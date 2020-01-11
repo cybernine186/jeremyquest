@@ -100,7 +100,7 @@ if(basename($_SERVER["SCRIPT_FILENAME"], '.php') == "login" && $_GET['a'] == "lo
 		//Logging($mysqli, $uid, Logs::User, 0, "{$uname} ({$uid}) logged in from {$ip}");
 		*/
 	}
-	else
+	//else
 		//Logging($mysqli, $uid, Logs::User, 0, "Failed login attempt for {$userid} from {$ip}");
 }
 /*
