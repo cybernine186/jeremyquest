@@ -63,25 +63,23 @@ if ($_GET['a'] == "pr")
 	$hash = $mysqli->real_escape_string($hash);
 
 	// Query user information for page output
-	$query = "SELECT firstname, lastname, userid FROM users WHERE id = {$id}";
+	$query = "SELECT username FROM users WHERE id = {$id}";
 	$result = $mysqli->query($query);
 	if ($result->num_rows != 1)
 		data_error();	// There should be results
 	$row = $result->fetch_assoc();
-	$firstname = $row['firstname'];
-	$lastname = $row['lastname'];
-	$username = $row['userid'];
+	$uname = $row['username'];
 	
 	// Update password hash in database for user
 	$query = "UPDATE users SET hash = '{$hash}' WHERE id = {$id}";
 	$result = $mysqli->query($query);
 	
 	// Indicate the change in system logging
-	Logging($mysqli, $uid, Logs::User, 0, "{$uname} ({$uid}) reset password for user {$username} ({$id})");
+	//Logging($mysqli, $uid, Logs::User, 0, "{$uname} ({$uid}) reset password for user {$username} ({$id})");
 	
 	// Page output
 	RowText("<h4>User Management</h4>");
-	RowText("Password updated for {$firstname} {$lastname}.");
+	RowText("Password updated for {$uname}.");
 	display_user_list($mysqli);
 }
 
