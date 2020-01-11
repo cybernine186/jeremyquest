@@ -26,6 +26,7 @@ $permission_rollback = false;
 $permission_logging = false;
 $permission_users = false;
 
+/*
 // $uname is what user is trying to use to login
 // $username is what is loaded as handle after verified, and used for content
 
@@ -146,7 +147,7 @@ if(!isset($_COOKIE[$cookie_name])) {
 		$mysqli->query($query);
 	}
 }
-
+*/
 
 // Start HTML
 ?>
