@@ -128,7 +128,6 @@ else
 		$badcookie = true;
 	}
 	else {
-		/*
 		// Cookie found - set user information and permissions
 		$row = $result->fetch_assoc();
 		$uid = $row['uid'];
@@ -141,6 +140,7 @@ else
 			$permission_looted = true;
 		if ($row['permission_dropped'])
 			$permission_dropped = true;			
+		/*
 		if ($row['permission_destroyed'])
 			$permission_destroyed = true
 		if ($row['permission_rollback'])
