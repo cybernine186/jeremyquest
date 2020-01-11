@@ -70,7 +70,7 @@ if(basename($_SERVER["SCRIPT_FILENAME"], '.php') == "login" && $_GET['a'] == "lo
 			if ($row['permission_dropped'])
 				$permission_dropped = true;			
 			if ($row['permission_destroyed'])
-				$permission_destroyed = true
+				$permission_destroyed = true;
 			if ($row['permission_rollback'])
 				$permission_rollback = true;
 			if ($row['permission_logging'])
