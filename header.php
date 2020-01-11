@@ -88,6 +88,7 @@ if(basename($_SERVER["SCRIPT_FILENAME"], '.php') == "login" && $_GET['a'] == "lo
 	$ip = get_client_ip();
 
 	if($login_good) {
+		/*
 		// Generate a hash for cookie
 		$cost = 10;
 		$salt = strtr(base64_encode(mcrypt_create_iv(16, MCRYPT_DEV_URANDOM)), '+', '.');
@@ -97,6 +98,7 @@ if(basename($_SERVER["SCRIPT_FILENAME"], '.php') == "login" && $_GET['a'] == "lo
 		$query = "INSERT INTO cookiehashes (userid, cookiehash, created, used) VALUES ({$uid}, '{$hash}', NOW(), NOW())";
 		$mysqli->query($query);
 		//Logging($mysqli, $uid, Logs::User, 0, "{$uname} ({$uid}) logged in from {$ip}");
+		*/
 	}
 	else
 		//Logging($mysqli, $uid, Logs::User, 0, "Failed login attempt for {$userid} from {$ip}");
