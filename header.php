@@ -165,6 +165,7 @@ if(!isset($_COOKIE[$cookie_name])) {
 // Wrap page in container
 Container();
 // Navbar data
+/*
 ?>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
 	<a class="navbar-brand" href="index.php">JeremyQuest</a>
@@ -275,6 +276,7 @@ Container();
 </nav>
 
 <?php
+*/
 if ($badcookie)
 {
 	RowText("Expired Session - Please login again");
