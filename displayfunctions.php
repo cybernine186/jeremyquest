@@ -54,7 +54,6 @@ Row();
 
 			</div>
 			<button type="submit" class="btn btn-primary">Submit</button>
-			<a class="btn btn-primary" href="users.php" role="button">Cancel</a>
 		</form>
 <?php
 	DivC();
