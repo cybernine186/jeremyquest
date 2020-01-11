@@ -14,22 +14,28 @@ include_once("dbconn.php");
 $cookie_name = 'jeremyquest';
 // User Information
 $uid = -1;
-$uname = "";
-$first_name = "";
-$last_name = "";
+$username = "";
 // Allowed Permissions
-$manage_users = false;
-$logging = false;
-$types = false;
+$permission_handins = false;
+$permission_trades = false;
+$permission_looted = false;
+$permission_dropped = false;
+$permission_destroyed = false;
+$permission_rollback = false;
+$permission_logging = false;
+$permission_users = false;
+
+// $uname is what user is trying to use to login
+// $username is what is loaded as handle after verified, and used for content
 
 // Handle logging-in process so user-specific data can be in header on login/logout
 if(basename($_SERVER["SCRIPT_FILENAME"], '.php') == "login" && $_GET['a'] == "login") {
 	// Process login
-	$userid = $mysqli->real_escape_string($_POST['userid']);
+	$userid = $mysqli->real_escape_string($_POST['uname']);
 	$password = $_POST['password'];
 
 	// Look for entry for indicated UserID
-	$query = "SELECT hash, firstname, lastname, id, manage_users, logging, types FROM users WHERE userid = '" . $userid . "'";
+	$query = "SELECT hash, id, permission_handins, permission_trades, permission_looted, permission_dropped, permission_destroyed, permission_rollback, permission_logging, permission_users FROM users WHERE username = '" . $uname . "'";
 	$result = $mysqli->query($query);
 	
 	// Login good until otherwise indicated bad
@@ -39,7 +45,8 @@ if(basename($_SERVER["SCRIPT_FILENAME"], '.php') == "login" && $_GET['a'] == "lo
 		// UserID not found
 		$login_good = false;
 	}
-	else {
+	else
+	{
 		// UserID found, now check hash
 		$row = $result->fetch_assoc();
 		$hash = $row['hash'];
@@ -49,18 +56,27 @@ if(basename($_SERVER["SCRIPT_FILENAME"], '.php') == "login" && $_GET['a'] == "lo
 			// Bad password
 			$login_good = false;
 		}
-		else {
+		else
+		{
 			// Login is good - set user information and permissions
-			$first_name = $row['firstname'];
-			$last_name = $row['lastname'];
 			$uid = $row['id'];
-			$uname = $userid;
-			if ($row['manage_users'])
-				$manage_users = true;
-			if ($row['logging'])
-				$logging = true;
-			if ($row['types'])
-				$types = true;
+			$username = $uname;
+			if ($row['permission_handins'])
+				$permission_handins = true;
+			if ($row['permission_trades'])
+				$permission_trades = true;
+			if ($row['permission_looted'])
+				$permission_looted = true;
+			if ($row['permission_dropped'])
+				$permission_dropped = true;			
+			if ($row['permission_destroyed'])
+				$permission_destroyed = true
+			if ($row['permission_rollback'])
+				$permission_rollback = true;
+			if ($row['permission_logging'])
+				$permission_logging = true;
+			if ($row['permission_users'])
+				$permission_users = true;
 		}
 	}
 	
@@ -95,7 +111,7 @@ if(!isset($_COOKIE[$cookie_name])) {
 } else {
 	// Cookie Present - see if it's legit
 	$cookievalue = $_COOKIE[$cookie_name];
-	$query = "SELECT cookiehashes.id AS id, cookiehashes.userid AS uid, users.id AS uid2, users.firstname AS firstname, users.lastname AS lastname, users.manage_users AS manage_users, users.logging AS logging, users.types AS types, users.userid AS userid FROM cookiehashes LEFT JOIN users ON cookiehashes.userid=users.id  WHERE cookiehashes.cookiehash='{$cookievalue}'";
+	$query = "SELECT cookiehashes.id AS id, cookiehashes.userid AS uid, users.id AS uid2, users.permission_handins AS permission_handins, users.permission_trades AS permission_trades, users.permission_looted AS permission_looted, users.permission_dropped AS permission_dropped, users.permission_destroyed AS permission_destroyed, users.permission_rollback AS permission_rollback, users.permission_logging AS permission_logging, users.username AS username FROM cookiehashes LEFT JOIN users ON cookiehashes.userid=users.id  WHERE cookiehashes.cookiehash='{$cookievalue}'";
 	$result = $mysqli->query($query);
 	if($result->num_rows == 0) {
 		// No cookies found server side - clear client cookie
@@ -106,15 +122,23 @@ if(!isset($_COOKIE[$cookie_name])) {
 		// Cookie found - set user information and permissions
 		$row = $result->fetch_assoc();
 		$uid = $row['uid'];
-		$uname = $row['userid'];
-		$first_name = $row['firstname'];
-		$last_name = $row['lastname'];
-		if ($row['manage_users'])
-			$manage_users = true;
-		if ($row['logging'])
-			$logging = true;
-		if ($row['types'])
-			$types = true;
+		$username = $row['userid'];
+		if ($row['permission_handins'])
+			$permission_handins = true;
+		if ($row['permission_trades'])
+			$permission_trades = true;
+		if ($row['permission_looted'])
+			$permission_looted = true;
+		if ($row['permission_dropped'])
+			$permission_dropped = true;			
+		if ($row['permission_destroyed'])
+			$permission_destroyed = true
+		if ($row['permission_rollback'])
+			$permission_rollback = true;
+		if ($row['permission_logging'])
+			$permission_logging = true;
+		if ($row['permission_users'])
+			$permission_users = true;
 		$cookieid = $row['id'];
 		// Touch cookie to keep alive after proper use
 		$query = "UPDATE cookiehashes SET used = NOW() WHERE id={$cookieid}";
@@ -143,7 +167,7 @@ Container();
 // Navbar data
 ?>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-	<a class="navbar-brand" href="index.php">Stoney Inventory</a>
+	<a class="navbar-brand" href="index.php">JeremyQuest</a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
 	</button>
@@ -156,52 +180,64 @@ Container();
 		// Only show these menu options if user is logged in
 		if ($uid >= 0)
 		{
-?>
-			<li class="nav-item<?php if(basename($_SERVER["SCRIPT_FILENAME"], '.php') == "view") print " active"; ?>">
-				<a class="nav-link" href="view.php">View</a>
-			</li>
-
-			<li class="nav-item<?php if(basename($_SERVER["SCRIPT_FILENAME"], '.php') == "reports") print " active"; ?>">
-				<a class="nav-link" href="reports.php">Reports</a>
-			</li>
-<?php
-			// Check for permission to modify types
-			if ($types || $manage_users)
+			// The READ list of menu options
+			if ($permission_handins || $permission_trades || $permission_looted || $permission_dropped || $permission_destroyed)
 			{
 ?>
-				<li class="nav-item dropdown<?php $basename = basename($_SERVER["SCRIPT_FILENAME"], '.php'); if ($basename == "users" || $basename == "locations" || $basename == "vendors" || $basename == "items" || $basename == "categories") print " active"; ?>">
+				<li class="nav-item dropdown<?php $basename = basename($_SERVER["SCRIPT_FILENAME"], '.php'); if ($basename == "handins" || $basename == "trades" || $basename == "looted" || $basename == "dropped" || $basename == "destroyed") print " active"; ?>">
 					<a class="nav-link dropdown-toggle" href="#" id="navbarMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						Manage
+						View
 					</a>
 					<div class="dropdown-menu" aria-labelledby="navbarMenuLink">
 <?php
-					if ($types)
-					{
+					if ($permission_handins)
+						print "<a class='dropdown-item' href='handins.php'>Handins</a>";
+					if ($permission_trades)
+						print "<a class='dropdown-item' href='trade.php'>Trades</a>";
+					if ($permission_looted)
+						print "<a class='dropdown-item' href='looted.php'>Looted</a>";
+					if ($permission_dropped)
+						print "<a class='dropdown-item' href='dropped.php'>Dropped</a>";
+					if ($permission_destroyed)
+						print "<a class='dropdown-item' href='destroyed.php'>Destroyed</a>";
 ?>
-						<a class="dropdown-item" href="items.php">Item Types</a>
-						<a class="dropdown-item" href="categories.php">Item Categories</a>
-						<a class="dropdown-item" href="locations.php">Locations</a>
-						<a class="dropdown-item" href="vendors.php">Vendors</a>
+					</div>
+				</li>
 <?php
-					}
-					// Check for permission to manage users
-					if ($manage_users)
-					{
+			}
+			// The ALTER list of menu options
+			if ($permission_rollback)
+			{
 ?>
-						<a class="dropdown-item" href="users.php">Users</a>
+				<li class="nav-item dropdown<?php $basename = basename($_SERVER["SCRIPT_FILENAME"], '.php'); if ($basename == "rollback") print " active"; ?>">
+					<a class="nav-link dropdown-toggle" href="#" id="navbarMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Alter
+					</a>
+					<div class="dropdown-menu" aria-labelledby="navbarMenuLink">
 <?php
-					}
+					if ($permission_rollback)
+						print "<a class='dropdown-item' href='rollback.php'>Rollback</a>";
 ?>
-				</div>
-			</li>
+					</div>
+				</li>
 <?php
 			}
 			// Check for permission to view logging data
-			if ($logging)
+			if ($permission_logging || $permission_users)
 			{
 ?>
-				<li class="nav-item<?php if(basename($_SERVER["SCRIPT_FILENAME"], '.php') == "logs") print " active"; ?>">
-					<a class="nav-link" href="logs.php">Logs</a>
+				<li class="nav-item dropdown<?php $basename = basename($_SERVER["SCRIPT_FILENAME"], '.php'); if ($basename == "logs" || $basename == "users") print " active"; ?>">
+					<a class="nav-link dropdown-toggle" href="#" id="navbarMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Admin
+					</a>
+					<div class="dropdown-menu" aria-labelledby="navbarMenuLink">
+<?php
+					if ($permission_logging)
+						print "<a class='dropdown-item' href='logs.php'>Logs</a>";
+					if ($permission_users)
+						print "<a class='dropdown-item' href='users.php'>Users</a>";
+?>
+					</div>
 				</li>
 <?php
 			}

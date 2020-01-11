@@ -1,0 +1,23 @@
+CREATE TABLE users (
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	username VARCHAR(30) NOT NULL,
+	hash VARCHAR(100) NOT NULL,
+	permission_handins TINYINT NOT NULL DEFAULT 0,
+	permission_trades TINYINT NOT NULL DEFAULT 0,
+	permission_looted TINYINT NOT NULL DEFAULT 0,
+	permission_dropped TINYINT NOT NULL DEFAULT 0,
+	permission_destroyed TINYINT NOT NULL DEFAULT 0,
+	permission_rollback TINYINT NOT NULL DEFAULT 0,
+	permission_logging TINYINT NOT NULL DEFAULT 0,
+	permission_users TINYINT NOT NULL DEFAULT 0,
+	PRIMARY KEY (id)
+);
+
+CREATE TABLE cookiehashes (
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	userid INT UNSIGNED NOT NULL,
+	cookiehash VARCHAR(100) NOT NULL,
+	created DATETIME NOT NULL,
+	used DATETIME NOT NULL,
+	PRIMARY KEY (id)
+);
