@@ -294,6 +294,8 @@ Container();
 
 <?php
 
+print $permission_users;
+
 if ($badcookie)
 {
 	RowText("Expired Session - Please login again");
