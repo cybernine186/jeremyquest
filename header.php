@@ -30,13 +30,11 @@ $permission_users = false;
 // $uname is what user is trying to use to login
 // $username is what is loaded as handle after verified, and used for content
 
-phpinfo();
 
-/*
 // Handle logging-in process so user-specific data can be in header on login/logout
 if(basename($_SERVER["SCRIPT_FILENAME"], '.php') == "login" && $_GET['a'] == "login") {
 	// Process login
-	$userid = $mysqli->real_escape_string($_POST['uname']);
+	$uname = $mysqli->real_escape_string($_POST['uname']);
 	$password = $_POST['password'];
 
 	// Look for entry for indicated UserID
@@ -52,6 +50,7 @@ if(basename($_SERVER["SCRIPT_FILENAME"], '.php') == "login" && $_GET['a'] == "lo
 	}
 	else
 	{
+		/*
 		// UserID found, now check hash
 		$row = $result->fetch_assoc();
 		$hash = $row['hash'];
@@ -83,6 +82,7 @@ if(basename($_SERVER["SCRIPT_FILENAME"], '.php') == "login" && $_GET['a'] == "lo
 			if ($row['permission_users'])
 				$permission_users = true;
 		}
+		*/
 	}
 	
 	$ip = get_client_ip();
