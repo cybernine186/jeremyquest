@@ -102,4 +102,47 @@ else
 
 include_once("footer.php")
 
+
+/***************************************************************************************************
+DISPLAY FUNCTIONS
+***************************************************************************************************/
+
+/*******************************************************************************
+Function:	display_password_reset
+Purpose:	Display password reset form
+In:			$id - id of user for password reset
+*******************************************************************************/
+function display_password_reset($mysqli, $id)
+{
+	$query = "SELECT username FROM users WHERE id = {$id}";
+	$result = $mysqli->query($query);
+	
+	if ($result->num_rows != 1)
+		data_error();
+	
+	$row = $result->fetch_assoc();
+	
+	RowText("<h6>{$row['username']}</h6>");
+
+	Row();
+		Col();
+?>
+			<form action="resetpw.php?a=pr" method="post">
+				<div class="form-group">
+					<label for="password1">Password</label>
+					<input type="password" class="form-control" id="password1" placeholder="Password" name="password1">
+				</div>
+					<div class="form-group">
+					<label for="password2">Verify Password</label>
+					<input type="password" class="form-control" id="password2" placeholder="Password Again" name="password2">
+				</div>
+				<input type="hidden" name="id" value="<?php print $id; ?>">
+				<button type="submit" class="btn btn-primary">Submit</button>
+				<a class="btn btn-primary" href="users.php" role="button">Cancel</a>
+			</form>
+<?php
+		DivC();
+	DivC();
+}
+
 ?>

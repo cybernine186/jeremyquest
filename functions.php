@@ -53,13 +53,23 @@ function Col($center = false, $formatting = '')
 	print '<div class="col' . ($center ? ' text-center' : '') . ($formatting != '' ? ' ' . $formatting : '') . '">';
 }
 
-function IsNumber($id)
+/*******************************************************************************
+Function:	IsNumber
+Purpose:	Check if value is number
+In:			$num - the number to checkdate
+Out:		Whether or not $num is a number
+*******************************************************************************/
+function IsNumber($num)
 {
-	if (!preg_match("/^\d{1,7}$/", $id, $matches))
+	if (!preg_match("/^\d{1,7}$/", $num, $matches))
 		return false;
 	return true;
 }
 
+/*******************************************************************************
+Function:	data_error
+Purpose:	General error that results in page termination
+*******************************************************************************/
 function data_error()
 {
 	Row();
@@ -72,6 +82,11 @@ function data_error()
 	die;
 }
 
+/*******************************************************************************
+Function:	get_client_ip
+Purpose:	Get user's IP
+Out:		User's IP as string
+*******************************************************************************/
 function get_client_ip() {
     $ipaddress = '';
     if (getenv('HTTP_CLIENT_IP'))
@@ -89,6 +104,34 @@ function get_client_ip() {
     else
         $ipaddress = 'UNKNOWN';
     return $ipaddress;
+}
+
+/*******************************************************************************
+Function:	display_pagination
+Purpose:	Show pagination links
+In:			$start - the page we are currently on
+			$pages - the number of total pages
+			$link - the base link before pagination context in $_GET
+*******************************************************************************/
+function display_pagination($start, $pages, $link)
+{
+	$containsget = (strpos($link, '?') !== false ? true : false);
+	
+	print "<ul class='pagination'>";
+	print "<li class='page-item" . ($pages == 1 || $start == 1 ? " disabled" : "") . "'>";
+	print "<a class='page-link' href='{$link}" . ($containsget ? "&" : "?") . "s=" . ($start - 1) . "'>Previous</a></li>";
+	
+	for($i = 1; $i <= $pages; $i++)
+	{
+		if(($i - $start >= -4 && $i - $start <= 4) || ($i % 10 == 0) || ($i == 1) || ($i == $pages)) {
+			print "<li class='page-item" . ($i == $start ? " active" : "") . "'>";
+			print "<a class='page-link' href='{$link}" . ($containsget ? "&" : "?") . "s={$i}'>{$i}</a></li>";
+		}
+	}
+	
+	print "<li class='page-item" . ($pages == 1 || $start == $pages ? " disabled" : "") . "'>";
+	print "<a class='page-link' href='{$link}" . ($containsget ? "&" : "?") . "s=" . ($start + 1) . "'>Next</a></li>";
+	print "</ul>";
 }
 
 ?>
