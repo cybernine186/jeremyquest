@@ -123,17 +123,16 @@ else
 	$result = $mysqli->query($query);
 	if($result->num_rows == 0)
 	{
-		/*
 		// No cookies found server side - clear client cookie
 		setcookie($cookie_name, "", time() - 86400);
 		$badcookie = true;
-		*/
 	}
 	else {
+		/*
 		// Cookie found - set user information and permissions
 		$row = $result->fetch_assoc();
 		$uid = $row['uid'];
-		$username = $row['userid'];
+		$username = $row['username'];
 		if ($row['permission_handins'])
 			$permission_handins = true;
 		if ($row['permission_trades'])
@@ -154,6 +153,7 @@ else
 		// Touch cookie to keep alive after proper use
 		$query = "UPDATE cookiehashes SET used = NOW() WHERE id={$cookieid}";
 		$mysqli->query($query);
+		*/
 	}
 }
 
