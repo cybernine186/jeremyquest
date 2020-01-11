@@ -100,7 +100,7 @@ if(basename($_SERVER["SCRIPT_FILENAME"], '.php') == "login" && $_GET['a'] == "lo
 	//else
 		//Logging($mysqli, $uid, Logs::User, 0, "Failed login attempt for {$userid} from {$ip}");
 }
-/*
+
 // Process logout if applicable
 if(basename($_SERVER["SCRIPT_FILENAME"], '.php') == "login" && $_GET['a'] == "logout") {
 	setcookie($cookie_name, "0", time() - 86400);
@@ -149,7 +149,7 @@ if(!isset($_COOKIE[$cookie_name])) {
 		$mysqli->query($query);
 	}
 }
-*/
+
 
 // Start HTML
 ?>
