@@ -50,7 +50,7 @@ In:			$center - whether or not text in the column is center-aligned
 *******************************************************************************/
 function Col($center = false, $formatting = '')
 {
-	print '<div class="col' . ($center ? ' text-center' : '') . ($formatting != '' ? ' ' . $formatting : '') . '">';
+	print '<div class="col' . ($center ? ' text-center' : '') . ($formatting != '' ? $formatting : '') . '">';
 }
 
 /*******************************************************************************
