@@ -7,7 +7,7 @@ Description:	Handles user/login information
 				Included at the top of every script
 ***************************************************************************************************/
 
-/*
+
 // Database Connection
 include_once("dbconn.php");
 
@@ -146,7 +146,7 @@ if(!isset($_COOKIE[$cookie_name])) {
 		$mysqli->query($query);
 	}
 }
-*/
+
 
 // Start HTML
 ?>
