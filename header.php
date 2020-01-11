@@ -119,7 +119,7 @@ else
 	// Cookie Present - see if it's legit
 	
 	$cookievalue = $_COOKIE[$cookie_name];
-	$query = "SELECT cookiehashes.id AS id, cookiehashes.userid AS uid, users.id AS uid2, users.permission_handins AS permission_handins, users.permission_trades AS permission_trades, users.permission_looted AS permission_looted, users.permission_dropped AS permission_dropped, users.permission_destroyed AS permission_destroyed, users.permission_rollback AS permission_rollback, users.permission_logging AS permission_logging, users.username AS username FROM cookiehashes LEFT JOIN users ON cookiehashes.userid=users.id  WHERE cookiehashes.cookiehash='{$cookievalue}'";
+	$query = "SELECT cookiehashes.id AS id, cookiehashes.userid AS uid, users.id AS uid2, users.permission_handins AS permission_handins, users.permission_trades AS permission_trades, users.permission_looted AS permission_looted, users.permission_dropped AS permission_dropped, users.permission_destroyed AS permission_destroyed, users.permission_rollback AS permission_rollback, users.permission_logging AS permission_logging, users.permission_users AS permission_users, users.username AS username FROM cookiehashes LEFT JOIN users ON cookiehashes.userid=users.id  WHERE cookiehashes.cookiehash='{$cookievalue}'";
 	$result = $mysqli->query($query);
 	if($result->num_rows == 0)
 	{
