@@ -109,7 +109,7 @@ if(basename($_SERVER["SCRIPT_FILENAME"], '.php') == "login" && $_GET['a'] == "lo
 
 // Cookie bad until confirmed good
 $badcookie = false;
-
+/*
 if(!isset($_COOKIE[$cookie_name])) {
     // Cookie Absent - do nothing
 } else {
@@ -149,7 +149,7 @@ if(!isset($_COOKIE[$cookie_name])) {
 		$mysqli->query($query);
 	}
 }
-
+*/
 
 // Start HTML
 ?>
