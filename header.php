@@ -109,7 +109,7 @@ if(basename($_SERVER["SCRIPT_FILENAME"], '.php') == "login" && $_GET['a'] == "lo
 
 // Cookie bad until confirmed good
 $badcookie = false;
-/*
+
 if(!isset($_COOKIE[$cookie_name])) {
     // Cookie Absent - do nothing
 } else {
@@ -119,7 +119,7 @@ if(!isset($_COOKIE[$cookie_name])) {
 	$result = $mysqli->query($query);
 	if($result->num_rows == 0) {
 		// No cookies found server side - clear client cookie
-		setcookie($cookie_name, $hash, time() - 86400);
+		//setcookie($cookie_name, $hash, time() - 86400);
 		$badcookie = true;
 	}
 	else {
@@ -149,7 +149,7 @@ if(!isset($_COOKIE[$cookie_name])) {
 		$mysqli->query($query);
 	}
 }
-*/
+
 
 // Start HTML
 ?>
