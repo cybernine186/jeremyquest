@@ -110,16 +110,20 @@ if(basename($_SERVER["SCRIPT_FILENAME"], '.php') == "login" && $_GET['a'] == "lo
 // Cookie bad until confirmed good
 $badcookie = false;
 
-if(!isset($_COOKIE[$cookie_name])) {
+if(!isset($_COOKIE[$cookie_name]))
+{
     // Cookie Absent - do nothing
-} else {
+}
+else
+{
 	// Cookie Present - see if it's legit
+	/*
 	$cookievalue = $_COOKIE[$cookie_name];
 	$query = "SELECT cookiehashes.id AS id, cookiehashes.userid AS uid, users.id AS uid2, users.permission_handins AS permission_handins, users.permission_trades AS permission_trades, users.permission_looted AS permission_looted, users.permission_dropped AS permission_dropped, users.permission_destroyed AS permission_destroyed, users.permission_rollback AS permission_rollback, users.permission_logging AS permission_logging, users.username AS username FROM cookiehashes LEFT JOIN users ON cookiehashes.userid=users.id  WHERE cookiehashes.cookiehash='{$cookievalue}'";
 	$result = $mysqli->query($query);
 	if($result->num_rows == 0) {
 		// No cookies found server side - clear client cookie
-		//setcookie($cookie_name, $hash, time() - 86400);
+		setcookie($cookie_name, $hash, time() - 86400);
 		$badcookie = true;
 	}
 	else {
@@ -148,6 +152,7 @@ if(!isset($_COOKIE[$cookie_name])) {
 		$query = "UPDATE cookiehashes SET used = NOW() WHERE id={$cookieid}";
 		$mysqli->query($query);
 	}
+	*/
 }
 
 
