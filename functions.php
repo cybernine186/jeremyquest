@@ -12,6 +12,11 @@ function Container()
 	print '<div class="container">';
 }
 
+function DivC()
+{
+	print '</div>';
+}
+
 /*******************************************************************************
 Function:	RowText
 Purpose:	Create a row of text
