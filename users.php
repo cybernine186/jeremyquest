@@ -87,7 +87,8 @@ elseif ($_GET['a'] == "pe")
 	$users = $_POST['usersCheckbox'] == "on" ? "1" : "0";
 	
 	// Update the user information in database
-	$query = "UPDATE users SET username='{$uname}', permission_handins={$handins}, permission_trades={$trades}, permission_looted={$looted}, permission_dropped={$dropped}, permission_destroyed={$destroyed}, permission_rollback={$rollback}, permission_logging={$login}, permission_users={$users}  WHERE id={$editid}";
+	$query = "UPDATE users SET username='{$uname}', permission_handins={$handins}, permission_trades={$trades}, permission_looted={$looted}, permission_dropped={$dropped}, permission_destroyed={$destroyed}, permission_rollback={$rollback}, permission_logging={$login}, permission_users={$users} WHERE id={$editid}";
+	print $query;
 	$result = $mysqli->query($query);
 	
 	// Indicate the change in system logging

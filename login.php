@@ -8,7 +8,7 @@ if ($_GET['a'] == "login")
 		Col(true, 'pt-4 pb-2');
 		if ($uid >= 0)
 		{
-			print "Thanks for logging in, {$first_name}.";
+			print "Thanks for logging in, {$username}.";
 			header("refresh:3;url=index.php");
 		}
 		else
