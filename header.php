@@ -140,7 +140,6 @@ else
 			$permission_looted = true;
 		if ($row['permission_dropped'])
 			$permission_dropped = true;			
-		/*
 		if ($row['permission_destroyed'])
 			$permission_destroyed = true
 		if ($row['permission_rollback'])
@@ -149,6 +148,7 @@ else
 			$permission_logging = true;
 		if ($row['permission_users'])
 			$permission_users = true;
+		/*
 		$cookieid = $row['id'];
 		// Touch cookie to keep alive after proper use
 		$query = "UPDATE cookiehashes SET used = NOW() WHERE id={$cookieid}";
