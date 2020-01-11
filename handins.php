@@ -30,7 +30,7 @@ function display_handin_search($mysqli)
 	Row();
 		Col();
 		DivC();
-		Col(false, '-6');
+		Col(false, '', '6');
 			print "jerk";
 		DivC();
 		Col();

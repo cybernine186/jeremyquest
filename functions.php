@@ -48,9 +48,9 @@ Function:	Col
 Purpose:	Create a col <div>
 In:			$center - whether or not text in the column is center-aligned
 *******************************************************************************/
-function Col($center = false, $formatting = '')
+function Col($center = false, $formatting = '', $width = '')
 {
-	print '<div class="col' . ($center ? ' text-center' : '') . ($formatting != '' ? $formatting : '') . '">';
+	print '<div class="col' . ($width ? '-{$width}' : '') . ($center ? ' text-center' : '') . ($formatting != '' ? ' ' . $formatting : '') . '">';
 }
 
 /*******************************************************************************
