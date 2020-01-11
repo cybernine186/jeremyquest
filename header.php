@@ -30,6 +30,9 @@ $permission_users = false;
 // $uname is what user is trying to use to login
 // $username is what is loaded as handle after verified, and used for content
 
+phpinfo();
+
+/*
 // Handle logging-in process so user-specific data can be in header on login/logout
 if(basename($_SERVER["SCRIPT_FILENAME"], '.php') == "login" && $_GET['a'] == "login") {
 	// Process login
