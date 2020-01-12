@@ -37,7 +37,7 @@ DISPLAY FUNCTIONS
 function display_handin_search()
 {
 	Row();
-		Col(true);
+		Col(false);
 ?>
 			<form action="handins.php?a=sp" method="post">
 				<div class="form-group">
