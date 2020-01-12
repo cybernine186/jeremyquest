@@ -36,7 +36,7 @@ if ($_GET['a'] == "pr")
 	{
 		RowText("All fields must be at least one character long.");
 		// Redisplay password reset form on error
-		display_password_reset($mysqli, $id);
+		display_password_reset($admindb, $id);
 		// Close and kill script to avoid further processing
 		include_once("footer.php");
 		die;
@@ -47,7 +47,7 @@ if ($_GET['a'] == "pr")
 	{
 		RowText("Passwords don't match. Please try again.");
 		// Redisplay password reset form on error
-		display_password_reset($mysqli, $id);
+		display_password_reset($admindb, $id);
 		// Close and kill script to avoid further processing
 		include_once("footer.php");
 		die;
@@ -60,11 +60,11 @@ if ($_GET['a'] == "pr")
 	$hash = crypt($_POST['password1'], $salt);
 	
 	// Just in case hash contains escape characters
-	$hash = $mysqli->real_escape_string($hash);
+	$hash = $admindb->real_escape_string($hash);
 
 	// Query user information for page output
 	$query = "SELECT username FROM users WHERE id = {$id}";
-	$result = $mysqli->query($query);
+	$result = $admindb->query($query);
 	if ($result->num_rows != 1)
 		data_error();	// There should be results
 	$row = $result->fetch_assoc();
@@ -72,15 +72,15 @@ if ($_GET['a'] == "pr")
 	
 	// Update password hash in database for user
 	$query = "UPDATE users SET hash = '{$hash}' WHERE id = {$id}";
-	$result = $mysqli->query($query);
+	$result = $admindb->query($query);
 	
 	// Indicate the change in system logging
-	//Logging($mysqli, $uid, Logs::User, 0, "{$uname} ({$uid}) reset password for user {$username} ({$id})");
+	//Logging($admindb, $uid, Logs::User, 0, "{$uname} ({$uid}) reset password for user {$username} ({$id})");
 	
 	// Page output
 	RowText("<h4>User Management</h4>");
 	RowText("Password updated for {$uname}.");
-	display_user_list($mysqli);
+	display_user_list($admindb);
 }
 
 /***************************************************************************************************
@@ -97,7 +97,7 @@ else
 	RowText("<h4>Password Reset</h4>");
 	
 	// Invoke for output
-	display_password_reset($mysqli, $id);
+	display_password_reset($admindb, $id);
 }
 
 include_once("footer.php")
@@ -112,10 +112,10 @@ Function:	display_password_reset
 Purpose:	Display password reset form
 In:			$id - id of user for password reset
 *******************************************************************************/
-function display_password_reset($mysqli, $id)
+function display_password_reset($admindb, $id)
 {
 	$query = "SELECT username FROM users WHERE id = {$id}";
-	$result = $mysqli->query($query);
+	$result = $admindb->query($query);
 	
 	if ($result->num_rows != 1)
 		data_error();

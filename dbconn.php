@@ -1,8 +1,8 @@
 <?php
 include_once("dbcredential.php");
-	$mysqli = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+	$admindb = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
 
-	if ($mysqli->connect_errno)
+	if ($admindb->connect_errno)
 	{
 		print "Failed to connect to database.";
 		include_once("footer.php");

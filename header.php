@@ -34,12 +34,12 @@ $permission_users = false;
 // Handle logging-in process so user-specific data can be in header on login/logout
 if(basename($_SERVER["SCRIPT_FILENAME"], '.php') == "login" && $_GET['a'] == "login") {
 	// Process login
-	$uname = $mysqli->real_escape_string($_POST['uname']);
+	$uname = $admindb->real_escape_string($_POST['uname']);
 	$password = $_POST['password'];
 
 	// Look for entry for indicated UserID
 	$query = "SELECT hash, id, permission_handins, permission_trades, permission_looted, permission_dropped, permission_destroyed, permission_rollback, permission_logging, permission_users FROM users WHERE username = '" . $uname . "'";
-	$result = $mysqli->query($query);
+	$result = $admindb->query($query);
 	
 	// Login good until otherwise indicated bad
 	$login_good = true;
@@ -94,11 +94,11 @@ if(basename($_SERVER["SCRIPT_FILENAME"], '.php') == "login" && $_GET['a'] == "lo
 		$hash = crypt(($first_name . $uid . time()), $salt);
 		setcookie($cookie_name, $hash, time() + (86400 * 9999));
 		$query = "INSERT INTO cookiehashes (userid, cookiehash, created, used) VALUES ({$uid}, '{$hash}', NOW(), NOW())";
-		$mysqli->query($query);
-		//Logging($mysqli, $uid, Logs::User, 0, "{$uname} ({$uid}) logged in from {$ip}");
+		$admindb->query($query);
+		//Logging($admindb, $uid, Logs::User, 0, "{$uname} ({$uid}) logged in from {$ip}");
 	}
 	//else
-		//Logging($mysqli, $uid, Logs::User, 0, "Failed login attempt for {$userid} from {$ip}");
+		//Logging($admindb, $uid, Logs::User, 0, "Failed login attempt for {$userid} from {$ip}");
 }
 
 // Process logout if applicable
@@ -120,7 +120,7 @@ else
 	
 	$cookievalue = $_COOKIE[$cookie_name];
 	$query = "SELECT cookiehashes.id AS id, cookiehashes.userid AS uid, users.id AS uid2, users.permission_handins AS permission_handins, users.permission_trades AS permission_trades, users.permission_looted AS permission_looted, users.permission_dropped AS permission_dropped, users.permission_destroyed AS permission_destroyed, users.permission_rollback AS permission_rollback, users.permission_logging AS permission_logging, users.permission_users AS permission_users, users.username AS username FROM cookiehashes LEFT JOIN users ON cookiehashes.userid=users.id  WHERE cookiehashes.cookiehash='{$cookievalue}'";
-	$result = $mysqli->query($query);
+	$result = $admindb->query($query);
 	if($result->num_rows == 0)
 	{
 		// No cookies found server side - clear client cookie
@@ -158,7 +158,7 @@ else
 		$cookieid = $row['id'];
 		// Touch cookie to keep alive after proper use
 		$query = "UPDATE cookiehashes SET used = NOW() WHERE id={$cookieid}";
-		$mysqli->query($query);
+		$admindb->query($query);
 	}
 }
 

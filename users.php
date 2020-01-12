@@ -30,7 +30,7 @@ if ($_GET['a'] == "e")
 	$id = $_GET['id'];
 	
 	// Page output
-	display_user_edit($mysqli, $id);
+	display_user_edit($admindb, $id);
 }
 
 /***************************************************************************************************
@@ -50,16 +50,16 @@ elseif ($_GET['a'] == "pe")
 	{
 		RowText("All fields must be at least one character long.");
 		// Redisplay user edit form on error
-		display_user_edit($mysqli, $_GET['id']);
+		display_user_edit($admindb, $_GET['id']);
 		// Close and kill script to avoid further processing
 		include_once("footer.php");
 		die;
 	}
 	
 	// Check if User ID is taken
-	$uname = $mysqli->real_escape_string($_POST['username']);
+	$uname = $admindb->real_escape_string($_POST['username']);
 	$query = "SELECT id FROM users WHERE username = '{$uname}'";
-	$result = $mysqli->query($query);
+	$result = $admindb->query($query);
 	if ($result->num_rows > 0)
 	{
 		$row = $result->fetch_assoc();
@@ -67,7 +67,7 @@ elseif ($_GET['a'] == "pe")
 		{
 			RowText("This User ID is already taken. Please try again");
 			// Redisplay user edit form on error
-			display_user_edit($mysqli, $_GET['id']);
+			display_user_edit($admindb, $_GET['id']);
 			// Close and kill script to avoid further processing
 			include_once("footer.php");
 			die;
@@ -87,15 +87,15 @@ elseif ($_GET['a'] == "pe")
 	// Update the user information in database
 	$query = "UPDATE users SET username='{$uname}', permission_handins={$handins}, permission_trades={$trades}, permission_looted={$looted}, permission_dropped={$dropped}, permission_destroyed={$destroyed}, permission_rollback={$rollback}, permission_logging={$logging}, permission_users={$users} WHERE id={$editid}";
 	print $query;
-	$result = $mysqli->query($query);
+	$result = $admindb->query($query);
 	
 	// Indicate the change in system logging
-	//Logging($mysqli, $uid, Logs::User, 0, "{$uname} ({$uid}) edited user info for user {$firstname} {$lastname} ({$userid})");
+	//Logging($admindb, $uid, Logs::User, 0, "{$uname} ({$uid}) edited user info for user {$firstname} {$lastname} ({$userid})");
 	
 	RowText("User information updated.");
 
 	// Page output
-	display_user_list($mysqli);
+	display_user_list($admindb);
 }
 
 /***************************************************************************************************
@@ -132,9 +132,9 @@ elseif ($_GET['a'] == "cp")
 	// $username is user name set for user by login
 	
 	// Check if User ID is taken
-	$uname = $mysqli->real_escape_string($_POST['username']);
+	$uname = $admindb->real_escape_string($_POST['username']);
 	$query = "SELECT id FROM users WHERE username = '{$uname}'";
-	$result = $mysqli->query($query);
+	$result = $admindb->query($query);
 	if ($result->num_rows > 0)
 	{
 		RowText("This User ID is already taken. Please try again");
@@ -154,21 +154,21 @@ elseif ($_GET['a'] == "cp")
 	$hash = crypt($_POST['password1'], $salt);
 	
 	// Escape the escapes!
-	$hash = $mysqli->real_escape_string($hash);
+	$hash = $admindb->real_escape_string($hash);
 
 	// Insert user information into database
 	$query = "INSERT INTO users (username, hash) VALUES ('{$uname}', '{$hash}')";
-	$result = $mysqli->query($query);
+	$result = $admindb->query($query);
 	
 	// Get insert ID for logging
-	$lastid = $mysqli->insert_id;
+	$lastid = $admindb->insert_id;
 	
 	// Indicate the change in system logging
-	//Logging($mysqli, $uid, Logs::User, 0, "{$uname} ({$uid}) created user {$firstname} {$lastname} ({$userid} - {$lastid})");
+	//Logging($admindb, $uid, Logs::User, 0, "{$uname} ({$uid}) created user {$firstname} {$lastname} ({$userid} - {$lastid})");
 	
 	// Page output
 	RowText("User created!");
-	display_user_list($mysqli);
+	display_user_list($admindb);
 }
 
 /***************************************************************************************************
@@ -188,7 +188,7 @@ Inputs:			None
 else
 {
 	// Page output
-	display_user_list($mysqli);
+	display_user_list($admindb);
 }
 
 include_once("footer.php")
@@ -201,7 +201,7 @@ DISPLAY FUNCTIONS
 Function:	display_user_list
 Purpose:	Display user list
 *******************************************************************************/
-function display_user_list($mysqli)
+function display_user_list($admindb)
 {
 ?>
 	<table class="table">
@@ -215,7 +215,7 @@ function display_user_list($mysqli)
 		<tbody>
 <?php
 	$query = "SELECT id, username FROM users";
-	$result = $mysqli->query($query);
+	$result = $admindb->query($query);
 	while ($row = $result->fetch_assoc())
 	{
 		print "<tr>";
@@ -263,10 +263,10 @@ Function:	display_user_edit
 Purpose:	Display user edit form
 In:			$id - id of user for editing
 *******************************************************************************/
-function display_user_edit($mysqli, $id)
+function display_user_edit($admindb, $id)
 {
 	$query = "SELECT username, permission_handins, permission_trades, permission_looted, permission_dropped, permission_destroyed, permission_rollback, permission_logging, permission_users FROM users WHERE id = {$id}";
-	$result = $mysqli->query($query);
+	$result = $admindb->query($query);
 	
 	// Check results exist
 	if ($result->num_rows != 1)
