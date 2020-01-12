@@ -66,7 +66,8 @@ elseif ($_GET['a'] == "h")
 <?php
 						print "<td>{$row['handin_id']}</td><td>{$row['time']}</td>";
 						print "<td>{$row['char_pp']}</td><td>{$row['char_gp']}</td>";
-						print "<td>{$row['char_sp']}</td><td>{$row['char_cp']}</td></tr></tbody></table>";
+						print "<td>{$row['char_sp']}</td><td>{$row['char_cp']}</td>";
+						print "<td>{$row['char_items']}</td></tr></tbody></table>";
 						
 						
 		DivC();
