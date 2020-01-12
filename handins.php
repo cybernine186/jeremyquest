@@ -32,6 +32,49 @@ elseif ($_GET['a'] == "p")
 	
 	display_player_handins($eqdb, $charid);
 }
+elseif ($_GET['a'] == "h")
+{
+	if (!IsNumber($_GET['id']))
+		data_error();
+	
+	$handin_id = $_GET['id'];
+	$query = "SELECT handin_id, DATE_FORMAT(time, '%a %b %d, %Y %T') AS time, char_pp, char_gp, char_sp, char_cp, char_items, npc_id, npc_types.name AS npcname, character_data.name AS charname FROM qs_player_handin_record LEFT JOIN character_data ON character_data.id = qs_player_handin_record.char_id LEFT JOIN npc_types ON npc_types.id = qs_player_handin_record.npc_id WHERE handin_id = {$handin_id}";
+	$result = $eqdb->query($query);
+	if($result->num_rows < 1)
+		data_error();
+	$row = $result->fetch_assoc();
+	CenterText("<h5>{$row['charname']} Handin #{$handin_id} to {$row['npcname']} ({$row['npc_id']})</h5>");
+	Row();
+		Col();
+		DivC();
+		Col(true, '', 6);
+?>
+			<table class="table">
+				<thead>
+					<tr>
+						<th scope="col">ID</th>
+						<th scope="col">When</th>
+						<th scope="col">PP</th>
+						<th scope="col">GP</th>
+						<th scope="col">SP</th>
+						<th scope="col">CP</th>
+						<th scope="col">Items</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+<?php
+						print "<td>{$row['handin_id']}</td><td>{$row['time']}</td>";
+						print "<td>{$row['char_pp']}</td><td>{$row['char_gp']}</td>";
+						print "<td>{$row['char_sp']}</td><td>{$row['char_cp']}</td></tr></tbody></table>";
+						
+						
+		DivC();
+		Col();
+		DivC();
+	DivC();
+
+}
 else
 {
 	display_handin_search();
