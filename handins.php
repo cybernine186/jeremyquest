@@ -54,6 +54,7 @@ function display_handin_search()
 
 function display_handin_search_results($playername)
 {
+	print "ok man";
 	$query = "SELECT character_data.id AS id, character_data.name AS charname, character_data.level AS level, guild_members.guild_id, guilds.name AS gname FROM character_data LEFT JOIN guild_members ON character_data.id = guild_members.char_id LEFT JOIN guilds ON guild_members.guild_id = guilds.id WHERE character_data.name LIKE '%{$playername}%'";
 	$result = $eqdb->query($query);
 	
