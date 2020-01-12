@@ -23,6 +23,15 @@ if ($_GET['a'] == "sp")
 	
 	display_handin_search_results($eqdb, $playername);
 }
+elseif ($_GET['a'] == "p")
+{
+	if (!IsNumber($_GET['id'])
+		data_error();
+	
+	$charid = $_GET['id'];
+	
+	display_player_handins($eqdb, $charid);
+}
 else
 {
 	display_handin_search();
@@ -33,6 +42,51 @@ include_once("footer.php");
 /***************************************************************************************************
 DISPLAY FUNCTIONS
 ***************************************************************************************************/
+
+function display_player_handins($eqdb, $charid)
+{
+	$query = "SELECT name FROM character_data WHERE id = {$charid}";
+	$result = $eqdb->query($query);
+	if($result->num_rows < 1)
+		data_error();
+	
+	$row = $result->fetch_assoc();
+	RowText("<h5>{$row['name']}</h5>");
+	$days = 1000;
+	$query = "SELECT handin_id, time AS timenum, DATE_FORMAT(time, '%a %b %d, %Y %T') AS time, char_pp, char_gp, char_sp, char_cp, char_items, npc_id, npc_types.name FROM qs_player_handin_record LEFT JOIN npc_types ON npc_types.id = qs_player_handin_record.npc_id WHERE char_id = {$charid} AND time > (NOW() - INTERVAL {$days} DAY) ORDER BY timenum DESC";
+	$result = $eqdb->query($query);
+	if($result->num_rows < 1)
+	{
+		RowText("No handins found in last {$days} days.");
+		include_once("footer.php");
+		die;
+	}
+?>
+	<table class="table">
+		<thead>
+			<tr>
+				<th scope="col">ID</th>
+				<th scope="col">When</th>
+				<th scope="col">PP</th>
+				<th scope="col">GP</th>
+				<th scope="col">SP</th>
+				<th scope="col">CP</th>
+				<th scope="col">Items</th>
+				<th scope="col">NPC</th>
+			</tr>
+		</thead>
+		<tbody>
+<?php
+			while ($row = $result->fetch_assoc())
+			{
+				print "<tr><td>";
+				Hyperlink("handins.php?a=h&id={$row['handin_id']}", $row['handin_id']);
+				print "</td><td>{$row['time']}</td><td>{$row['char_pp']}</td><td>{$row['char_gp']}</td><td>{$row['char_sp']}</td>";
+				print "<td>{$row['char_items']}</td><td>{$row['name']} ({$row['npc_id']})</td></tr>";
+			}
+		print "</tbody>";
+	print "</table>";
+}
 
 function display_handin_search()
 {
