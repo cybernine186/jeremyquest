@@ -19,7 +19,7 @@ if ($_GET['a'] == "sp")
 	if (!IsText($_POST['playerName']))
 		data_error();
 	
-	$playername = $mysqli->real_escape_string($_POST['playerName'])
+	$playername = $eqdb->real_escape_string($_POST['playerName']);
 	
 	display_handin_search_results($playername);
 }
