@@ -43,7 +43,7 @@ elseif ($_GET['a'] == "h")
 	if($result->num_rows < 1)
 		data_error();
 	$row = $result->fetch_assoc();
-	RowText("<h5>{$row['charname']} handin #{$handin_id} to {$row['npcname']} ({$row['npc_id']})</h5>");
+	RowText("<h5>{$row['charname']} - Handin #{$handin_id} to {$row['npcname']} ({$row['npc_id']})</h5>");
 	Row();
 		Col();
 		DivC();
