@@ -47,7 +47,7 @@ elseif ($_GET['a'] == "h")
 	Row();
 		Col();
 		DivC();
-		Col(true, '', 6);
+		Col(true, '', 8);
 ?>
 			<table class="table">
 				<thead>
@@ -87,7 +87,7 @@ elseif ($_GET['a'] == "h")
 	Row();
 		Col();
 		DivC();
-		Col(true, '', 4);
+		Col(true, '', 6);
 ?>
 			<table class="table">
 				<thead>
