@@ -37,7 +37,9 @@ DISPLAY FUNCTIONS
 function display_handin_search()
 {
 	Row();
-		Col(false);
+		Col();
+		DivC();
+		Col(false, '', 6);
 ?>
 			<form action="handins.php?a=sp" method="post">
 				<div class="form-group">
@@ -47,6 +49,8 @@ function display_handin_search()
 				<button type="submit" class="btn btn-primary">Submit</button>
 			</form>
 <?php
+		DivC();
+		Col();
 		DivC();
 	DivC();
 		
