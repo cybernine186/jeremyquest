@@ -21,7 +21,7 @@ if ($_GET['a'] == "sp")
 	
 	$playername = $eqdb->real_escape_string($_POST['playerName']);
 	
-	display_handin_search_results($playername);
+	display_handin_search_results($eqdb, $playername);
 }
 else
 {
@@ -52,7 +52,7 @@ function display_handin_search()
 		
 }
 
-function display_handin_search_results($playername)
+function display_handin_search_results($eqdb, $playername)
 {
 	print "ok man";
 	$query = "SELECT character_data.id AS id, character_data.name AS charname, character_data.level AS level, guild_members.guild_id, guilds.name AS gname FROM character_data LEFT JOIN guild_members ON character_data.id = guild_members.char_id LEFT JOIN guilds ON guild_members.guild_id = guilds.id WHERE character_data.name LIKE '%{$playername}%'";
