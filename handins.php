@@ -49,18 +49,40 @@ function display_player_handins($eqdb, $charid)
 	$result = $eqdb->query($query);
 	if($result->num_rows < 1)
 		data_error();
-	
 	$row = $result->fetch_assoc();
 	RowText("<h5>{$row['name']} Quest Handins</h5>");
-	$days = 1000;
-	$query = "SELECT handin_id, time AS timenum, DATE_FORMAT(time, '%a %b %d, %Y %T') AS time, char_pp, char_gp, char_sp, char_cp, char_items, npc_id, npc_types.name FROM qs_player_handin_record LEFT JOIN npc_types ON npc_types.id = qs_player_handin_record.npc_id WHERE char_id = {$charid} AND time > (NOW() - INTERVAL {$days} DAY) ORDER BY timenum DESC";
-	$result = $eqdb->query($query);
-	if($result->num_rows < 1)
+
+	$days = 1000;	
+	
+	$query = "SELECT count(*) AS count FROM qs_player_handin_record WHERE char_id = {$charid} AND time > (NOW() - INTERVAL {$days} DAY)";
+	$result = $mysqli->query($query);
+	$row = $result->fetch_assoc();
+	
+	$handincount = $row['count'];
+	
+	if($handincount < 1)
 	{
 		RowText("No handins found in last {$days} days.");
 		include_once("footer.php");
 		die;
 	}
+	
+	// Pagination Data
+	$start = 1;
+	if(isset($_GET['s']))
+		$start = $_GET['s'];
+	
+	$pagesize = 15;
+	
+	$pages = ceil($handincount / $pagesize);
+	
+	$begin = ($start - 1) * $pagesize;	
+	
+	display_pagination($start, $pages, "handins.php?a=p&id={$charid}");
+
+	$query = "SELECT handin_id, time AS timenum, DATE_FORMAT(time, '%a %b %d, %Y %T') AS time, char_pp, char_gp, char_sp, char_cp, char_items, npc_id, npc_types.name FROM qs_player_handin_record LEFT JOIN npc_types ON npc_types.id = qs_player_handin_record.npc_id WHERE char_id = {$charid} AND time > (NOW() - INTERVAL {$days} DAY) ORDER BY timenum DESC LIMIT {$begin}, {$pagesize}";
+	$result = $eqdb->query($query);
+
 ?>
 	<table class="table">
 		<thead>
