@@ -25,7 +25,7 @@ if ($_GET['a'] == "sp")
 }
 elseif ($_GET['a'] == "p")
 {
-	if (!IsNumber($_GET['id'])
+	if (!IsNumber($_GET['id']))
 		data_error();
 	
 	$charid = $_GET['id'];
