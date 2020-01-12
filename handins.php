@@ -72,7 +72,7 @@ function display_player_handins($eqdb, $charid)
 	if(isset($_GET['s']))
 		$start = $_GET['s'];
 	
-	$pagesize = 10;
+	$pagesize = 20;
 	
 	$pages = ceil($handincount / $pagesize);
 	
@@ -108,6 +108,8 @@ function display_player_handins($eqdb, $charid)
 			}
 		print "</tbody>";
 	print "</table>";
+	
+	display_pagination($start, $pages, "handins.php?a=p&id={$charid}");
 }
 
 function display_handin_search()
