@@ -56,12 +56,25 @@ function Col($center = false, $formatting = '', $width = '')
 /*******************************************************************************
 Function:	IsNumber
 Purpose:	Check if value is number
-In:			$num - the number to checkdate
+In:			$num - the number to check
 Out:		Whether or not $num is a number
 *******************************************************************************/
 function IsNumber($num)
 {
 	if (!preg_match("/^\d{1,7}$/", $num, $matches))
+		return false;
+	return true;
+}
+
+/*******************************************************************************
+Function:	IsText
+Purpose:	Check if text is just letters
+In:			$text - the text to check
+Out:		Whether or not $text consists only of letters
+*******************************************************************************/
+function IsText($text)
+{
+	if (!preg_match("/^[a-zA-Z]+$/", $text, $matches))
 		return false;
 	return true;
 }
