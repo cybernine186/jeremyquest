@@ -147,4 +147,9 @@ function display_pagination($start, $pages, $link)
 	print "</ul>";
 }
 
+function Hyperlink($target, $label)
+{
+	print "<a href=\"{$target}\">{$label}</a>";
+}
+
 ?>

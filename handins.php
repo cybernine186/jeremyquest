@@ -67,8 +67,36 @@ function display_handin_search_results($eqdb, $playername)
 		display_handin_search();
 		include_once("footer.php");
 		die;
-	}	
-
+	}
+	Row();
+		Col();
+		DivC();
+		Col(true, '', 6);
+?>
+			<table class="table">
+				<thead>
+					<tr>
+						<th scope="col">Character</th>
+						<th scope="col">Guild</th>
+						<th scope="col">Level</th>
+					</tr>
+				</thead>
+				<tbody>
+<?php
+					while ($row = $result->fetch_assoc())
+					{
+						print "<tr><td>";
+						Hyperlink("handins.php?a=p&id={$row['id']}", $row['charname']);
+						print "</td><td>{$row['gname']}</td><td>{$row['level']}</td></tr>";
+					}
+?>
+				</tbody>
+			</table>
+<?php
+		DivC();
+		Col();
+		DivC();
+	DivC();
 }
 
 ?>
