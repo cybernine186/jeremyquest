@@ -74,7 +74,38 @@ elseif ($_GET['a'] == "h")
 		Col();
 		DivC();
 	DivC();
-
+	
+	$query = "SELECT item_id, charges, items.name FROM qs_player_handin_record_entries LEFT JOIN items ON item_id = items.id WHERE event_id = {$handin_id}";
+	$result = $mysqli->query($query);
+	if($result->num_rows < 1)
+	{
+		RowText("<h6>No Items Handed In</h6>");
+		include_once("footer.php");
+		die;
+	}
+	
+	Row();
+		Col();
+		DivC();
+		Col(true, '', 4);
+?>
+			<table class="table">
+				<thead>
+					<tr>
+						<th scope="col">Item</th>
+						<th scope="col">Charges</th>
+					</tr>
+				</thead>
+				<tbody>
+<?php
+					while ($row = $result->fetch_assoc())
+						print "<tr><td>{$row['name']} ({$row['item_id']})</td><td>{$row['charges']}</td></tr>";
+				print "</tbody>";
+			print "</table>";
+		DivC();
+		Col();
+		DivC();
+	DivC();
 }
 else
 {
