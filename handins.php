@@ -51,7 +51,7 @@ function display_player_handins($eqdb, $charid)
 		data_error();
 	
 	$row = $result->fetch_assoc();
-	RowText("<h5>{$row['name']}</h5>");
+	RowText("<h5>{$row['name']} Quest Handins</h5>");
 	$days = 1000;
 	$query = "SELECT handin_id, time AS timenum, DATE_FORMAT(time, '%a %b %d, %Y %T') AS time, char_pp, char_gp, char_sp, char_cp, char_items, npc_id, npc_types.name FROM qs_player_handin_record LEFT JOIN npc_types ON npc_types.id = qs_player_handin_record.npc_id WHERE char_id = {$charid} AND time > (NOW() - INTERVAL {$days} DAY) ORDER BY timenum DESC";
 	$result = $eqdb->query($query);
@@ -81,7 +81,7 @@ function display_player_handins($eqdb, $charid)
 			{
 				print "<tr><td>";
 				Hyperlink("handins.php?a=h&id={$row['handin_id']}", $row['handin_id']);
-				print "</td><td>{$row['time']}</td><td>{$row['char_pp']}</td><td>{$row['char_gp']}</td><td>{$row['char_sp']}</td>";
+				print "</td><td>{$row['time']}</td><td>{$row['char_pp']}</td><td>{$row['char_gp']}</td><td>{$row['char_sp']}</td><td>{$row['char_cp']}</td>";
 				print "<td>{$row['char_items']}</td><td>{$row['name']} ({$row['npc_id']})</td></tr>";
 			}
 		print "</tbody>";
