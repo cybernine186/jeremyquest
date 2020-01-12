@@ -55,7 +55,7 @@ function display_player_handins($eqdb, $charid)
 	$days = 1000;	
 	
 	$query = "SELECT count(*) AS count FROM qs_player_handin_record WHERE char_id = {$charid} AND time > (NOW() - INTERVAL {$days} DAY)";
-	$result = $mysqli->query($query);
+	$result = $eqdb->query($query);
 	$row = $result->fetch_assoc();
 	
 	$handincount = $row['count'];
