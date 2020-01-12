@@ -72,7 +72,7 @@ function display_player_handins($eqdb, $charid)
 	if(isset($_GET['s']))
 		$start = $_GET['s'];
 	
-	$pagesize = 15;
+	$pagesize = 10;
 	
 	$pages = ceil($handincount / $pagesize);
 	
