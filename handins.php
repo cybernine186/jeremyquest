@@ -76,7 +76,7 @@ elseif ($_GET['a'] == "h")
 	DivC();
 	
 	$query = "SELECT item_id, charges, items.name FROM qs_player_handin_record_entries LEFT JOIN items ON item_id = items.id WHERE event_id = {$handin_id}";
-	$result = $mysqli->query($query);
+	$result = $eqdb->query($query);
 	if($result->num_rows < 1)
 	{
 		RowText("<h6>No Items Handed In</h6>");
