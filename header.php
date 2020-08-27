@@ -91,7 +91,7 @@ if(basename($_SERVER["SCRIPT_FILENAME"], '.php') == "login" && isset($_GET['a'])
 		$cost = 10;
 		$salt = strtr(base64_encode(mcrypt_create_iv(16, MCRYPT_DEV_URANDOM)), '+', '.');
 		$salt = sprintf("$2a$%02d$", $cost) . $salt;
-		$hash = crypt(($first_name . $uid . time()), $salt);
+		$hash = crypt(($uname . $uid . time()), $salt);
 		setcookie($cookie_name, $hash, time() + (86400 * 9999));
 		$query = "INSERT INTO cookiehashes (userid, cookiehash, created, used) VALUES ({$uid}, '{$hash}', NOW(), NOW())";
 		$admindb->query($query);
