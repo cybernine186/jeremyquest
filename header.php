@@ -102,7 +102,7 @@ if(basename($_SERVER["SCRIPT_FILENAME"], '.php') == "login" && isset($_GET['a'])
 }
 
 // Process logout if applicable
-if(basename($_SERVER["SCRIPT_FILENAME"], '.php') == "login" && $_GET['a'] == "logout") {
+if(basename($_SERVER["SCRIPT_FILENAME"], '.php') == "login" && isset($_GET['a']) && $_GET['a'] == "logout") {
 	setcookie($cookie_name, "0", time() - 86400);
 	$uid = -1;
 }
