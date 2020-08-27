@@ -2,7 +2,11 @@
 include_once("functions.php");
 include_once("header.php");
 
-if ($_GET['a'] == "login")
+if (!isset($_GET['a']))
+{
+	display_login_page();
+}
+elseif ($_GET['a'] == "login")
 {
 	Row();
 		Col(true, 'pt-4 pb-2');
