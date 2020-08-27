@@ -32,7 +32,7 @@ $permission_users = false;
 
 
 // Handle logging-in process so user-specific data can be in header on login/logout
-if(basename($_SERVER["SCRIPT_FILENAME"], '.php') == "login" && $_GET['a'] == "login") {
+if(basename($_SERVER["SCRIPT_FILENAME"], '.php') == "login" && isset($_GET['a']) && $_GET['a'] == "login") {
 	// Process login
 	$uname = $admindb->real_escape_string($_POST['uname']);
 	$password = $_POST['password'];
