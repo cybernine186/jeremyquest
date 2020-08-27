@@ -191,7 +191,7 @@ else
 	display_user_list($admindb);
 }
 
-include_once("footer.php")
+include_once("footer.php");
 
 /***************************************************************************************************
 DISPLAY FUNCTIONS
