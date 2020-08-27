@@ -1,7 +1,5 @@
 <?php
 
-include_once("displayfunctions.php");
-
 /*******************************************************************************
 Function:	Container
 Purpose:	Create a container <div>
