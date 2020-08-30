@@ -14,7 +14,11 @@ if (!$permission_handins)
 
 RowText("<h4>Handins</h4>");
 
-if ($_GET['a'] == "sp")
+if (!isset($_GET['a']))
+{
+	display_handin_search();
+}
+elseif ($_GET['a'] == "sp")
 {
 	if (!IsText($_POST['playerName']))
 		data_error();
