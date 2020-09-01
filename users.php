@@ -27,7 +27,7 @@ if (!isset($_GET['a']))
 Section:		Edit User - Display User Edit form
 Inputs:			$_GET['id']				- ID of the user being edited
 ***************************************************************************************************/
-if ($_GET['a'] == "e")
+elseif ($_GET['a'] == "e")
 {
 	// Check for valid ID format
 	if (!IsNumber($_GET['id']))
