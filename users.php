@@ -18,6 +18,11 @@ if (!$permission_users)
 
 RowText("<h4>User Management</h4>");
 
+if (!isset($_GET['a']))
+{
+	// Page output
+	display_user_list($admindb);
+}
 /***************************************************************************************************
 Section:		Edit User - Display User Edit form
 Inputs:			$_GET['id']				- ID of the user being edited
