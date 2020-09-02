@@ -12,7 +12,7 @@ if (!isset($_GET['a']))
 elseif ($_GET['a'] == 's')
 {
 	$playername = $eqdb->real_escape_string($_POST['search']);
-	display_search_result($eqdb, $playername);
+	display_search_results($eqdb, $playername);
 }
 
 function display_search_results($eqdb, $playername)
