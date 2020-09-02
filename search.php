@@ -45,7 +45,7 @@ function display_search_results($eqdb, $playername)
 					while ($row = $result->fetch_assoc())
 					{
 						print "<tr><td>";
-						Hyperlink("handins.php?a=p&id={$row['id']}", $row['charname']);
+						Hyperlink("players.php?a=o&id={$row['id']}", $row['charname']);
 						print "</td><td>{$row['gname']}</td><td>{$row['level']}</td></tr>";
 					}
 ?>
