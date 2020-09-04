@@ -4,18 +4,18 @@ include_once("functions.php");
 include_once("header.php");
 
 // Check for permissions
-if (!$permission_handins)
+if (!$permission_trades)
 {
 	RowText("<h5>You are not authorized!</h5>");
 	include_once("footer.php");
 	die;
 }
 
-RowText("<h4>Handins</h4>");
+RowText("<h4>Trades</h4>");
 
 if (!isset($_GET['a']))
 {
-	display_handin_search();
+	display_trade_search();
 }
 elseif ($_GET['a'] == "sp")
 {
@@ -24,7 +24,7 @@ elseif ($_GET['a'] == "sp")
 	
 	$playername = $eqdb->real_escape_string($_POST['playerName']);
 	
-	display_handin_search_results($eqdb, $playername);
+	display_trade_search_results($eqdb, $playername);
 }
 elseif ($_GET['a'] == "p")
 {
@@ -33,20 +33,21 @@ elseif ($_GET['a'] == "p")
 	
 	$charid = $_GET['id'];
 	
-	display_player_handins($eqdb, $charid);
+	display_player_trades($eqdb, $charid);
 }
-elseif ($_GET['a'] == "h")
+elseif ($_GET['a'] == "t")
 {
 	if (!IsNumber($_GET['id']))
 		data_error();
 	
-	$handin_id = $_GET['id'];
-	$query = "SELECT handin_id, DATE_FORMAT(time, '%a %b %d, %Y %T') AS time, char_pp, char_gp, char_sp, char_cp, char_items, npc_id, npc_types.name AS npcname, character_data.name AS charname FROM qs_player_handin_record LEFT JOIN character_data ON character_data.id = qs_player_handin_record.char_id LEFT JOIN npc_types ON npc_types.id = qs_player_handin_record.npc_id WHERE handin_id = {$handin_id}";
+	$trade_id = $_GET['id'];
+	$query = "SELECT trade_id, DATE_FORMAT(time, '%a %b %d, %Y %T') AS time, char1_id, n1.name AS n1name, char1_pp, char1_gp, char1_sp, char1_cp, char1_items, char2_id, n2.name AS n2name, char2_pp, char2_gp, char2_sp, char2_cp, char2_items FROM qs_player_trade_record LEFT JOIN character_data AS n1 ON n1.id = qs_player_trade_record.char_id LEFT JOIN character_data AS n2 ON n2.id = qs_player_trade_record.char_id WHERE trade_id = {$trade_id}";
 	$result = $eqdb->query($query);
 	if($result->num_rows < 1)
 		data_error();
 	$row = $result->fetch_assoc();
-	RowText("<h5>{$row['charname']} - Handin #{$handin_id} to {$row['npcname']} ({$row['npc_id']})</h5>");
+	RowText("<h5>Trade #{$trade_id} - {$row['n2name']} and {$row['n2name']}</h5>");
+	/*
 	Row();
 		Col();
 		DivC();
@@ -109,10 +110,11 @@ elseif ($_GET['a'] == "h")
 		Col();
 		DivC();
 	DivC();
+	*/
 }
 else
 {
-	display_handin_search();
+	display_trade_search();
 }
 
 include_once("footer.php");
@@ -121,26 +123,26 @@ include_once("footer.php");
 DISPLAY FUNCTIONS
 ***************************************************************************************************/
 
-function display_player_handins($eqdb, $charid)
+function display_player_trades($eqdb, $charid)
 {
 	$query = "SELECT name FROM character_data WHERE id = {$charid}";
 	$result = $eqdb->query($query);
 	if($result->num_rows < 1)
 		data_error();
 	$row = $result->fetch_assoc();
-	RowText("<h5>{$row['name']} Quest Handins</h5>");
+	RowText("<h5>{$row['name']} Trades</h5>");
 
 	$days = 1000;	
 	
-	$query = "SELECT count(*) AS count FROM qs_player_handin_record WHERE char_id = {$charid} AND time > (NOW() - INTERVAL {$days} DAY)";
+	$query = "SELECT count(*) AS count FROM qs_player_trade_record WHERE char_id = {$charid} AND time > (NOW() - INTERVAL {$days} DAY)";
 	$result = $eqdb->query($query);
 	$row = $result->fetch_assoc();
 	
-	$handincount = $row['count'];
+	$tradecount = $row['count'];
 	
-	if($handincount < 1)
+	if($tradecount < 1)
 	{
-		RowText("No handins found in last {$days} days.");
+		RowText("No trades found in last {$days} days.");
 		include_once("footer.php");
 		die;
 	}
@@ -152,11 +154,12 @@ function display_player_handins($eqdb, $charid)
 	
 	$pagesize = 20;
 	
-	$pages = ceil($handincount / $pagesize);
+	$pages = ceil($tradecount / $pagesize);
 	
 	$begin = ($start - 1) * $pagesize;	
 	
-	display_pagination($start, $pages, "handins.php?a=p&id={$charid}");
+	display_pagination($start, $pages, "trades.php?a=p&id={$charid}");
+	/*
 
 	$query = "SELECT handin_id, time AS timenum, DATE_FORMAT(time, '%a %b %d, %Y %T') AS time, char_pp, char_gp, char_sp, char_cp, char_items, npc_id, npc_types.name FROM qs_player_handin_record LEFT JOIN npc_types ON npc_types.id = qs_player_handin_record.npc_id WHERE char_id = {$charid} AND time > (NOW() - INTERVAL {$days} DAY) ORDER BY timenum DESC LIMIT {$begin}, {$pagesize}";
 	$result = $eqdb->query($query);
@@ -186,18 +189,19 @@ function display_player_handins($eqdb, $charid)
 			}
 		print "</tbody>";
 	print "</table>";
+	*/
 	
-	display_pagination($start, $pages, "handins.php?a=p&id={$charid}");
+	display_pagination($start, $pages, "trades.php?a=p&id={$charid}");
 }
 
-function display_handin_search()
+function display_trade_search()
 {
 	Row();
 		Col();
 		DivC();
 		Col(false, '', 6);
 ?>
-			<form action="handins.php?a=sp" method="post">
+			<form action="trades.php?a=sp" method="post">
 				<div class="form-group">
 					<label for="playerName">Player Name</label>
 					<input type="text" class="form-control" id="playerName" placeholder="Enter Player Name" name="playerName">
@@ -212,7 +216,7 @@ function display_handin_search()
 		
 }
 
-function display_handin_search_results($eqdb, $playername)
+function display_trade_search_results($eqdb, $playername)
 {
 	$query = "SELECT character_data.id AS id, character_data.name AS charname, character_data.level AS level, guild_members.guild_id, guilds.name AS gname FROM character_data LEFT JOIN guild_members ON character_data.id = guild_members.char_id LEFT JOIN guilds ON guild_members.guild_id = guilds.id WHERE character_data.name LIKE '%{$playername}%'";
 	$result = $eqdb->query($query);
@@ -242,7 +246,7 @@ function display_handin_search_results($eqdb, $playername)
 					while ($row = $result->fetch_assoc())
 					{
 						print "<tr><td>";
-						Hyperlink("handins.php?a=p&id={$row['id']}", $row['charname']);
+						Hyperlink("trades.php?a=p&id={$row['id']}", $row['charname']);
 						print "</td><td>{$row['gname']}</td><td>{$row['level']}</td></tr>";
 					}
 ?>
