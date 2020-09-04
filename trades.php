@@ -134,7 +134,7 @@ function display_player_trades($eqdb, $charid)
 
 	$days = 1000;	
 	
-	$query = "SELECT count(*) AS count FROM qs_player_trade_record WHERE char_id = {$charid} AND time > (NOW() - INTERVAL {$days} DAY)";
+	$query = "SELECT count(*) AS count FROM qs_player_trade_record WHERE (char1_id = {$charid} OR char2_id = {$charid}) AND time > (NOW() - INTERVAL {$days} DAY)";
 	$result = $eqdb->query($query);
 	$row = $result->fetch_assoc();
 	
