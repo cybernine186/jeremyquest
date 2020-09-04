@@ -224,7 +224,7 @@ function display_trade_search_results($eqdb, $playername)
 	if($result->num_rows < 1)
 	{
 		RowText("<h5>No Players Found</h5>");
-		display_player_search();
+		display_trade_search();
 		include_once("footer.php");
 		die;
 	}
