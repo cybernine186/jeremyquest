@@ -211,7 +211,7 @@ Container();
 					if ($permission_handins)
 						print "<a class='dropdown-item' href='handins.php'>Handins</a>";
 					if ($permission_trades)
-						print "<a class='dropdown-item' href='trade.php'>Trades</a>";
+						print "<a class='dropdown-item' href='trades.php'>Trades</a>";
 					if ($permission_looted)
 						print "<a class='dropdown-item' href='looted.php'>Looted</a>";
 					if ($permission_dropped)
