@@ -189,7 +189,7 @@ function display_player_trades($eqdb, $charid)
 		<tbody>
 <?php
 
-			while ($row = $result->fetch_assoc())
+			while (($row = $result->fetch_assoc()) != null)
 			{
 				print "<tr><td>";
 				Hyperlink("trades.php?a=t&id={$row['trade_id']}", $row['handin_id']);
