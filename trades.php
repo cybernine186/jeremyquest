@@ -175,9 +175,7 @@ function display_player_trades($eqdb, $charid)
 	*/
 
 	$result = $eqdb->query($query) || die($eqdb->error);
-	var_dump($result);
-	die;
-	print "<br />" . $result->num_rows . "<br />";
+/*
 ?>
 	<table class="table">
 		<thead>
@@ -200,6 +198,7 @@ function display_player_trades($eqdb, $charid)
 		</thead>
 		<tbody>
 <?php
+*/
 			$row = $result->fetch_assoc();
 			/*
 			while ($row = $result->fetch_assoc())
