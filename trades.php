@@ -130,7 +130,8 @@ function display_player_trades($eqdb, $charid)
 	if($result->num_rows < 1)
 		data_error();
 	$row = $result->fetch_assoc();
-	RowText("<h5>{$row['name']} Trades</h5>");
+	$name = $row['name'];
+	RowText("<h5>{$name} Trades</h5>");
 
 	$days = 1000;	
 	
@@ -159,9 +160,10 @@ function display_player_trades($eqdb, $charid)
 	$begin = ($start - 1) * $pagesize;	
 	
 	display_pagination($start, $pages, "trades.php?a=p&id={$charid}");
-	/*
 
-	$query = "SELECT handin_id, time AS timenum, DATE_FORMAT(time, '%a %b %d, %Y %T') AS time, char_pp, char_gp, char_sp, char_cp, char_items, npc_id, npc_types.name FROM qs_player_handin_record LEFT JOIN npc_types ON npc_types.id = qs_player_handin_record.npc_id WHERE char_id = {$charid} AND time > (NOW() - INTERVAL {$days} DAY) ORDER BY timenum DESC LIMIT {$begin}, {$pagesize}";
+	$query = "SELECT trade_id, DATE_FORMAT(time, '%a %b %d, %Y %T') AS time, char1_id, n1.name AS n1name, char1_pp, char1_gp, char1_sp, char1_cp, char1_items, char2_id, n2.name AS n2name, char2_pp, char2_gp, char2_sp, char2_cp, char2_items FROM qs_player_trade_record LEFT JOIN character_data AS n1 ON n1.id = qs_player_trade_record.char_id LEFT JOIN character_data AS n2 ON n2.id = qs_player_trade_record.char_id WHERE char1_id = {$charid} OR char2_id = {$charid} LIMIT {$begin} OFFSET {$pagesize}";
+	//$query = "SELECT handin_id, time AS timenum, DATE_FORMAT(time, '%a %b %d, %Y %T') AS time, char_pp, char_gp, char_sp, char_cp, char_items, npc_id, npc_types.name FROM qs_player_handin_record LEFT JOIN npc_types ON npc_types.id = qs_player_handin_record.npc_id WHERE char_id = {$charid} AND time > (NOW() - INTERVAL {$days} DAY) ORDER BY timenum DESC LIMIT {$begin}, {$pagesize}";
+
 	$result = $eqdb->query($query);
 
 ?>
@@ -170,26 +172,32 @@ function display_player_trades($eqdb, $charid)
 			<tr>
 				<th scope="col">ID</th>
 				<th scope="col">When</th>
-				<th scope="col">PP</th>
-				<th scope="col">GP</th>
-				<th scope="col">SP</th>
-				<th scope="col">CP</th>
-				<th scope="col">Items</th>
-				<th scope="col">NPC</th>
+				<th scope="col">Char1</th>
+				<th scope="col">PP1</th>
+				<th scope="col">GP1</th>
+				<th scope="col">SP1</th>
+				<th scope="col">CP1</th>
+				<th scope="col">Items1</th>
+				<th scope="col">Char2</th>
+				<th scope="col">PP2</th>
+				<th scope="col">GP2</th>
+				<th scope="col">SP2</th>
+				<th scope="col">CP2</th>
+				<th scope="col">Items2</th>				
 			</tr>
 		</thead>
 		<tbody>
 <?php
+
 			while ($row = $result->fetch_assoc())
 			{
 				print "<tr><td>";
-				Hyperlink("handins.php?a=h&id={$row['handin_id']}", $row['handin_id']);
-				print "</td><td>{$row['time']}</td><td>{$row['char_pp']}</td><td>{$row['char_gp']}</td><td>{$row['char_sp']}</td><td>{$row['char_cp']}</td>";
-				print "<td>{$row['char_items']}</td><td>{$row['name']} ({$row['npc_id']})</td></tr>";
+				Hyperlink("trades.php?a=t&id={$row['trade_id']}", $row['handin_id']);
+				print "</td><td>{$row['time']}</td><td>{$row['n1name']}</td><td>{$row['char1_pp']}</td><td>{$row['char1_gp']}</td><td>{$row['char1_sp']}</td><td>{$row['char1_cp']}</td><td>{$row['char1_items']}</td>";
+				print "<td>{$row['n2name']}</td><td>{$row['char2_pp']}</td><td>{$row['char2_gp']}</td><td>{$row['char2_sp']}</td><td>{$row['char2_cp']}</td><td>{$row['char2_items']}</td>";
 			}
 		print "</tbody>";
 	print "</table>";
-	*/
 	
 	display_pagination($start, $pages, "trades.php?a=p&id={$charid}");
 }
