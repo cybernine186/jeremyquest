@@ -132,6 +132,7 @@ function display_player_trades($eqdb, $charid)
 	$row = $result->fetch_assoc();
 	$name = $row['name'];
 	RowText("<h5>{$name} Trades</h5>");
+	$result->close();
 
 	$days = 1000;	
 	
@@ -140,6 +141,7 @@ function display_player_trades($eqdb, $charid)
 	$row = $result->fetch_assoc();
 	
 	$tradecount = $row['count'];
+	$result->close();
 	
 	if($tradecount < 1)
 	{
