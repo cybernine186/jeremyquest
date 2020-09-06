@@ -165,15 +165,17 @@ function display_player_trades($eqdb, $charid)
 	print $query;
 	//$query = "SELECT handin_id, time AS timenum, DATE_FORMAT(time, '%a %b %d, %Y %T') AS time, char_pp, char_gp, char_sp, char_cp, char_items, npc_id, npc_types.name FROM qs_player_handin_record LEFT JOIN npc_types ON npc_types.id = qs_player_handin_record.npc_id WHERE char_id = {$charid} AND time > (NOW() - INTERVAL {$days} DAY) ORDER BY timenum DESC LIMIT {$begin}, {$pagesize}";
 
+	/*
 	if($result = $eqdb->query($query)){
 		while ($row = $result->fetch_assoc()) {
 			print_r($row);
 		}
 		die;
 	}
+	*/
 
 	$result = $eqdb->query($query) || die($eqdb->error);;
-
+	print "<br />" . $result->num_rows . "<br />";
 ?>
 	<table class="table">
 		<thead>
