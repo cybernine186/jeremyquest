@@ -164,7 +164,7 @@ function display_player_trades($eqdb, $charid)
 	$query = "SELECT trade_id, DATE_FORMAT(time, '%a %b %d, %Y %T') AS time, char1_id, n1.name AS n1name, char1_pp, char1_gp, char1_sp, char1_cp, char1_items, char2_id, n2.name AS n2name, char2_pp, char2_gp, char2_sp, char2_cp, char2_items FROM qs_player_trade_record LEFT JOIN character_data AS n1 ON n1.id = qs_player_trade_record.char_id LEFT JOIN character_data AS n2 ON n2.id = qs_player_trade_record.char_id WHERE char1_id = {$charid} OR char2_id = {$charid} LIMIT {$begin} OFFSET {$pagesize}";
 	//$query = "SELECT handin_id, time AS timenum, DATE_FORMAT(time, '%a %b %d, %Y %T') AS time, char_pp, char_gp, char_sp, char_cp, char_items, npc_id, npc_types.name FROM qs_player_handin_record LEFT JOIN npc_types ON npc_types.id = qs_player_handin_record.npc_id WHERE char_id = {$charid} AND time > (NOW() - INTERVAL {$days} DAY) ORDER BY timenum DESC LIMIT {$begin}, {$pagesize}";
 
-	$result = $eqdb->query($query);
+	$result = $eqdb->query($query) || die($eqdb->error);;
 
 ?>
 	<table class="table">
@@ -189,7 +189,7 @@ function display_player_trades($eqdb, $charid)
 		<tbody>
 <?php
 
-			while (($row = $result->fetch_assoc()) != null)
+			while ($row = $result->fetch_assoc())
 			{
 				print "<tr><td>";
 				Hyperlink("trades.php?a=t&id={$row['trade_id']}", $row['handin_id']);
