@@ -188,14 +188,16 @@ function display_player_trades($eqdb, $charid)
 		</thead>
 		<tbody>
 <?php
-
+			$row = $result->fetch_assoc();
+			/*
 			while ($row = $result->fetch_assoc())
 			{
+			*/
 				print "<tr><td>";
 				Hyperlink("trades.php?a=t&id={$row['trade_id']}", $row['handin_id']);
 				print "</td><td>{$row['time']}</td><td>{$row['n1name']}</td><td>{$row['char1_pp']}</td><td>{$row['char1_gp']}</td><td>{$row['char1_sp']}</td><td>{$row['char1_cp']}</td><td>{$row['char1_items']}</td>";
 				print "<td>{$row['n2name']}</td><td>{$row['char2_pp']}</td><td>{$row['char2_gp']}</td><td>{$row['char2_sp']}</td><td>{$row['char2_cp']}</td><td>{$row['char2_items']}</td>";
-			}
+			//}
 		print "</tbody>";
 	print "</table>";
 	
