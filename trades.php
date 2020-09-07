@@ -42,13 +42,12 @@ elseif ($_GET['a'] == "t")
 	
 	$trade_id = $_GET['id'];
 	$query = "SELECT trade_id, DATE_FORMAT(time, '%a %b %d, %Y %T') AS time, char1_id, n1.name AS n1name, char1_pp, char1_gp, char1_sp, char1_cp, char1_items, char2_id, n2.name AS n2name, char2_pp, char2_gp, char2_sp, char2_cp, char2_items FROM qs_player_trade_record LEFT JOIN character_data AS n1 ON n1.id = qs_player_trade_record.char1_id LEFT JOIN character_data AS n2 ON n2.id = qs_player_trade_record.char2_id WHERE trade_id = {$trade_id}";
-	print "<br />" . $query . "<br />";
 	$result = $eqdb->query($query);
 	if($result->num_rows < 1)
 		data_error();
 	$row = $result->fetch_assoc();
 	RowText("<h5>Trade #{$trade_id} - {$row['n1name']} and {$row['n2name']}</h5>");
-	/*
+
 	Row();
 		Col();
 		DivC();
@@ -59,27 +58,32 @@ elseif ($_GET['a'] == "t")
 					<tr>
 						<th scope="col">ID</th>
 						<th scope="col">When</th>
-						<th scope="col">PP</th>
-						<th scope="col">GP</th>
-						<th scope="col">SP</th>
-						<th scope="col">CP</th>
-						<th scope="col">Items</th>
+						<th scope="col">Char1</th>
+						<th scope="col">PP1</th>
+						<th scope="col">GP1</th>
+						<th scope="col">SP1</th>
+						<th scope="col">CP1</th>
+						<th scope="col">Items1</th>
+						<th scope="col">Char2</th>
+						<th scope="col">PP2</th>
+						<th scope="col">GP2</th>
+						<th scope="col">SP2</th>
+						<th scope="col">CP2</th>
+						<th scope="col">Items2</th>		
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
 <?php
-						print "<td>{$row['handin_id']}</td><td>{$row['time']}</td>";
-						print "<td>{$row['char_pp']}</td><td>{$row['char_gp']}</td>";
-						print "<td>{$row['char_sp']}</td><td>{$row['char_cp']}</td>";
-						print "<td>{$row['char_items']}</td></tr></tbody></table>";
-						
-						
+						print "<td>";
+						Hyperlink("trades.php?a=t&id={$row['trade_id']}", $row['trade_id']);
+						print "</td><td>{$row['thetime']}</td><td>{$row['n1name']}</td><td>{$row['char1_pp']}</td><td>{$row['char1_gp']}</td><td>{$row['char1_sp']}</td><td>{$row['char1_cp']}</td><td>{$row['char1_items']}</td>";
+						print "<td>{$row['n2name']}</td><td>{$row['char2_pp']}</td><td>{$row['char2_gp']}</td><td>{$row['char2_sp']}</td><td>{$row['char2_cp']}</td><td>{$row['char2_items']}</td></tr></tbody></table>";
 		DivC();
 		Col();
 		DivC();
 	DivC();
-	
+	/*
 	$query = "SELECT item_id, charges, items.name FROM qs_player_handin_record_entries LEFT JOIN items ON item_id = items.id WHERE event_id = {$handin_id}";
 	$result = $eqdb->query($query);
 	if($result->num_rows < 1)
