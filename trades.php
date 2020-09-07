@@ -47,7 +47,7 @@ elseif ($_GET['a'] == "t")
 	if($result->num_rows < 1)
 		data_error();
 	$row = $result->fetch_assoc();
-	RowText("<h5>Trade #{$trade_id} - {$row['n2name']} and {$row['n2name']}</h5>");
+	RowText("<h5>Trade #{$trade_id} - {$row['n1name']} and {$row['n2name']}</h5>");
 	/*
 	Row();
 		Col();
