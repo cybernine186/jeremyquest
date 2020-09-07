@@ -41,7 +41,7 @@ elseif ($_GET['a'] == "t")
 		data_error();
 	
 	$trade_id = $_GET['id'];
-	$query = "SELECT trade_id, DATE_FORMAT(time, '%a %b %d, %Y %T') AS time, char1_id, n1.name AS n1name, char1_pp, char1_gp, char1_sp, char1_cp, char1_items, char2_id, n2.name AS n2name, char2_pp, char2_gp, char2_sp, char2_cp, char2_items FROM qs_player_trade_record LEFT JOIN character_data AS n1 ON n1.id = qs_player_trade_record.char1_id LEFT JOIN character_data AS n2 ON n2.id = qs_player_trade_record.char2_id WHERE trade_id = {$trade_id}";
+	$query = "SELECT trade_id, DATE_FORMAT(time, '%a %b %d, %Y %T') AS thetime, char1_id, n1.name AS n1name, char1_pp, char1_gp, char1_sp, char1_cp, char1_items, char2_id, n2.name AS n2name, char2_pp, char2_gp, char2_sp, char2_cp, char2_items FROM qs_player_trade_record LEFT JOIN character_data AS n1 ON n1.id = qs_player_trade_record.char1_id LEFT JOIN character_data AS n2 ON n2.id = qs_player_trade_record.char2_id WHERE trade_id = {$trade_id}";
 	$result = $eqdb->query($query);
 	if($result->num_rows < 1)
 		data_error();
