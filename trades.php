@@ -49,8 +49,8 @@ elseif ($_GET['a'] == "t")
 	RowText("<h5>Trade #{$trade_id} - {$row['n1name']} and {$row['n2name']}</h5>");
 
 	Row();
-		Col();
-		DivC();
+		//Col();
+		//DivC();
 		Col(true, '', 8);
 ?>
 			<table class="table">
@@ -80,8 +80,8 @@ elseif ($_GET['a'] == "t")
 						print "</td><td>{$row['thetime']}</td><td>{$row['n1name']}</td><td>{$row['char1_pp']}</td><td>{$row['char1_gp']}</td><td>{$row['char1_sp']}</td><td>{$row['char1_cp']}</td><td>{$row['char1_items']}</td>";
 						print "<td>{$row['n2name']}</td><td>{$row['char2_pp']}</td><td>{$row['char2_gp']}</td><td>{$row['char2_sp']}</td><td>{$row['char2_cp']}</td><td>{$row['char2_items']}</td></tr></tbody></table>";
 		DivC();
-		Col();
-		DivC();
+		//Col();
+		//DivC();
 	DivC();
 	/*
 	$query = "SELECT item_id, charges, items.name FROM qs_player_handin_record_entries LEFT JOIN items ON item_id = items.id WHERE event_id = {$handin_id}";
