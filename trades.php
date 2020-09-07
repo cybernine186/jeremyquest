@@ -51,7 +51,7 @@ elseif ($_GET['a'] == "t")
 	Row();
 		//Col();
 		//DivC();
-		Col(true, '', 8);
+		Col(true, '', 12);
 ?>
 			<table class="table">
 				<thead>
