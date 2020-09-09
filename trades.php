@@ -113,11 +113,6 @@ elseif ($_GET['a'] == "t")
 		}
 	}
 	
-	var_dump($p1items);
-	var_dump($p1charges);
-	var_dump($p2items);
-	var_dump($p2charges);
-	
 	Row();
 		Col();
 		DivC();
