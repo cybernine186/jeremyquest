@@ -11,7 +11,7 @@ if (!$permission_dropped)
 	die;
 }
 
-RowText("<h4>Dropped Items</h4>");
+RowText("<h4>Item Drops and Pickups</h4>");
 
 if (!isset($_GET['a']))
 {
