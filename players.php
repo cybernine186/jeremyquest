@@ -49,7 +49,7 @@ function display_player_overview($eqdb, $charid)
 				<tbody>
 					<tr>
 						<td>
-							<a href="handins.php?a=p&id=<?php print $charid; ?>" class="btn btn-primary btn-lg disabled" role="button" aria-disabled="true">Handins</a>
+							<a href="handins.php?a=p&id=<?php print $charid; ?>" class="btn btn-primary btn-lg disabled" role="button">Handins</a>
 						</td>
 						<td>
 							<a href="trades.php?a=p&id=<?php print $charid; ?>" class="btn btn-primary btn-lg disabled" role="button" aria-disabled="true">Trades</a>
