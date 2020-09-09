@@ -223,7 +223,7 @@ function display_player_dropped($eqdb, $charid)
 	
 	display_pagination($start, $pages, "dropped.php?a=p&id={$charid}");
 
-	$query = "SELECT drop_id, DATE_FORMAT(time, '%a %b %d, %Y %T') AS thetime, char_id, pickup, zone_id, x, y, z, zone.short_name AS zonename, qs_player_drop_record_entries.item_id AS itemid, items.name AS itemname, qs_player_drop_record_entries.charges AS charges FROM qs_player_drop_record JOIN zone ON zone.zoneidnumber = qs_player_drop_record.zone_id JOIN qs_player_drop_record_entries ON qs_player_drop_record_entries.event_id = qs_player_drop_record.drop_id JOIN items ON items.id = qs_player_drop_record_entries.item_id WHERE char_id = {$charid} ORDER BY time DESC LIMIT {$begin}, {$pagesize}";
+	$query = "SELECT drop_id, DATE_FORMAT(time, '%a %b %d, %Y %T') AS thetime, char_id, pickup, zone_id, x, y, z, zone.short_name AS zonename FROM qs_player_drop_record JOIN zone ON zone.zoneidnumber = qs_player_drop_record.zone_id WHERE char_id = {$charid} ORDER BY time DESC LIMIT {$begin}, {$pagesize}";
 	$result = $eqdb->query($query);
 ?>
 	<table class="table">
@@ -236,20 +236,20 @@ function display_player_dropped($eqdb, $charid)
 				<th scope="col">X</th>
 				<th scope="col">Y</th>
 				<th scope="col">Z</th>
-				<th scope="col">Item</th>
-				<th scope="col">Charges</th>
 			</tr>
 		</thead>
 		<tbody>
 <?php
 			while ($row = $result->fetch_assoc())
 			{
-				print "<tr><td>{$row['drop_id']}</td><td>{$row['thetime']}</td><td>";
+				print "<tr><td>";
+				Hyperlink("dropped.php?a=d&id={$row['drop_id']}", $row['drop_id']);
+				print "</td><td>{$row['thetime']}</td><td>";
 				if ($row['pickup'] == "0")
 					print "Drop";
 				else
 					print "Pickup";
-				print "</td><td>{$row['zonename']}</td><td>{$row['x']}</td><td>{$row['y']}</td><td>{$row['z']}</td><td>{$row['itemname']} ({$row['itemid']})</td><td>{$row['charges']}</td></tr>";
+				print "</td><td>{$row['zonename']}</td><td>{$row['x']}</td><td>{$row['y']}</td><td>{$row['z']}</td></tr>";
 			}
 		print "</tbody>";
 	print "</table>";
