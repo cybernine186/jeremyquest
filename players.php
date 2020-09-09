@@ -3,7 +3,12 @@
 include_once("functions.php");
 include_once("header.php");
 
-include_once("footer.php");
+if ($uid <= 1)
+{
+	RowText("<h5>You are not authorized!</h5>");
+	include_once("footer.php");
+	die;
+}
 
 if (!isset($_GET['a']))
 {
@@ -29,7 +34,7 @@ function display_player_overview($eqdb, $charid)
 	$row = $result->fetch_assoc();
 	$name = $row['name'];
 	
-	RowText("<h4>Player Overview - {$name}</h4>");
+	RowText("<h4>{$name}</h4>");
 	Row();
 		Col();
 		DivC();
@@ -75,5 +80,7 @@ function display_player_overview($eqdb, $charid)
 		DivC();
 	DivC();
 }
+
+include_once("footer.php");
 
 ?>

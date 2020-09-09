@@ -5,6 +5,13 @@ include_once("header.php");
 
 include_once("footer.php");
 
+if ($uid <= 1)
+{
+	RowText("<h5>You are not authorized!</h5>");
+	include_once("footer.php");
+	die;
+}
+
 if (!isset($_GET['a']))
 {
 	data_error();
