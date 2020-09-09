@@ -244,7 +244,7 @@ function display_player_dropped($eqdb, $charid)
 <?php
 			while ($row = $result->fetch_assoc())
 			{
-				print "<tr><td>{$row['trade_id']}</td><td>{$row['thetime']}</td><td>";
+				print "<tr><td>{$row['drop_id']}</td><td>{$row['thetime']}</td><td>";
 				if ($row['pickup'] == "0")
 					print "Drop";
 				else
