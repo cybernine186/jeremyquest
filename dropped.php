@@ -48,9 +48,10 @@ elseif ($_GET['a'] == "d")
 	$row = $result->fetch_assoc();
 	RowText("<h5>{$row['name']} " . ($row['pickup'] ? "Pickup" : "Drop") . " - {$drop_id}</h5>");
 	
-	
 	Row();
-		Col(true, '', 12);
+		Col();
+		DivC();
+		Col(true, '', 6);
 ?>
 			<table class="table">
 				<thead>
@@ -69,6 +70,8 @@ elseif ($_GET['a'] == "d")
 					}
 				print "</tbody>";
 			print "</table>";
+		DivC();
+		Col();
 		DivC();
 	DivC();
 }
