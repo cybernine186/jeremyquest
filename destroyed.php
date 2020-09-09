@@ -42,7 +42,7 @@ elseif ($_GET['a'] == "d")
 	
 	$destroyed_id = $_GET['id'];
 
-	$query = "SELECT DATE_FORMAT(time, '%a %b %d, %Y %T') AS thetime, char_id, char_items, character_data.name AS name FROM qs_player_delete_record JOIN character_data ON character_data.id = qs_player_delete_record.char_id WHERE drop_id = {$drop_id}";
+	$query = "SELECT DATE_FORMAT(time, '%a %b %d, %Y %T') AS thetime, char_id, char_items, character_data.name AS name FROM qs_player_delete_record JOIN character_data ON character_data.id = qs_player_delete_record.char_id WHERE delete_id = {$destroyed_id}";
 	$result = $eqdb->query($query);
 	if($result->num_rows < 1)
 		data_error();
