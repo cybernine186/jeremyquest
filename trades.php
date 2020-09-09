@@ -118,11 +118,11 @@ elseif ($_GET['a'] == "t")
 	var_dump($p2items);
 	var_dump($p2charges);
 	
-	/*
 	Row();
 		Col();
 		DivC();
 		Col(true, '', 4);
+			RowText("<h5>{$nameone} Trades</h5>");
 ?>
 			<table class="table">
 				<thead>
@@ -133,15 +133,35 @@ elseif ($_GET['a'] == "t")
 				</thead>
 				<tbody>
 <?php
-					while ($row = $result->fetch_assoc())
-						print "<tr><td>{$row['name']} ({$row['item_id']})</td><td>{$row['charges']}</td></tr>";
+					foreach ($p1items as $index => $val)
+					{
+						print "<tr><td>{$val}</td><td>{$p1charges[$index]}</td></tr>";
+					}
+				print "</tbody>";
+			print "</table>";
+		DivC();
+		Col(true, '', 4);
+			RowText("<h5>{$nametwo} Trades</h5>");
+?>
+			<table class="table">
+				<thead>
+					<tr>
+						<th scope="col">Item</th>
+						<th scope="col">Charges</th>
+					</tr>
+				</thead>
+				<tbody>
+<?php
+					foreach ($p2items as $index => $val)
+					{
+						print "<tr><td>{$val}</td><td>{$p2charges[$index]}</td></tr>";
+					}
 				print "</tbody>";
 			print "</table>";
 		DivC();
 		Col();
 		DivC();
 	DivC();
-	*/
 }
 else
 {
