@@ -41,13 +41,13 @@ elseif ($_GET['a'] == "d")
 		data_error();
 	
 	$destroyed_id = $_GET['id'];
-	/*
-	$query = "SELECT DATE_FORMAT(time, '%a %b %d, %Y %T') AS thetime, char_id, character_data.name AS name, pickup, zone.short_name AS zonename, qs_player_drop_record.x AS x, qs_player_drop_record.y AS y, qs_player_drop_record.z AS z FROM qs_player_drop_record JOIN character_data ON character_data.id = qs_player_drop_record.char_id JOIN zone ON zone.zoneidnumber = qs_player_drop_record.zone_id WHERE drop_id = {$drop_id}";
+
+	$query = "SELECT DATE_FORMAT(time, '%a %b %d, %Y %T') AS thetime, char_id, char_items, character_data.name AS name FROM qs_player_delete_record JOIN character_data ON character_data.id = qs_player_delete_record.char_id WHERE drop_id = {$drop_id}";
 	$result = $eqdb->query($query);
 	if($result->num_rows < 1)
 		data_error();
 	$row = $result->fetch_assoc();
-	RowText("<h5>{$row['name']} " . ($row['pickup'] ? "Pickup" : "Drop") . " - #{$drop_id}</h5>");
+	RowText("<h5>{$row['name']} Item Destroy - #{$destroyed_id}</h5>");
 	
 	Row();
 		Col();
@@ -59,16 +59,12 @@ elseif ($_GET['a'] == "d")
 					<tr>
 						<th scope="col">ID</th>
 						<th scope="col">When</th>
-						<th scope="col">Type</th>
-						<th scope="col">Zone</th>
-						<th scope="col">X</th>
-						<th scope="col">Y</th>
-						<th scope="col">Z</th>
+						<th scope="col">Items</th>
 					</tr>
 				</thead>
 				<tbody>
 <?php
-					print "<tr><td>{$drop_id}</td><td>{$row['thetime']}</td><td>" . ($row['pickup'] ? "Pickup" : "Drop") . "</td><td>{$row['zonename']}</td><td>{$row['x']}</td><td>{$row['y']}</td><td>{$row['z']}</td></tr>";
+					print "<tr><td>{$destroyed_id}</td><td>{$row['thetime']}</td><td>{$row['char_items']}</td></tr>";
 				print "</tbody>";
 			print "</table>";
 		DivC();
@@ -86,11 +82,12 @@ elseif ($_GET['a'] == "d")
 					<tr>
 						<th scope="col">Item</th>
 						<th scope="col">Charges</th>
+						<th scope="col">Slot</th>
 					</tr>
 				</thead>
 				<tbody>
 <?php
-					$query = "SELECT item_id, charges, items.name AS itemname FROM qs_player_drop_record_entries JOIN items ON items.id = qs_player_drop_record_entries.item_id WHERE event_id = {$drop_id}";
+					$query = "SELECT char_slot, item_id, charges, items.name AS itemname FROM qs_player_delete_record_entries JOIN items ON items.id = qs_player_delete_record_entries.item_id WHERE event_id = {$destroyed_id}";
 					$result = $eqdb->query($query);
 					while ($row = $result->fetch_assoc())
 					{
@@ -102,7 +99,6 @@ elseif ($_GET['a'] == "d")
 		Col();
 		DivC();
 	DivC();
-	*/
 }
 else
 {
@@ -123,7 +119,7 @@ function display_player_destroyed($eqdb, $charid)
 		data_error();
 	$row = $result->fetch_assoc();
 	$name = $row['name'];
-	RowText("<h5>{$name} Drops and Pickups</h5>");
+	RowText("<h5>{$name} Doug - Destroyed Items</h5>");
 
 	$days = 1000;	
 	
