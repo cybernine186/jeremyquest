@@ -85,7 +85,7 @@ elseif ($_GET['a'] == "t")
 	$nameone = $row['n1name'];
 	$nametwo = $row['n2name'];
 	
-	$query = "SELECT event_id, from_id, to_id, item_id, charges, items.name AS itemname FROM qs_player_trade_record_entries LEFT JOIN items ON items.name = qs_player_trade_record_entries.item_id WHERE event_id = {$trade_id}";
+	$query = "SELECT event_id, from_id, to_id, item_id, charges, items.name AS itemname FROM qs_player_trade_record_entries LEFT JOIN items ON items.id = qs_player_trade_record_entries.item_id WHERE event_id = {$trade_id}";
 	$result = $eqdb->query($query);
 	if($result->num_rows < 1)
 	{
