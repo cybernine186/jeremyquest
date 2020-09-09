@@ -49,22 +49,22 @@ function display_player_overview($eqdb, $charid)
 				<tbody>
 					<tr>
 						<td>
-							<a href="handins.php?a=p&id=<?php print $charid; ?>" class="btn btn-primary btn-lg disabled" role="button">Handins</a>
+							<a href="handins.php?a=p&id=<?php print $charid; ?>" class="btn btn-primary btn-lg" role="button" aria-disabled="true">Handins</a>
 						</td>
 						<td>
-							<a href="trades.php?a=p&id=<?php print $charid; ?>" class="btn btn-primary btn-lg disabled" role="button" aria-disabled="true">Trades</a>
+							<a href="trades.php?a=p&id=<?php print $charid; ?>" class="btn btn-primary btn-lg" role="button" aria-disabled="true">Trades</a>
 						</td>
 						<td>
-							<a href="looted.php?a=p&id=<?php print $charid; ?>" class="btn btn-primary btn-lg disabled" role="button" aria-disabled="true">Looted</a>
+							<a href="looted.php?a=p&id=<?php print $charid; ?>" class="btn btn-primary btn-lg" role="button" aria-disabled="true">Looted</a>
 						</td>
 						<td>
-							<a href="dropped.php?a=p&id=<?php print $charid; ?>" class="btn btn-primary btn-lg disabled" role="button" aria-disabled="true">Dropped</a>
+							<a href="dropped.php?a=p&id=<?php print $charid; ?>" class="btn btn-primary btn-lg" role="button" aria-disabled="true">Dropped</a>
 						</td>
 						<td>
-							<a href="deleted.php?a=p&id=<?php print $charid; ?>" class="btn btn-primary btn-lg disabled" role="button" aria-disabled="true">Destroyed</a>
+							<a href="deleted.php?a=p&id=<?php print $charid; ?>" class="btn btn-primary btn-lg" role="button" aria-disabled="true">Destroyed</a>
 						</td>
 						<td>
-							<a href="inventory.php?a=p&id=<?php print $charid; ?>" class="btn btn-primary btn-lg disabled" role="button" aria-disabled="true">Inventory</a>
+							<a href="inventory.php?a=p&id=<?php print $charid; ?>" class="btn btn-primary btn-lg" role="button" aria-disabled="true">Inventory</a>
 						</td>
 					</tr>
 				</tbody>
