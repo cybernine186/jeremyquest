@@ -49,8 +49,6 @@ elseif ($_GET['a'] == "t")
 	RowText("<h5>Trade #{$trade_id} - {$row['n1name']} and {$row['n2name']}</h5>");
 
 	Row();
-		//Col();
-		//DivC();
 		Col(true, '', 12);
 ?>
 			<table class="table">
@@ -80,23 +78,51 @@ elseif ($_GET['a'] == "t")
 						print "</td><td>{$row['thetime']}</td><td>{$row['n1name']}</td><td>{$row['char1_pp']}</td><td>{$row['char1_gp']}</td><td>{$row['char1_sp']}</td><td>{$row['char1_cp']}</td><td>{$row['char1_items']}</td>";
 						print "<td>{$row['n2name']}</td><td>{$row['char2_pp']}</td><td>{$row['char2_gp']}</td><td>{$row['char2_sp']}</td><td>{$row['char2_cp']}</td><td>{$row['char2_items']}</td></tr></tbody></table>";
 		DivC();
-		//Col();
-		//DivC();
 	DivC();
-	/*
-	$query = "SELECT item_id, charges, items.name FROM qs_player_handin_record_entries LEFT JOIN items ON item_id = items.id WHERE event_id = {$handin_id}";
+	
+	$idone = $row['char1_id'];
+	$idtwo = $row['char2_id'];
+	$nameone = $row['n1name'];
+	$nametwo = $row['n2name'];
+	
+	$query = "SELECT event_id, from_id, to_id, item_id, charges, items.name AS itemname FROM qs_player_trade_record_entries LEFT JOIN items ON items.name = qs_player_trade_record_entries.item_id WHERE event_id = {$trade_id}";
 	$result = $eqdb->query($query);
 	if($result->num_rows < 1)
 	{
-		RowText("<h6>No Items Handed In</h6>");
+		RowText("<h6>No Items Traded</h6>");
 		include_once("footer.php");
 		die;
 	}
 	
+	$p1items = array();
+	$p1charges = array();
+	$p2items = array();
+	$p2charges = array();
+	
+	while ($row = $result->fetch_assoc())
+	{
+		if ($row['from_id'] == $idone)
+		{
+			array_push($p1items, $row['itemname'] . " (" . $row['item_id'] . ")");
+			array_push($p1charges, $row['charges']);
+		}
+		else
+		{
+			array_push($p2items, $row['itemname'] . " (" . $row['item_id'] . ")");
+			array_push($p2charges, $row['charges']);
+		}
+	}
+	
+	var_dump($p1items);
+	var_dump($p1charges);
+	var_dump($p2items);
+	var_dump($p2charges);
+	
+	/*
 	Row();
 		Col();
 		DivC();
-		Col(true, '', 6);
+		Col(true, '', 4);
 ?>
 			<table class="table">
 				<thead>
