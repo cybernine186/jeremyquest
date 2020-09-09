@@ -11,7 +11,7 @@ if (!$permission_inventory)
 	die;
 }
 
-RowText("<h4>Inventory</h4>");
+RowText("<h4>Inventory Snapshots</h4>");
 
 include_once("footer.php");
 
