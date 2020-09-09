@@ -41,12 +41,39 @@ elseif ($_GET['a'] == "d")
 		data_error();
 	
 	$drop_id = $_GET['id'];
-	$query = "SELECT DATE_FORMAT(time, '%a %b %d, %Y %T') AS thetime, char_id, character_data.name AS name, pickup, zone.short_name, qs_player_drop_record.x AS x, qs_player_drop_record.y AS y, qs_player_drop_record.z AS z FROM qs_player_drop_record JOIN character_data ON character_data.id = qs_player_drop_record.char_id JOIN zone ON zone.zoneidnumber = qs_player_drop_record.zone_id WHERE drop_id = {$drop_id}";
+	$query = "SELECT DATE_FORMAT(time, '%a %b %d, %Y %T') AS thetime, char_id, character_data.name AS name, pickup, zone.short_name AS zonename, qs_player_drop_record.x AS x, qs_player_drop_record.y AS y, qs_player_drop_record.z AS z FROM qs_player_drop_record JOIN character_data ON character_data.id = qs_player_drop_record.char_id JOIN zone ON zone.zoneidnumber = qs_player_drop_record.zone_id WHERE drop_id = {$drop_id}";
 	$result = $eqdb->query($query);
 	if($result->num_rows < 1)
 		data_error();
 	$row = $result->fetch_assoc();
-	RowText("<h5>{$row['name']} " . ($row['pickup'] ? "Pickup" : "Drop") . " - {$drop_id}</h5>");
+	RowText("<h5>{$row['name']} " . ($row['pickup'] ? "Pickup" : "Drop") . " - #{$drop_id}</h5>");
+	
+	Row()
+		Col();
+		DivC();
+		Col(true, '', 8);
+?>
+			<table class="table">
+				<thead>
+					<tr>
+						<th scope="col">ID</th>
+						<th scope="col">When</th>
+						<th scope="col">Type</th>
+						<th scope="col">Zone</th>
+						<th scope="col">X<th>
+						<th scope="col">Y<th>
+						<th scope="col">Z<th>
+					</tr>
+				</thead>
+				<tbody>
+<?php
+					print "<tr><td>{$drop_id}</td><td>{$row['thetime']}</td><td>" . ($row['pickup'] ? "Pickup" : "Drop") . "</td><td>{$row['zonename']}</td><td>{$row['x']}</td><td>{$row['y']}</td><td>{$row['z']}</td></tr>";
+				print "</tbody>";
+			print "</table>";
+		DivC();
+		Col();
+		DivC();
+	DivC();
 	
 	Row();
 		Col();
