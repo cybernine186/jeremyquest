@@ -41,7 +41,7 @@ elseif ($_GET['a'] == "d")
 		data_error();
 	
 	$drop_id = $_GET['id'];
-	$query = "SELECT DATE_FORMAT(time, '%a %b %d, %Y %T') AS thetime, char_id, character_data.name AS name, pickup, zone.short_name, x, y, z FROM qs_player_trade_record JOIN character_data ON character_data.id = qs_player_drop_record.char_id JOIN zone ON zone.zoneidnumber = qs_player_trade_record.zone_id WHERE drop_id = {$drop_id}";
+	$query = "SELECT DATE_FORMAT(time, '%a %b %d, %Y %T') AS thetime, char_id, character_data.name AS name, pickup, zone.short_name, x, y, z FROM qs_player_drop_record JOIN character_data ON character_data.id = qs_player_drop_record.char_id JOIN zone ON zone.zoneidnumber = qs_player_drop_record.zone_id WHERE drop_id = {$drop_id}";
 	$result = $eqdb->query($query);
 	if($result->num_rows < 1)
 		data_error();
