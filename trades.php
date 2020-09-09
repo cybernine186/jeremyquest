@@ -144,7 +144,7 @@ elseif ($_GET['a'] == "t")
 		DivC();
 		Col(true, '', 4);
 			RowText("<h5>{$nametwo} Trades</h5>");
-			if (sizeof($p1items) <= 0)
+			if (sizeof($p2items) <= 0)
 			{
 				RowText("None");
 			}
