@@ -121,7 +121,7 @@ function display_player_dropped($eqdb, $charid)
 		data_error();
 	$row = $result->fetch_assoc();
 	$name = $row['name'];
-	RowText("<h5>{$name} Dropped</h5>");
+	RowText("<h5>{$name} Drops and Pickups</h5>");
 	$result->close();
 
 	$days = 1000;	
