@@ -40,14 +40,14 @@ elseif ($_GET['a'] == "d")
 	if (!IsNumber($_GET['id']))
 		data_error();
 	
-	$trade_id = $_GET['id'];
-	$query = "SELECT trade_id, DATE_FORMAT(time, '%a %b %d, %Y %T') AS thetime, char1_id, n1.name AS n1name, char1_pp, char1_gp, char1_sp, char1_cp, char1_items, char2_id, n2.name AS n2name, char2_pp, char2_gp, char2_sp, char2_cp, char2_items FROM qs_player_trade_record LEFT JOIN character_data AS n1 ON n1.id = qs_player_trade_record.char1_id LEFT JOIN character_data AS n2 ON n2.id = qs_player_trade_record.char2_id WHERE trade_id = {$trade_id}";
+	$drop_id = $_GET['id'];
+	$query = "SELECT DATE_FORMAT(time, '%a %b %d, %Y %T') AS thetime, char_id, character_data.name AS name, pickup, zone.short_name, x, y, z FROM qs_player_trade_record JOIN character_data ON character_data.id = qs_player_trade_record.char_id JOIN zone ON zone.zoneidnumber = qs_player_trade_record.zone_id WHERE drop_id = {$drop_id}";
 	$result = $eqdb->query($query);
 	if($result->num_rows < 1)
 		data_error();
 	$row = $result->fetch_assoc();
-	RowText("<h5>Trade #{$trade_id} - {$row['n1name']} and {$row['n2name']}</h5>");
-
+	RowText("<h5>{$row['name']} " . ($row['pickup'] ? "Pickup" : "Drop") . " - {$drop_id}</h5>");
+/*
 	Row();
 		Col(true, '', 12);
 ?>
@@ -171,6 +171,7 @@ elseif ($_GET['a'] == "d")
 		Col();
 		DivC();
 	DivC();
+*/
 }
 else
 {
