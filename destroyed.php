@@ -127,7 +127,7 @@ function display_player_destroyed($eqdb, $charid)
 
 	$days = 1000;	
 	
-	$query = "SELECT count(*) AS count FROM qs_player_destroyed_record WHERE char_id = {$charid} AND time > (NOW() - INTERVAL {$days} DAY)";
+	$query = "SELECT count(*) AS count FROM qs_player_delete_record WHERE char_id = {$charid} AND time > (NOW() - INTERVAL {$days} DAY)";
 	$result = $eqdb->query($query);
 	$row = $result->fetch_assoc();
 	
