@@ -249,7 +249,7 @@ function display_player_dropped($eqdb, $charid)
 					print "Drop";
 				else
 					print "Pickup";
-				print "</td><td>{$row['zonename']}</td><td>{$row['x']}</td><td>{$row['y']}</td><td>{$row['z']}</td><td>{$row['itemname']} ({$row['itemid']})</td><td>{$row['charges']}</td></tr>
+				print "</td><td>{$row['zonename']}</td><td>{$row['x']}</td><td>{$row['y']}</td><td>{$row['z']}</td><td>{$row['itemname']} ({$row['itemid']})</td><td>{$row['charges']}</td></tr>";
 			}
 		print "</tbody>";
 	print "</table>";
