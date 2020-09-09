@@ -60,9 +60,9 @@ elseif ($_GET['a'] == "d")
 						<th scope="col">When</th>
 						<th scope="col">Type</th>
 						<th scope="col">Zone</th>
-						<th scope="col">X<th>
-						<th scope="col">Y<th>
-						<th scope="col">Z<th>
+						<th scope="col">X</th>
+						<th scope="col">Y</th>
+						<th scope="col">Z</th>
 					</tr>
 				</thead>
 				<tbody>
