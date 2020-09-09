@@ -191,21 +191,21 @@ function display_player_dropped($eqdb, $charid)
 		data_error();
 	$row = $result->fetch_assoc();
 	$name = $row['name'];
-	RowText("<h5>{$name} Trades</h5>");
+	RowText("<h5>{$name} Dropped</h5>");
 	$result->close();
 
 	$days = 1000;	
 	
-	$query = "SELECT count(*) AS count FROM qs_player_trade_record WHERE (char1_id = {$charid} OR char2_id = {$charid}) AND time > (NOW() - INTERVAL {$days} DAY)";
+	$query = "SELECT count(*) AS count FROM qs_player_drop_record WHERE char_id = {$charid} AND time > (NOW() - INTERVAL {$days} DAY)";
 	$result = $eqdb->query($query);
 	$row = $result->fetch_assoc();
 	
-	$tradecount = $row['count'];
+	$dropcount = $row['count'];
 	$result->close();
 	
-	if($tradecount < 1)
+	if($dropcount < 1)
 	{
-		RowText("No trades found in last {$days} days.");
+		RowText("No drops found in last {$days} days.");
 		include_once("footer.php");
 		die;
 	}
@@ -217,13 +217,13 @@ function display_player_dropped($eqdb, $charid)
 	
 	$pagesize = 20;
 	
-	$pages = ceil($tradecount / $pagesize);
+	$pages = ceil($dropcount / $pagesize);
 	
 	$begin = ($start - 1) * $pagesize;	
 	
-	display_pagination($start, $pages, "trades.php?a=p&id={$charid}");
+	display_pagination($start, $pages, "dropped.php?a=p&id={$charid}");
 
-	$query = "SELECT trade_id, DATE_FORMAT(time, '%a %b %d, %Y %T') AS thetime, char1_id, n1.name AS n1name, char1_pp, char1_gp, char1_sp, char1_cp, char1_items, char2_id, n2.name AS n2name, char2_pp, char2_gp, char2_sp, char2_cp, char2_items FROM qs_player_trade_record JOIN character_data AS n1 ON n1.id = qs_player_trade_record.char1_id JOIN character_data AS n2 ON n2.id = qs_player_trade_record.char2_id WHERE (char1_id = {$charid} OR char2_id = {$charid}) ORDER BY time DESC LIMIT {$begin}, {$pagesize}";
+	$query = "SELECT drop_id, DATE_FORMAT(time, '%a %b %d, %Y %T') AS thetime, char_id, pickup, zone_id, x, y, z, zone.short_name AS zonename, qs_player_drop_record_entries.item_id AS itemid, items.name AS itemname, qs_player_drop_record_entries.charges AS charges FROM qs_player_drop_record JOIN zone ON zone.zoneidnumber = qs_player_drop_record.zone_id JOIN qs_player_drop_record_entries ON qs_player_drop_record_entries.event_id = qs_player_drop_record.drop_id JOIN items ON items.id = qs_player_drop_record_entries.item_id WHERE char_id = {$charid} ORDER BY time DESC LIMIT {$begin}, {$pagesize}";
 	$result = $eqdb->query($query);
 ?>
 	<table class="table">
@@ -231,33 +231,30 @@ function display_player_dropped($eqdb, $charid)
 			<tr>
 				<th scope="col">ID</th>
 				<th scope="col">When</th>
-				<th scope="col">Char1</th>
-				<th scope="col">PP1</th>
-				<th scope="col">GP1</th>
-				<th scope="col">SP1</th>
-				<th scope="col">CP1</th>
-				<th scope="col">Items1</th>
-				<th scope="col">Char2</th>
-				<th scope="col">PP2</th>
-				<th scope="col">GP2</th>
-				<th scope="col">SP2</th>
-				<th scope="col">CP2</th>
-				<th scope="col">Items2</th>				
+				<th scope="col">Type</th>
+				<th scope="col">Zone</th>
+				<th scope="col">X</th>
+				<th scope="col">Y</th>
+				<th scope="col">Z</th>
+				<th scope="col">Item</th>
+				<th scope="col">Charges</th>
 			</tr>
 		</thead>
 		<tbody>
 <?php
 			while ($row = $result->fetch_assoc())
 			{
-				print "<tr><td>";
-				Hyperlink("trades.php?a=t&id={$row['trade_id']}", $row['trade_id']);
-				print "</td><td>{$row['thetime']}</td><td>{$row['n1name']}</td><td>{$row['char1_pp']}</td><td>{$row['char1_gp']}</td><td>{$row['char1_sp']}</td><td>{$row['char1_cp']}</td><td>{$row['char1_items']}</td>";
-				print "<td>{$row['n2name']}</td><td>{$row['char2_pp']}</td><td>{$row['char2_gp']}</td><td>{$row['char2_sp']}</td><td>{$row['char2_cp']}</td><td>{$row['char2_items']}</td>";
+				print "<tr><td>{$row['trade_id']}</td><td>{$row['thetime']}</td><td>";
+				if ($row['pickup'] == "0")
+					print "Drop";
+				else
+					print "Pickup";
+				print "</td><td>{$row['zonename']}</td><td>{$row['x']}</td><td>{$row['y']}</td><td>{$row['z']}</td><td>{$row['itemname']} ({$row['itemid']})</td><td>{$row['charges']}</td></tr>
 			}
 		print "</tbody>";
 	print "</table>";
 	
-	display_pagination($start, $pages, "trades.php?a=p&id={$charid}");
+	display_pagination($start, $pages, "dropped.php?a=p&id={$charid}");
 }
 
 function display_dropped_search()
