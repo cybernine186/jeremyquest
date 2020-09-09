@@ -47,131 +47,30 @@ elseif ($_GET['a'] == "d")
 		data_error();
 	$row = $result->fetch_assoc();
 	RowText("<h5>{$row['name']} " . ($row['pickup'] ? "Pickup" : "Drop") . " - {$drop_id}</h5>");
-/*
+	
+	
 	Row();
 		Col(true, '', 12);
 ?>
 			<table class="table">
 				<thead>
 					<tr>
-						<th scope="col">ID</th>
-						<th scope="col">When</th>
-						<th scope="col">Char1</th>
-						<th scope="col">PP1</th>
-						<th scope="col">GP1</th>
-						<th scope="col">SP1</th>
-						<th scope="col">CP1</th>
-						<th scope="col">Items1</th>
-						<th scope="col">Char2</th>
-						<th scope="col">PP2</th>
-						<th scope="col">GP2</th>
-						<th scope="col">SP2</th>
-						<th scope="col">CP2</th>
-						<th scope="col">Items2</th>		
+						<th scope="col">Item</th>
+						<th scope="col">Charges</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
 <?php
-						print "<td>";
-						Hyperlink("trades.php?a=t&id={$row['trade_id']}", $row['trade_id']);
-						print "</td><td>{$row['thetime']}</td><td>{$row['n1name']}</td><td>{$row['char1_pp']}</td><td>{$row['char1_gp']}</td><td>{$row['char1_sp']}</td><td>{$row['char1_cp']}</td><td>{$row['char1_items']}</td>";
-						print "<td>{$row['n2name']}</td><td>{$row['char2_pp']}</td><td>{$row['char2_gp']}</td><td>{$row['char2_sp']}</td><td>{$row['char2_cp']}</td><td>{$row['char2_items']}</td></tr></tbody></table>";
+					$query = "SELECT item_id, charges, items.name AS itemname FROM qs_player_drop_record_entries JOIN items ON items.id = qs_player_drop_record_entries.item_id WHERE event_id = {$drop_id}";
+					$result = $eqdb->query($query);
+					while ($row = $result->fetch_assoc())
+					{
+						print "<tr><td>{$row['itemname']} ({$row['item_id']})</td><td>{$row['charges']}</td></tr>";
+					}
+				print "</tbody>";
+			print "</table>";
 		DivC();
 	DivC();
-	
-	$idone = $row['char1_id'];
-	$idtwo = $row['char2_id'];
-	$nameone = $row['n1name'];
-	$nametwo = $row['n2name'];
-	
-	$query = "SELECT event_id, from_id, to_id, item_id, charges, items.name AS itemname FROM qs_player_trade_record_entries LEFT JOIN items ON items.id = qs_player_trade_record_entries.item_id WHERE event_id = {$trade_id}";
-	$result = $eqdb->query($query);
-	if($result->num_rows < 1)
-	{
-		RowText("<h6>No Items Traded</h6>");
-		include_once("footer.php");
-		die;
-	}
-	
-	$p1items = array();
-	$p1charges = array();
-	$p2items = array();
-	$p2charges = array();
-	
-	while ($row = $result->fetch_assoc())
-	{
-		if ($row['from_id'] == $idone)
-		{
-			array_push($p1items, $row['itemname'] . " (" . $row['item_id'] . ")");
-			array_push($p1charges, $row['charges']);
-		}
-		else
-		{
-			array_push($p2items, $row['itemname'] . " (" . $row['item_id'] . ")");
-			array_push($p2charges, $row['charges']);
-		}
-	}
-	
-	Row();
-		Col();
-		DivC();
-		Col(true, '', 4);
-			RowText("<h5>{$nameone} Trades</h5>");
-			if (sizeof($p1items) <= 0)
-			{
-				RowText("None");
-			}
-			else
-			{
-?>
-				<table class="table">
-					<thead>
-						<tr>
-							<th scope="col">Item</th>
-							<th scope="col">Charges</th>
-						</tr>
-					</thead>
-					<tbody>
-<?php
-						foreach ($p1items as $index => $val)
-						{
-							print "<tr><td>{$val}</td><td>{$p1charges[$index]}</td></tr>";
-						}
-					print "</tbody>";
-				print "</table>";
-			}
-		DivC();
-		Col(true, '', 4);
-			RowText("<h5>{$nametwo} Trades</h5>");
-			if (sizeof($p2items) <= 0)
-			{
-				RowText("None");
-			}
-			else
-			{
-?>
-				<table class="table">
-					<thead>
-						<tr>
-							<th scope="col">Item</th>
-							<th scope="col">Charges</th>
-						</tr>
-					</thead>
-					<tbody>
-<?php
-						foreach ($p2items as $index => $val)
-						{
-							print "<tr><td>{$val}</td><td>{$p2charges[$index]}</td></tr>";
-						}
-					print "</tbody>";
-				print "</table>";
-			}
-		DivC();
-		Col();
-		DivC();
-	DivC();
-*/
 }
 else
 {
