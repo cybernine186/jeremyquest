@@ -22,7 +22,7 @@ $permission_trades = false;
 $permission_looted = false;
 $permission_dropped = false;
 $permission_destroyed = false;
-$permission_rollback = false;
+$permission_inventory = false;
 $permission_logging = false;
 $permission_users = false;
 
@@ -38,7 +38,7 @@ if(basename($_SERVER["SCRIPT_FILENAME"], '.php') == "login" && isset($_GET['a'])
 	$password = $_POST['password'];
 
 	// Look for entry for indicated UserID
-	$query = "SELECT hash, id, permission_handins, permission_trades, permission_looted, permission_dropped, permission_destroyed, permission_rollback, permission_logging, permission_users FROM users WHERE username = '" . $uname . "'";
+	$query = "SELECT hash, id, permission_handins, permission_trades, permission_looted, permission_dropped, permission_destroyed, permission_inventory, permission_logging, permission_users FROM users WHERE username = '" . $uname . "'";
 	$result = $admindb->query($query);
 	
 	// Login good until otherwise indicated bad
@@ -74,8 +74,8 @@ if(basename($_SERVER["SCRIPT_FILENAME"], '.php') == "login" && isset($_GET['a'])
 				$permission_dropped = true;			
 			if ($row['permission_destroyed'])
 				$permission_destroyed = true;
-			if ($row['permission_rollback'])
-				$permission_rollback = true;
+			if ($row['permission_inventory'])
+				$permission_inventory = true;
 			if ($row['permission_logging'])
 				$permission_logging = true;
 			if ($row['permission_users'])
@@ -119,7 +119,7 @@ else
 	// Cookie Present - see if it's legit
 	
 	$cookievalue = $_COOKIE[$cookie_name];
-	$query = "SELECT cookiehashes.id AS id, cookiehashes.userid AS uid, users.id AS uid2, users.permission_handins AS permission_handins, users.permission_trades AS permission_trades, users.permission_looted AS permission_looted, users.permission_dropped AS permission_dropped, users.permission_destroyed AS permission_destroyed, users.permission_rollback AS permission_rollback, users.permission_logging AS permission_logging, users.permission_users AS permission_users, users.username AS username FROM cookiehashes LEFT JOIN users ON cookiehashes.userid=users.id  WHERE cookiehashes.cookiehash='{$cookievalue}'";
+	$query = "SELECT cookiehashes.id AS id, cookiehashes.userid AS uid, users.id AS uid2, users.permission_handins AS permission_handins, users.permission_trades AS permission_trades, users.permission_looted AS permission_looted, users.permission_dropped AS permission_dropped, users.permission_destroyed AS permission_destroyed, users.permission_inventory AS permission_inventory, users.permission_logging AS permission_logging, users.permission_users AS permission_users, users.username AS username FROM cookiehashes LEFT JOIN users ON cookiehashes.userid=users.id  WHERE cookiehashes.cookiehash='{$cookievalue}'";
 	$result = $admindb->query($query);
 	if($result->num_rows == 0)
 	{
@@ -147,8 +147,8 @@ else
 		if ($row['permission_destroyed'])
 			$permission_destroyed = true;
 		
-		if ($row['permission_rollback'])
-			$permission_rollback = true;
+		if ($row['permission_inventory'])
+			$permission_inventory = true;
 		
 		if ($row['permission_logging'])
 			$permission_logging = true;
@@ -224,17 +224,17 @@ Container();
 <?php
 			}
 			// The ALTER list of menu options
-			if ($permission_rollback)
+			if ($permission_inventory)
 			{
 ?>
-				<li class="nav-item dropdown<?php $basename = basename($_SERVER["SCRIPT_FILENAME"], '.php'); if ($basename == "rollback") print " active"; ?>">
+				<li class="nav-item dropdown<?php $basename = basename($_SERVER["SCRIPT_FILENAME"], '.php'); if ($basename == "inventory") print " active"; ?>">
 					<a class="nav-link dropdown-toggle" href="#" id="navbarMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						Alter
 					</a>
 					<div class="dropdown-menu" aria-labelledby="navbarMenuLink">
 <?php
-					if ($permission_rollback)
-						print "<a class='dropdown-item' href='rollback.php'>Rollback</a>";
+					if ($permission_inventory)
+						print "<a class='dropdown-item' href='inventory.php'>Inventory</a>";
 ?>
 					</div>
 				</li>
