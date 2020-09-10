@@ -13,7 +13,7 @@ if (!$permission_inventory)
 
 RowText("<h4>Inventory Snapshots</h4>");
 
-if (!isset($_GET['a'])
+if (!isset($_GET['a']))
 {
 	Row();
 		Col();
