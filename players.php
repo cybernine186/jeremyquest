@@ -3,7 +3,7 @@
 include_once("functions.php");
 include_once("header.php");
 
-if ($uid <= 1)
+if ($uid <= 0)
 {
 	RowText("<h5>You are not authorized!</h5>");
 	include_once("footer.php");
