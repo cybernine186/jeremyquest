@@ -80,6 +80,32 @@ elseif ($_GET['a'] == "pe")
 	}
 	
 	// Permission variables from checkboxes on form
+	$handins = "0";
+	$trades = "0";
+	$looted = "0";
+	$dropped = "0";
+	$destroyed = "0";
+	$inventory = "0";
+	$logging = "0";
+	$users = "0";
+	
+	if (isset($_POST['handinsCheckbox']) && $_POST['handinsCheckbox'] == "on")
+		$handins = "1";
+	if (isset($_POST['tradesCheckbox']) && $_POST['tradesCheckbox'] == "on")
+		$trades = "1";
+	if (isset($_POST['lootedCheckbox']) && $_POST['lootedCheckbox'] == "on")
+		$looted = "1";
+	if (isset($_POST['droppedCheckbox']) && $_POST['droppedCheckbox'] == "on")
+		$dropped = "1";	
+	if (isset($_POST['destroyedCheckbox']) && $_POST['destroyedCheckbox'] == "on")
+		$destroyed = "1";	
+	if (isset($_POST['inventoryCheckbox']) && $_POST['inventoryCheckbox'] == "on")
+		$inventory = "1";	
+	if (isset($_POST['loggingCheckbox']) && $_POST['loggingCheckbox'] == "on")
+		$logging = "1";	
+	if (isset($_POST['usersCheckbox']) && $_POST['usersCheckbox'] == "on")
+		$users = "1";	
+	/*
 	$handins = $_POST['handinsCheckbox'] == "on" ? "1" : "0";
 	$trades = $_POST['tradesCheckbox'] == "on" ? "1" : "0";
 	$looted = $_POST['lootedCheckbox'] == "on" ? "1" : "0";
@@ -88,7 +114,7 @@ elseif ($_GET['a'] == "pe")
 	$inventory = $_POST['inventoryCheckbox'] == "on" ? "1" : "0";
 	$logging = $_POST['loggingCheckbox'] == "on" ? "1" : "0";
 	$users = $_POST['usersCheckbox'] == "on" ? "1" : "0";
-	
+	*/
 	// Update the user information in database
 	$query = "UPDATE users SET username='{$uname}', permission_handins={$handins}, permission_trades={$trades}, permission_looted={$looted}, permission_dropped={$dropped}, permission_destroyed={$destroyed}, permission_inventory={$inventory}, permission_logging={$logging}, permission_users={$users} WHERE id={$editid}";
 	$result = $admindb->query($query);
