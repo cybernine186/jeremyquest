@@ -10,7 +10,7 @@ include_once("functions.php");
 include_once("header.php");
 
 // Check for permissions
-if (!$permission_users)
+if (!$manage_users)
 {
 	RowText("<h5>You are not authorized!</h5>");
 	include_once("footer.php");
@@ -68,14 +68,14 @@ if ($_GET['a'] == "pr")
 	if ($result->num_rows != 1)
 		data_error();	// There should be results
 	$row = $result->fetch_assoc();
-	$uname = $row['username'];
+	$uname = $row['userid'];
 	
 	// Update password hash in database for user
 	$query = "UPDATE users SET hash = '{$hash}' WHERE id = {$id}";
 	$result = $admindb->query($query);
 	
 	// Indicate the change in system logging
-	//Logging($admindb, $uid, Logs::User, 0, "{$uname} ({$uid}) reset password for user {$username} ({$id})");
+	Logging($admindb, $uid, Logs::User, "User Password Reset - Resetter: {$username} - Resetee: {$uname} - " . get_client_ip());
 	
 	// Page output
 	RowText("<h4>User Management</h4>");
@@ -100,18 +100,19 @@ else
 	display_password_reset($admindb, $id);
 }
 
-include_once("footer.php")
+include_once("footer.php");
 
 
 /***************************************************************************************************
 DISPLAY FUNCTIONS
 ***************************************************************************************************/
 
-/*******************************************************************************
-Function:	display_password_reset
-Purpose:	Display password reset form
-In:			$id - id of user for password reset
-*******************************************************************************/
+
+/***************************************************************************************************
+Function:		display_password_reset
+Purpose:		Display the password reset form
+Inputs:			ID of the user for whom to reset password
+***************************************************************************************************/
 function display_password_reset($admindb, $id)
 {
 	$query = "SELECT username FROM users WHERE id = {$id}";
