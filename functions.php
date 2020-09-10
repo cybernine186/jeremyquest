@@ -150,4 +150,10 @@ function Hyperlink($target, $label)
 	print "<a href=\"{$target}\">{$label}</a>";
 }
 
+function Logging($admindb, $userid, $type, $message)
+{
+	$query = "INSERT INTO logs (time, uid, type, message) VALUES (NOW(), {$userid}, {$type}, '{$message}')";
+	$result = $admindb->query($query);
+}
+
 ?>

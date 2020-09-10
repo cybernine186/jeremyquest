@@ -26,6 +26,14 @@ $permission_inventory = false;
 $permission_logging = false;
 $permission_users = false;
 
+abstract class Logs
+{
+	const Session = 0;
+	const User = 1;
+	const Rollback = 2;
+	const Transfer = 3;
+}
+
 
 // $uname is what user is trying to use to login
 // $username is what is loaded as handle after verified, and used for content
@@ -47,6 +55,7 @@ if(basename($_SERVER["SCRIPT_FILENAME"], '.php') == "login" && isset($_GET['a'])
 	if($result->num_rows == 0) {
 		// UserID not found
 		$login_good = false;
+		Logging($admindb, 0, Logs::Session, "Failed Login Attempt - Unknown User Name: {$uname} - " . get_client_ip());
 	}
 	else
 	{
@@ -58,6 +67,7 @@ if(basename($_SERVER["SCRIPT_FILENAME"], '.php') == "login" && isset($_GET['a'])
 		if ($hash != $input_hash) {
 			// Bad password
 			$login_good = false;
+			Logging($admindb, 0, Logs::Session, "Failed Login Attempt - Bad Password for User: {$uname} - " . get_client_ip());
 		}
 		else
 		{
@@ -80,6 +90,8 @@ if(basename($_SERVER["SCRIPT_FILENAME"], '.php') == "login" && isset($_GET['a'])
 				$permission_logging = true;
 			if ($row['permission_users'])
 				$permission_users = true;
+			
+			Logging($admindb, 0, Logs::Session, "Successful Login - User: {$uname} - " . get_client_ip());
 		}
 	}
 	

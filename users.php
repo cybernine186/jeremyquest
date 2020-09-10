@@ -97,6 +97,8 @@ elseif ($_GET['a'] == "pe")
 	//Logging($admindb, $uid, Logs::User, 0, "{$uname} ({$uid}) edited user info for user {$firstname} {$lastname} ({$userid})");
 	
 	RowText("User information updated.");
+	
+	Logging($admindb, 0, Logs::User, "User Info Edit - Editor: {$username} - Editee: {$uname} - " . get_client_ip());
 
 	// Page output
 	display_user_list($admindb);
@@ -172,6 +174,9 @@ elseif ($_GET['a'] == "cp")
 	
 	// Page output
 	RowText("User created!");
+	
+	Logging($admindb, 0, Logs::User, "User Created - Creator: {$username} - Createe: {$uname} - " . get_client_ip());
+	
 	display_user_list($admindb);
 }
 

@@ -7,7 +7,7 @@ CREATE TABLE users (
 	permission_looted TINYINT NOT NULL DEFAULT 0,
 	permission_dropped TINYINT NOT NULL DEFAULT 0,
 	permission_destroyed TINYINT NOT NULL DEFAULT 0,
-	permission_rollback TINYINT NOT NULL DEFAULT 0,
+	permission_inventory TINYINT NOT NULL DEFAULT 0,
 	permission_logging TINYINT NOT NULL DEFAULT 0,
 	permission_users TINYINT NOT NULL DEFAULT 0,
 	PRIMARY KEY (id)
@@ -19,5 +19,14 @@ CREATE TABLE cookiehashes (
 	cookiehash VARCHAR(100) NOT NULL,
 	created DATETIME NOT NULL,
 	used DATETIME NOT NULL,
+	PRIMARY KEY (id)
+);
+
+CREATE TABLE logs (
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	time DATETIME NOT NULL,
+	uid INT UNSIGNED NOT NULL,
+	type TINYINT UNSIGNED NOT NULL,
+	message VARCHAR(100),
 	PRIMARY KEY (id)
 );
