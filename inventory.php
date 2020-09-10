@@ -20,10 +20,10 @@ if (!isset($_GET['a']))
 		DivC();
 		Col(true, '', 2);
 ?>
-			<form action="handins.php?a=sp" method="post">
+			<form action="inventory.php?a=sp" method="post">
 				<div class="form-group">
-					<label for="playerName">Player Name</label>
-					<input type="text" class="form-control" id="playerName" placeholder="Enter Player Name" name="playerName">
+					<label for="playername">Player Name</label>
+					<input type="text" class="form-control" id="playername" placeholder="Enter Player Name" name="playername">
 				</div>
 				<button type="submit" class="btn btn-primary">Submit</button>
 			</form>
@@ -159,10 +159,10 @@ else
 		DivC();
 		Col(true, '', 2);
 ?>
-			<form action="handins.php?a=sp" method="post">
+			<form action="inventory.php?a=sp" method="post">
 				<div class="form-group">
-					<label for="playerName">Player Name</label>
-					<input type="text" class="form-control" id="playerName" placeholder="Enter Player Name" name="playerName">
+					<label for="playername">Player Name</label>
+					<input type="text" class="form-control" id="playername" placeholder="Enter Player Name" name="playername">
 				</div>
 				<button type="submit" class="btn btn-primary">Submit</button>
 			</form>
