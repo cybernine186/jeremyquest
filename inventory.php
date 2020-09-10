@@ -71,7 +71,7 @@ elseif ($_GET['a'] == "ri")
 		
 	RowText("<h4>Rollback Complete</h4>");
 	$query = "SELECT name FROM character_data WHERE id = {$charid}";
-	$result = $admindb->query($query);
+	$result = $eqdb->query($query);
 	if ($result->num_rows != 1)
 		data_error();
 	$row = $result->fetch_assoc();
