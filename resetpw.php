@@ -23,7 +23,19 @@ Inputs:			$_POST['password1']		- First password form field
 				$_POST['password2'] 	- Second password form field
 				$_POST['id']			- ID of the user whose password's being reset
 ***************************************************************************************************/
-if ($_GET['a'] == "pr")
+if (!isset($_GET['a']))
+{
+	// Check for valid ID format
+	if (!IsNumber($_GET['id']))
+		data_error();
+	$id = $_GET['id'];
+
+	RowText("<h4>Password Reset</h4>");
+	
+	// Invoke for output
+	display_password_reset($admindb, $id);
+}
+elseif ($_GET['a'] == "pr")
 {
 	// Check for valid ID format
 	if (!IsNumber($_POST['id']))
