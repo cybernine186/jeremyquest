@@ -81,8 +81,6 @@ elseif ($_GET['a'] == "sp")
 	$result = $eqdb->query($query);
 		
 	Row();
-		Col();
-		DivC();
 		Col(true, '', 6);
 ?>
 			<table class="table">
@@ -102,8 +100,6 @@ elseif ($_GET['a'] == "sp")
 					}
 				print "</tbody>";
 			print "</table>";
-		DivC();
-		Row();
 		DivC();
 	DivC();
 }
