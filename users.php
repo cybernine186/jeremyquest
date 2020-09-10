@@ -85,12 +85,12 @@ elseif ($_GET['a'] == "pe")
 	$looted = $_POST['lootedCheckbox'] == "on" ? "1" : "0";
 	$dropped = $_POST['droppedCheckbox'] == "on" ? "1" : "0";
 	$destroyed = $_POST['destroyedCheckbox'] == "on" ? "1" : "0";
-	$rollback = $_POST['rollbackCheckbox'] == "on" ? "1" : "0";
+	$inventory = $_POST['inventoryCheckbox'] == "on" ? "1" : "0";
 	$logging = $_POST['loggingCheckbox'] == "on" ? "1" : "0";
 	$users = $_POST['usersCheckbox'] == "on" ? "1" : "0";
 	
 	// Update the user information in database
-	$query = "UPDATE users SET username='{$uname}', permission_handins={$handins}, permission_trades={$trades}, permission_looted={$looted}, permission_dropped={$dropped}, permission_destroyed={$destroyed}, permission_rollback={$rollback}, permission_logging={$logging}, permission_users={$users} WHERE id={$editid}";
+	$query = "UPDATE users SET username='{$uname}', permission_handins={$handins}, permission_trades={$trades}, permission_looted={$looted}, permission_dropped={$dropped}, permission_destroyed={$destroyed}, permission_inventory={$inventory}, permission_logging={$logging}, permission_users={$users} WHERE id={$editid}";
 	print $query;
 	$result = $admindb->query($query);
 	
@@ -270,7 +270,7 @@ In:			$id - id of user for editing
 *******************************************************************************/
 function display_user_edit($admindb, $id)
 {
-	$query = "SELECT username, permission_handins, permission_trades, permission_looted, permission_dropped, permission_destroyed, permission_rollback, permission_logging, permission_users FROM users WHERE id = {$id}";
+	$query = "SELECT username, permission_handins, permission_trades, permission_looted, permission_dropped, permission_destroyed, permission_inventory, permission_logging, permission_users FROM users WHERE id = {$id}";
 	$result = $admindb->query($query);
 	
 	// Check results exist
@@ -308,8 +308,8 @@ Row();
 				<label class="form-check-label" for="destroyedCheckbox">View Destroyed Items</label>
 			</div>
 			<div class="form-group form-check">
-				<input type="checkbox" class="form-check-input" id="rollbackCheckbox" name="rollbackCheckbox"<?php print ($row['permission_rollback'] ? "checked" : ""); ?>>
-				<label class="form-check-label" for="rollbackCheckbox">Perform Inventory Rollbacks</label>
+				<input type="checkbox" class="form-check-input" id="inventoryCheckbox" name="inventoryCheckbox"<?php print ($row['permission_inventory'] ? "checked" : ""); ?>>
+				<label class="form-check-label" for="inventoryCheckbox">Perform Inventory Stuff</label>
 			</div>
 			<div class="form-group form-check">
 				<input type="checkbox" class="form-check-input" id="loggingCheckbox" name="loggingCheckbox"<?php print ($row['permission_logging'] ? "checked" : ""); ?>>
