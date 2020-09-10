@@ -98,7 +98,7 @@ elseif ($_GET['a'] == "sp")
 <?php
 					while ($row = $result->fetch_assoc())
 					{
-						print "<tr><td>{$row['id']}</td><td>{$row['name']}</td><td>{$row['level']}</td><td><a href='inventory.php?a=sr&id={$row['id']}' class='btn btn-primary btn-lg' role='button' aria-disabled='true'>Go</a></td></tr>";
+						print "<tr><td>{$row['id']}</td><td>{$row['name']}</td><td>{$row['level']}</td><td><a href='inventory.php?a=sr&id={$row['id']}' class='btn btn-primary btn-sm' role='button' aria-disabled='true'>Go</a></td></tr>";
 					}
 				print "</tbody>";
 			print "</table>";
@@ -143,7 +143,7 @@ elseif ($_GET['a'] == "sr")
 						$query = "SELECT count(*) AS mycount, from_unixtime(time_index - 3600 * 4, '%Y %D %M %h:%i:%s %p') AS timef FROM inventory_snapshots WHERE time_index = {$key} AND charid = {$charid}";
 						$result = $eqdb->query($query);
 						$row = $result->fetch_assoc();
-						print "<tr><td>{$row['timef']}</td><td>{$row['mycount']}</td><td><a href='inventory.php?a=ri&id={$charid}&ti={$key}' class='btn btn-primary btn-lg' role='button' aria-disabled='true'>ROLL IT</a></td></tr>";
+						print "<tr><td>{$row['timef']}</td><td>{$row['mycount']}</td><td><a href='inventory.php?a=ri&id={$charid}&ti={$key}' class='btn btn-primary btn-sm' role='button' aria-disabled='true'>ROLL IT</a></td></tr>";
 					}
 				print "</tbody>";
 			print "</table>";
