@@ -105,26 +105,15 @@ elseif ($_GET['a'] == "pe")
 		$logging = "1";	
 	if (isset($_POST['usersCheckbox']) && $_POST['usersCheckbox'] == "on")
 		$users = "1";	
-	/*
-	$handins = $_POST['handinsCheckbox'] == "on" ? "1" : "0";
-	$trades = $_POST['tradesCheckbox'] == "on" ? "1" : "0";
-	$looted = $_POST['lootedCheckbox'] == "on" ? "1" : "0";
-	$dropped = $_POST['droppedCheckbox'] == "on" ? "1" : "0";
-	$destroyed = $_POST['destroyedCheckbox'] == "on" ? "1" : "0";
-	$inventory = $_POST['inventoryCheckbox'] == "on" ? "1" : "0";
-	$logging = $_POST['loggingCheckbox'] == "on" ? "1" : "0";
-	$users = $_POST['usersCheckbox'] == "on" ? "1" : "0";
-	*/
+
 	// Update the user information in database
 	$query = "UPDATE users SET username='{$uname}', permission_handins={$handins}, permission_trades={$trades}, permission_looted={$looted}, permission_dropped={$dropped}, permission_destroyed={$destroyed}, permission_inventory={$inventory}, permission_logging={$logging}, permission_users={$users} WHERE id={$editid}";
 	$result = $admindb->query($query);
 	
-	// Indicate the change in system logging
-	//Logging($admindb, $uid, Logs::User, 0, "{$uname} ({$uid}) edited user info for user {$firstname} {$lastname} ({$userid})");
-	
 	RowText("User information updated.");
 	
-	Logging($admindb, 0, Logs::User, "User Info Edit - Editor: {$username} - Editee: {$uname} - " . get_client_ip());
+	// Indicate the change in system logging
+	Logging($admindb, $uid, Logs::User, "User Info Edit - Editor: {$username} - Editee: {$uname} - " . get_client_ip());
 
 	// Page output
 	display_user_list($admindb);

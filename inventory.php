@@ -76,7 +76,7 @@ elseif ($_GET['a'] == "ri")
 		data_error();
 	$row = $result->fetch_assoc();
 	$playername = $row['name'];
-	Logging($admindb, 0, Logs::Rollback, "Inventory Rollback Performed - User: {$username} - Player: {$playername} - Time Index: {$snaptime} - " . get_client_ip());
+	Logging($admindb, $uid, Logs::Rollback, "Inventory Rollback Performed - User: {$username} - Player: {$playername} - Time Index: {$snaptime} - " . get_client_ip());
 }
 elseif ($_GET['a'] == "sp")
 {
