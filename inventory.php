@@ -13,7 +13,27 @@ if (!$permission_inventory)
 
 RowText("<h4>Inventory Snapshots</h4>");
 
-if ($_GET['a'] == "ri")
+if (!isset($_GET['a'])
+{
+	Row();
+		Col();
+		DivC();
+		Col(true, '', 2);
+?>
+			<form action="handins.php?a=sp" method="post">
+				<div class="form-group">
+					<label for="playerName">Player Name</label>
+					<input type="text" class="form-control" id="playerName" placeholder="Enter Player Name" name="playerName">
+				</div>
+				<button type="submit" class="btn btn-primary">Submit</button>
+			</form>
+<?php
+		DivC();
+		Col();
+		DivC();
+	DivC();
+}
+elseif ($_GET['a'] == "ri")
 {
 	$charid = preg_replace("/[^0-9]/", "", $_GET['id']);
 	$snaptime = preg_replace("/[^0-9]/", "", $_GET['ti']);
