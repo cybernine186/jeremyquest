@@ -69,7 +69,7 @@ function display_player_overview($eqdb, $charid)
 							<a href="destroyed.php?a=p&id=<?php print $charid; ?>" class="btn btn-primary btn-lg" role="button" aria-disabled="true">Destroyed</a>
 						</td>
 						<td>
-							<a href="inventory.php?a=p&id=<?php print $charid; ?>" class="btn btn-primary btn-lg" role="button" aria-disabled="true">Inventory</a>
+							<a href="inventory.php?a=sr&id=<?php print $charid; ?>" class="btn btn-primary btn-lg" role="button" aria-disabled="true">Inventory</a>
 						</td>
 					</tr>
 				</tbody>
