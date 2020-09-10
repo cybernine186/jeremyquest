@@ -80,7 +80,7 @@ elseif ($_GET['a'] == "pr")
 	if ($result->num_rows != 1)
 		data_error();	// There should be results
 	$row = $result->fetch_assoc();
-	$uname = $row['userid'];
+	$uname = $row['username'];
 	
 	// Update password hash in database for user
 	$query = "UPDATE users SET hash = '{$hash}' WHERE id = {$id}";
@@ -91,8 +91,8 @@ elseif ($_GET['a'] == "pr")
 	
 	// Page output
 	RowText("<h4>User Management</h4>");
-	RowText("Password updated for {$uname}.");
-	display_user_list($admindb);
+	RowText("Password updated for {$uname}. Returning to User List shortly.");
+	header("refresh:3;url=users.php");
 }
 
 /***************************************************************************************************
