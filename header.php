@@ -259,7 +259,7 @@ Container();
 <?php
 			}
 			// Check for permission to view logging data
-			if ($permission_logging || $permission_users)
+			if ($permission_logging || $permission_users || $permission_connections)
 			{
 ?>
 				<li class="nav-item dropdown<?php $basename = basename($_SERVER["SCRIPT_FILENAME"], '.php'); if ($basename == "logs" || $basename == "users") print " active"; ?>">
@@ -272,6 +272,8 @@ Container();
 						print "<a class='dropdown-item' href='logs.php'>Logs</a>";
 					if ($permission_users)
 						print "<a class='dropdown-item' href='users.php'>Users</a>";
+					if ($permission_connections)
+						print "<a class='dropdown-item' href='connections.php'>Connections</a>";
 ?>
 					</div>
 				</li>
