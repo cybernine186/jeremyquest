@@ -9,7 +9,7 @@ include_once("functions.php");
 include_once("header.php");
 
 // Check for permissions
-if (!$permission_users)
+if (!$permission_logs)
 {
 	RowText("<h5>You are not authorized!</h5>");
 	include_once("footer.php");
@@ -46,6 +46,7 @@ if (!$permission_users)
 	display_pagination($start, $pages, "logs.php");
 
 	$query = "SELECT time AS timenum, DATE_FORMAT(time, '%a %b %d, %Y %T') AS time, uid, type, message, users.username AS username FROM logs LEFT JOIN users ON users.id = logs.uid ORDER BY timenum DESC LIMIT {$begin}, {$pagesize}";
+	print $query;
 	$result = $eqdb->query($query);
 
 ?>
