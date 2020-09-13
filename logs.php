@@ -47,7 +47,7 @@ if (!$permission_logging)
 
 	$query = "SELECT time AS timenum, DATE_FORMAT(time, '%a %b %d, %Y %T') AS time, uid, type, message, users.username AS username FROM logs LEFT JOIN users ON users.id = logs.uid ORDER BY timenum DESC LIMIT {$begin}, {$pagesize}";
 	print $query;
-	$result = $eqdb->query($query);
+	$result = $admindb->query($query);
 
 ?>
 	<table class="table">
