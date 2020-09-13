@@ -20,7 +20,7 @@ RowText("<h4>Connections</h4>");
 
 if (!isset($_GET['a']))
 {
-	display_connection_list($admindb);
+	display_connection_list($admindb, $uid);
 }
 elseif ($_GET['a'] == "c")
 {
