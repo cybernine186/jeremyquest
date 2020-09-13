@@ -24,7 +24,11 @@ if (!isset($_GET['a']))
 }
 elseif ($_GET['a'] == "c")
 {
-	print "<h5>Connection Creation</h5>";
+	display_connection_creation();
+}
+elseif ($_GET['a'] == "cp")
+{
+
 }
 else
 {
@@ -32,6 +36,40 @@ else
 }
 
 include_once("footer.php");
+
+function display_connection_creation()
+{
+	Row();
+		Col();
+	?>
+			<form action="connections.php?a=cp" method="post">
+				<div class="form-group">
+					<label for="connectionName">Connection Name</label>
+					<input type="text" class="form-control" id="connectionName" placeholder="Enter Connection Name" name="connectionName">
+				</div>
+				<div class="form-group">
+					<label for="connectionHost">Host</label>
+					<input type="text" class="form-control" id="connectionHost" placeholder="Host" name="connectionHost">
+				</div>
+				<div class="form-group">
+					<label for="connectionDatabase">Database</label>
+					<input type="text" class="form-control" id="connectionDatabase" placeholder="Database" name="connectionDatabase">
+				</div>
+				<div class="form-group">
+					<label for="connectionUser">User</label>
+					<input type="text" class="form-control" id="connectionUser" placeholder="User" name="connectionUser">
+				</div>
+				<div class="form-group">
+					<label for="connectionPassword">Password</label>
+					<input type="password" class="form-control" id="connectionPassword" placeholder="Password" name="connectionPassword">
+				</div>
+				<button type="submit" class="btn btn-primary">Submit</button>
+				<a class='btn btn-primary' href='connections.php' role='button'>Cancel</a>
+			</form>
+	<?php
+		DivC();
+	DivC();
+}
 
 function display_connection_list($admindb)
 {
