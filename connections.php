@@ -28,7 +28,18 @@ elseif ($_GET['a'] == "c")
 }
 elseif ($_GET['a'] == "cp")
 {
-
+	$cname = $admindb->real_escape_string($_POST['connectionName']);
+	$chost = $admindb->real_escape_string($_POST['connectionHost']);
+	$cdb = $admindb->real_escape_string($_POST['connectionDatabase']);
+	$cuser = $admindb->real_escape_string($_POST['connectionUser']);
+	$cpassword = $admindb->real_escape_string($_POST['connectionPassword']);
+	
+	$query = "INSERT INTO connection (user, name, host, dbase, user, password) VALUES ({$uid}, '{$cname}', '{$cdb}', '{$cuser}', '{$cpassword}')";
+	$admindb->query($query);
+	
+	RowText("Connection Created");
+	
+	display_connection_list($admindb);
 }
 else
 {
@@ -73,7 +84,7 @@ function display_connection_creation()
 
 function display_connection_list($admindb)
 {
-	$query = "SELECT id, name FROM connections ORDER BY id ASC";
+	$query = "SELECT id, name FROM connections WHERE user = {$uid} ORDER BY id ASC";
 	$result = $admindb->query($query);
 	if ($result->num_rows < 1)
 	{
@@ -88,6 +99,7 @@ function display_connection_list($admindb)
 			<tr>
 				<th scope="col">ID</th>
 				<th scope="col">Connection Name</th>
+				<th scope="col">Use</th>
 				<th scope="col">Delete</th>
 			</tr>
 		</thead>
@@ -96,6 +108,8 @@ function display_connection_list($admindb)
 			while ($row = $result->fetch_assoc())
 			{
 				print "<tr><td>{$row['id']}</td><td>{$row['name']}</td><td>";
+				print "<a class='btn btn-primary' href='connections.php?a=u&id={$row['id']}' role='button'>Use</a>";
+				print "</td><td>";
 				print "<a class='btn btn-primary' href='connections.php?a=d&id={$row['id']}' role='button'>Delete</a>";
 				print "</td></tr>";
 			}
