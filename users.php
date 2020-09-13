@@ -292,7 +292,7 @@ In:			$id - id of user for editing
 *******************************************************************************/
 function display_user_edit($admindb, $id)
 {
-	$query = "SELECT username, permission_handins, permission_trades, permission_looted, permission_dropped, permission_destroyed, permission_inventory, permission_logging, permission_users FROM users WHERE id = {$id}";
+	$query = "SELECT username, permission_handins, permission_trades, permission_looted, permission_dropped, permission_destroyed, permission_inventory, permission_logging, permission_users, permission_connections FROM users WHERE id = {$id}";
 	$result = $admindb->query($query);
 	
 	// Check results exist
