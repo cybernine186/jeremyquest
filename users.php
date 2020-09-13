@@ -88,6 +88,7 @@ elseif ($_GET['a'] == "pe")
 	$inventory = "0";
 	$logging = "0";
 	$users = "0";
+	$connections = "0";
 	
 	if (isset($_POST['handinsCheckbox']) && $_POST['handinsCheckbox'] == "on")
 		$handins = "1";
@@ -104,10 +105,12 @@ elseif ($_GET['a'] == "pe")
 	if (isset($_POST['loggingCheckbox']) && $_POST['loggingCheckbox'] == "on")
 		$logging = "1";	
 	if (isset($_POST['usersCheckbox']) && $_POST['usersCheckbox'] == "on")
-		$users = "1";	
+		$users = "1";
+	if (isset($_POST['connectionsCheckbox']) && $_POST['connectionsCheckbox'] == "on")
+		$connections = "1";
 
 	// Update the user information in database
-	$query = "UPDATE users SET username='{$uname}', permission_handins={$handins}, permission_trades={$trades}, permission_looted={$looted}, permission_dropped={$dropped}, permission_destroyed={$destroyed}, permission_inventory={$inventory}, permission_logging={$logging}, permission_users={$users} WHERE id={$editid}";
+	$query = "UPDATE users SET username='{$uname}', permission_handins={$handins}, permission_trades={$trades}, permission_looted={$looted}, permission_dropped={$dropped}, permission_destroyed={$destroyed}, permission_inventory={$inventory}, permission_logging={$logging}, permission_users={$users}, permission_connections={$connections} WHERE id={$editid}";
 	$result = $admindb->query($query);
 	
 	RowText("User information updated.");
@@ -337,6 +340,10 @@ Row();
 			<div class="form-group form-check">
 				<input type="checkbox" class="form-check-input" id="usersCheckbox" name="usersCheckbox"<?php print ($row['permission_users'] ? "checked" : ""); ?>>
 				<label class="form-check-label" for="usersCheckbox">Manage Users</label>
+			</div>
+			<div class="form-group form-check">
+				<input type="checkbox" class="form-check-input" id="connectionsCheckbox" name="connectionsCheckbox"<?php print ($row['permission_connections'] ? "checked" : ""); ?>>
+				<label class="form-check-label" for="usersCheckbox">Manage Connections</label>
 			</div>
 
 			<button type="submit" class="btn btn-primary">Submit</button>
