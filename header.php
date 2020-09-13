@@ -188,7 +188,7 @@ $result = $admindb->query($query);
 
 if ($result->num_rows < 1)
 {
-	RowText("No Connection Selected");
+	$eqcgood = false;
 }
 elseif ($result->num_rows > 1)
 {
