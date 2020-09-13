@@ -180,6 +180,34 @@ else
 	}
 }
 
+$eqcgood = false;
+
+$query = "SELECT name, host, dbase, username, password FROM connections WHERE user = {$uid} AND selected = 1";
+$result = $admindb->query($query);
+
+if ($result->num_rows < 1)
+{
+	RowText("No Connection Selected");
+}
+elseif ($result->num_rows > 1)
+{
+	data_error();
+}
+
+$row = $result->fetch_assoc();
+
+$eqdb = new mysqli($row['host'], $row['username'], $row['password'], $row['dbase']);
+
+if ($eqdb->connect_errno)
+{
+	RowText("Failed to connect to database.");
+	$eqcgood = false;
+}
+else
+{
+	$eqcgood = true;
+}
+
 
 // Start HTML
 ?>
@@ -217,7 +245,7 @@ Container();
 		if ($uid >= 0)
 		{
 			// The READ list of menu options
-			if ($permission_handins || $permission_trades || $permission_looted || $permission_dropped || $permission_destroyed)
+			if ($eqcgood && ($permission_handins || $permission_trades || $permission_looted || $permission_dropped || $permission_destroyed))
 			{
 ?>
 				<li class="nav-item dropdown<?php $basename = basename($_SERVER["SCRIPT_FILENAME"], '.php'); if ($basename == "handins" || $basename == "trades" || $basename == "looted" || $basename == "dropped" || $basename == "destroyed") print " active"; ?>">
@@ -242,7 +270,7 @@ Container();
 <?php
 			}
 			// The ALTER list of menu options
-			if ($permission_inventory)
+			if ($eqcgood && $permission_inventory)
 			{
 ?>
 				<li class="nav-item dropdown<?php $basename = basename($_SERVER["SCRIPT_FILENAME"], '.php'); if ($basename == "inventory") print " active"; ?>">
@@ -299,7 +327,7 @@ Container();
 		</ul>
 <?php
 		// Show search field if user is logged in
-		if ($uid >= 0)
+		if ($eqcgood && $uid >= 0)
 		{
 ?>
 		<form class="form-inline my-2 my-lg-0" action="search.php?a=s" method="post">

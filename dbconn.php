@@ -9,6 +9,8 @@ include_once("dbcredential.php");
 		die;
 	}
 	
+	/*
+	
 	$eqdb = new mysqli($eqdbhost, $eqdbuser, $eqdbpass, $eqdbname);
 
 	if ($eqdb->connect_errno)
@@ -16,5 +18,7 @@ include_once("dbcredential.php");
 		print "Failed to connect to database.";
 		include_once("footer.php");
 		die;
-	}	
+	}
+	*/
+	
 ?>
