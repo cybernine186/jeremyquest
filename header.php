@@ -181,6 +181,7 @@ else
 }
 
 $eqcgood = false;
+$cname = "No Connection";
 
 $query = "SELECT name, host, dbase, username, password FROM connections WHERE user = {$uid} AND selected = 1";
 $result = $admindb->query($query);
@@ -207,6 +208,7 @@ else
 	else
 	{
 		$eqcgood = true;
+		$cname = $row['name'];
 	}
 }
 
@@ -326,6 +328,9 @@ Container();
 <?php
 		}
 ?>
+			<li class="nav-item">
+				<?php print $cname; ?>
+			</li>
 		</ul>
 <?php
 		// Show search field if user is logged in
