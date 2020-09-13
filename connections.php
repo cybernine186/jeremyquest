@@ -34,7 +34,7 @@ elseif ($_GET['a'] == "cp")
 	$cuser = $admindb->real_escape_string($_POST['connectionUser']);
 	$cpassword = $admindb->real_escape_string($_POST['connectionPassword']);
 	
-	$query = "INSERT INTO connection (user, name, host, dbase, user, password) VALUES ({$uid}, '{$cname}', '{$cdb}', '{$cuser}', '{$cpassword}')";
+	$query = "INSERT INTO connections (user, name, host, dbase, user, password) VALUES ({$uid}, '{$cname}', '{$cdb}', '{$cuser}', '{$cpassword}')";
 	$admindb->query($query);
 	
 	RowText("Connection Created");
