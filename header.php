@@ -193,19 +193,21 @@ elseif ($result->num_rows > 1)
 {
 	data_error();
 }
-
-$row = $result->fetch_assoc();
-
-$eqdb = new mysqli($row['host'], $row['username'], $row['password'], $row['dbase']);
-
-if ($eqdb->connect_errno)
-{
-	RowText("Failed to connect to database.");
-	$eqcgood = false;
-}
 else
 {
-	$eqcgood = true;
+	$row = $result->fetch_assoc();
+
+	$eqdb = new mysqli($row['host'], $row['username'], $row['password'], $row['dbase']);
+
+	if ($eqdb->connect_errno)
+	{
+		RowText("Failed to connect to database.");
+		$eqcgood = false;
+	}
+	else
+	{
+		$eqcgood = true;
+	}
 }
 
 
