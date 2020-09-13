@@ -39,11 +39,11 @@ elseif ($_GET['a'] == "cp")
 	
 	RowText("Connection Created");
 	
-	display_connection_list($admindb);
+	display_connection_list($admindb, $uid);
 }
 else
 {
-	display_connection_list($admindb);
+	display_connection_list($admindb, $uid);
 }
 
 include_once("footer.php");
@@ -82,7 +82,7 @@ function display_connection_creation()
 	DivC();
 }
 
-function display_connection_list($admindb)
+function display_connection_list($admindb, $uid)
 {
 	$query = "SELECT id, name FROM connections WHERE user = {$uid} ORDER BY id ASC";
 	$result = $admindb->query($query);
