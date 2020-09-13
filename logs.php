@@ -74,7 +74,7 @@ if (!$permission_logging)
 					print "Transfer";
 				else
 					print "Error";
-				print "</td></tr>";
+				print "</td><td>{$row['message']}</td></tr>";
 			}
 		print "</tbody>";
 	print "</table>";
