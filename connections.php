@@ -22,6 +22,10 @@ if (!isset($_GET['a']))
 {
 	display_connection_list($admindb);
 }
+elseif ($_GET['a'] == "c")
+{
+	print "<h5>Connection Creation</h5>";
+}
 else
 {
 	display_connection_list($admindb);
@@ -36,6 +40,7 @@ function display_connection_list($admindb)
 	if ($result->num_rows < 1)
 	{
 		RowText("No Connections");
+		print "<a class='btn btn-primary' href='connections.php?a=c' role='button'>Create New</a>";
 		include_once("footer.php");
 		die;
 	}
