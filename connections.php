@@ -139,7 +139,6 @@ function display_connection_list($admindb, $uid)
 	<table class="table">
 		<thead>
 			<tr>
-				<th scope="col">ID</th>
 				<th scope="col">Connection Name</th>
 				<th scope="col">Use</th>
 				<th scope="col">Delete</th>
@@ -149,7 +148,7 @@ function display_connection_list($admindb, $uid)
 <?php
 			while ($row = $result->fetch_assoc())
 			{
-				print "<tr><td>{$row['id']}</td><td>{$row['name']}</td><td>";
+				print "<tr><td>{$row['name']}</td><td>";
 				print "<a class='btn btn-primary' href='connections.php?a=u&id={$row['id']}' role='button'>Use</a>";
 				print "</td><td>";
 				print "<a class='btn btn-primary' href='connections.php?a=d&id={$row['id']}' role='button'>Delete</a>";
