@@ -25,6 +25,7 @@ $permission_destroyed = false;
 $permission_inventory = false;
 $permission_logging = false;
 $permission_users = false;
+$permission_connections = false;
 
 abstract class Logs
 {
@@ -46,7 +47,7 @@ if(basename($_SERVER["SCRIPT_FILENAME"], '.php') == "login" && isset($_GET['a'])
 	$password = $_POST['password'];
 
 	// Look for entry for indicated UserID
-	$query = "SELECT hash, id, permission_handins, permission_trades, permission_looted, permission_dropped, permission_destroyed, permission_inventory, permission_logging, permission_users FROM users WHERE username = '" . $uname . "'";
+	$query = "SELECT hash, id, permission_handins, permission_trades, permission_looted, permission_dropped, permission_destroyed, permission_inventory, permission_logging, permission_users, permission_connections FROM users WHERE username = '" . $uname . "'";
 	$result = $admindb->query($query);
 	
 	// Login good until otherwise indicated bad
@@ -90,6 +91,8 @@ if(basename($_SERVER["SCRIPT_FILENAME"], '.php') == "login" && isset($_GET['a'])
 				$permission_logging = true;
 			if ($row['permission_users'])
 				$permission_users = true;
+			if ($row['permission_connections'])
+				$permission_connections = true;
 			
 			Logging($admindb, 0, Logs::Session, "Successful Login - User: {$uname} - " . get_client_ip());
 		}
@@ -131,7 +134,7 @@ else
 	// Cookie Present - see if it's legit
 	
 	$cookievalue = $_COOKIE[$cookie_name];
-	$query = "SELECT cookiehashes.id AS id, cookiehashes.userid AS uid, users.id AS uid2, users.permission_handins AS permission_handins, users.permission_trades AS permission_trades, users.permission_looted AS permission_looted, users.permission_dropped AS permission_dropped, users.permission_destroyed AS permission_destroyed, users.permission_inventory AS permission_inventory, users.permission_logging AS permission_logging, users.permission_users AS permission_users, users.username AS username FROM cookiehashes LEFT JOIN users ON cookiehashes.userid=users.id  WHERE cookiehashes.cookiehash='{$cookievalue}'";
+	$query = "SELECT cookiehashes.id AS id, cookiehashes.userid AS uid, users.id AS uid2, users.permission_handins AS permission_handins, users.permission_trades AS permission_trades, users.permission_looted AS permission_looted, users.permission_dropped AS permission_dropped, users.permission_destroyed AS permission_destroyed, users.permission_inventory AS permission_inventory, users.permission_logging AS permission_logging, users.permission_users AS permission_users, users.permission_connections AS permission_connections, users.username AS username FROM cookiehashes LEFT JOIN users ON cookiehashes.userid=users.id  WHERE cookiehashes.cookiehash='{$cookievalue}'";
 	$result = $admindb->query($query);
 	if($result->num_rows == 0)
 	{
@@ -167,10 +170,47 @@ else
 		
 		if ($row['permission_users'])
 			$permission_users = true;
+		
+		if ($row['permission_connections'])
+			$permission_connections = true;
 		$cookieid = $row['id'];
 		// Touch cookie to keep alive after proper use
 		$query = "UPDATE cookiehashes SET used = NOW() WHERE id={$cookieid}";
 		$admindb->query($query);
+	}
+}
+
+$eqcgood = false;
+$cname = "No Connection";
+$cid = 0;
+
+$query = "SELECT id, name, host, dbase, username, password FROM connections WHERE user = {$uid} AND selected = 1";
+$result = $admindb->query($query);
+
+if ($result->num_rows < 1)
+{
+	$eqcgood = false;
+}
+elseif ($result->num_rows > 1)
+{
+	data_error();
+}
+else
+{
+	$row = $result->fetch_assoc();
+
+	$eqdb = new mysqli($row['host'], $row['username'], $row['password'], $row['dbase']);
+
+	if ($eqdb->connect_errno)
+	{
+		RowText("Failed to connect to database.");
+		$eqcgood = false;
+	}
+	else
+	{
+		$eqcgood = true;
+		$cname = $row['name'];
+		$cid = $row['id'];
 	}
 }
 
@@ -211,7 +251,7 @@ Container();
 		if ($uid >= 0)
 		{
 			// The READ list of menu options
-			if ($permission_handins || $permission_trades || $permission_looted || $permission_dropped || $permission_destroyed)
+			if ($eqcgood && ($permission_handins || $permission_trades || $permission_looted || $permission_dropped || $permission_destroyed))
 			{
 ?>
 				<li class="nav-item dropdown<?php $basename = basename($_SERVER["SCRIPT_FILENAME"], '.php'); if ($basename == "handins" || $basename == "trades" || $basename == "looted" || $basename == "dropped" || $basename == "destroyed") print " active"; ?>">
@@ -236,7 +276,7 @@ Container();
 <?php
 			}
 			// The ALTER list of menu options
-			if ($permission_inventory)
+			if ($eqcgood && $permission_inventory)
 			{
 ?>
 				<li class="nav-item dropdown<?php $basename = basename($_SERVER["SCRIPT_FILENAME"], '.php'); if ($basename == "inventory") print " active"; ?>">
@@ -253,7 +293,7 @@ Container();
 <?php
 			}
 			// Check for permission to view logging data
-			if ($permission_logging || $permission_users)
+			if ($permission_logging || $permission_users || $permission_connections)
 			{
 ?>
 				<li class="nav-item dropdown<?php $basename = basename($_SERVER["SCRIPT_FILENAME"], '.php'); if ($basename == "logs" || $basename == "users") print " active"; ?>">
@@ -266,6 +306,8 @@ Container();
 						print "<a class='dropdown-item' href='logs.php'>Logs</a>";
 					if ($permission_users)
 						print "<a class='dropdown-item' href='users.php'>Users</a>";
+					if ($permission_connections)
+						print "<a class='dropdown-item' href='connections.php'>Connections</a>";
 ?>
 					</div>
 				</li>
@@ -288,10 +330,13 @@ Container();
 <?php
 		}
 ?>
+			<li class="nav-item">
+				<a class="nav-link" href="connections.php"><i><b><?php print $cname; ?></b></i></a>
+			</li>
 		</ul>
 <?php
 		// Show search field if user is logged in
-		if ($uid >= 0)
+		if ($eqcgood && $uid >= 0)
 		{
 ?>
 		<form class="form-inline my-2 my-lg-0" action="search.php?a=s" method="post">

@@ -10,6 +10,7 @@ CREATE TABLE users (
 	permission_inventory TINYINT NOT NULL DEFAULT 0,
 	permission_logging TINYINT NOT NULL DEFAULT 0,
 	permission_users TINYINT NOT NULL DEFAULT 0,
+	permission_connections TINYINT NOT NULL DEFAULT 0,
 	PRIMARY KEY (id)
 );
 
@@ -29,4 +30,16 @@ CREATE TABLE logs (
 	type TINYINT UNSIGNED NOT NULL,
 	message VARCHAR(100),
 	PRIMARY KEY (id)
+);
+
+CREATE TABLE connections (
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	user INT UNSIGNED NOT NULL,
+	name VARCHAR(30) NOT NULL,
+	host VARCHAR(50) NOT NULL,
+	dbase VARCHAR(20) NOT NULL,
+	username VARCHAR(20) NOT NULL,
+	password VARCHAR(30) NOT NULL,
+	selected TINYINT NOT NULL DEFAULT 0,
+    PRIMARY KEY (id)
 );
