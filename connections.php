@@ -20,7 +20,7 @@ RowText("<h4>Connections</h4>");
 
 if (!isset($_GET['a']))
 {
-	display_connection_list($admindb, $uid);
+	display_connection_list($admindb, $uid, $cid);
 }
 elseif ($_GET['a'] == "c")
 {
@@ -85,7 +85,7 @@ elseif ($_GET['a'] == "dp")
 }
 else
 {
-	display_connection_list($admindb, $uid);
+	display_connection_list($admindb, $uid, $cid);
 }
 
 include_once("footer.php");
@@ -124,7 +124,7 @@ function display_connection_creation()
 	DivC();
 }
 
-function display_connection_list($admindb, $uid)
+function display_connection_list($admindb, $uid, $cid)
 {
 	$query = "SELECT id, name FROM connections WHERE user = {$uid} ORDER BY id ASC";
 	$result = $admindb->query($query);
