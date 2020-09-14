@@ -149,7 +149,7 @@ function display_connection_list($admindb, $uid, $cid)
 			while ($row = $result->fetch_assoc())
 			{
 				print "<tr><td>{$row['name']}</td><td>";
-				print "<a class='btn btn-primary' href='connections.php?a=u&id={$row['id']}' role='button'" . ($row['id'] == $cid ? " disabled" : "") .">Use</a>";
+				print "<a class='btn btn-primary" . $row['id'] == $cid ? " disabled" : "") . "' href='connections.php?a=u&id={$row['id']}' role='button'>Use</a>";
 				print "</td><td>";
 				print "<a class='btn btn-primary' href='connections.php?a=d&id={$row['id']}' role='button'>Delete</a>";
 				print "</td></tr>";
