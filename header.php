@@ -182,8 +182,9 @@ else
 
 $eqcgood = false;
 $cname = "No Connection";
+$cid = 0;
 
-$query = "SELECT name, host, dbase, username, password FROM connections WHERE user = {$uid} AND selected = 1";
+$query = "SELECT id, name, host, dbase, username, password FROM connections WHERE user = {$uid} AND selected = 1";
 $result = $admindb->query($query);
 
 if ($result->num_rows < 1)
@@ -209,6 +210,7 @@ else
 	{
 		$eqcgood = true;
 		$cname = $row['name'];
+		$cid = $row['id'];
 	}
 }
 
