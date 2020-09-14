@@ -329,7 +329,7 @@ Container();
 		}
 ?>
 			<li class="nav-item">
-				<a class="nav-link" href="connections.php"><?php print $cname; ?></a>
+				<a class="nav-link" href="connections.php"><i><?php print $cname; ?></i></a>
 			</li>
 		</ul>
 <?php
