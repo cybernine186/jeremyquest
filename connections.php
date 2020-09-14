@@ -66,6 +66,20 @@ elseif ($_GET['a'] == "d")
 	
 	display_delete_confirm($admindb, $cid);
 }
+elseif ($_GET['a'] == "dp")
+{
+	if (!IsNumber($_GET['id']))
+		data_error();
+	
+	$cid = $_GET['id'];
+	
+	$query = "DELETE FROM connections WHERE id = {$cid}";
+	$admindb->query($query);
+	
+	RowText("<h6>Connection Deleted</h6>";
+	RowText("Returning to Connection List shortly");
+	header("refresh:3;url=connections.php");
+}
 else
 {
 	display_connection_list($admindb, $uid);
