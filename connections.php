@@ -37,9 +37,34 @@ elseif ($_GET['a'] == "cp")
 	$query = "INSERT INTO connections (user, name, host, dbase, username, password, selected) VALUES ({$uid}, '{$cname}', '{$chost}', '{$cdb}', '{$cuser}', '{$cpassword}', 1)";
 	$admindb->query($query);
 	
-	RowText("Connection Created");
+	RowText("<h6>Connection Created</h6>");
+	RowText("Returning to Connection List shortly");
+	header("refresh:3;url=connections.php");
+}
+elseif ($_GET['a'] == "u")
+{
+	if (!IsNumber($_GET['id']))
+		data_error();
 	
-	display_connection_list($admindb, $uid);
+	$cid = $_GET['id'];
+	
+	$query = "UPDATE connections SET selected = 0 WHERE user = {$uid}";
+	$admindb->query($query);
+	$query = "UPDATE connections SET selected = 1 WHERE id = {$cid}";
+	$admindb->query($query);
+	
+	RowText("<h6>Connection Selected</h6>");
+	RowText("Returning to Connection List shortly");
+	header("refresh:3;url=connections.php");
+}
+elseif ($_GET['a'] == "d")
+{
+	if (!IsNumber($_GET['id']))
+		data_error();
+	
+	$cid = $_GET['id'];
+	
+	display_delete_confirm($admindb, $cid);
 }
 else
 {
@@ -119,4 +144,27 @@ function display_connection_list($admindb, $uid)
 	print "<a class='btn btn-primary' href='connections.php?a=c' role='button'>Create New</a>";
 }
 
+function display_delete_confirm($admindb, $cid)
+{
+	$query = "SELECT name FROM connections WHERE id = {$cid}";
+	$result = $admindb->query($query);
+	if ($result->num_rows != 1)
+		data_error();
+	
+	$row = $result->fetch_assoc();
+	$cname = $row['name'];
+	RowText("Are you sure you want to delete connection {$cname}?");
+	Row();
+		Col();
+		DivC();
+		Col(true, '', 1);
+			print "<a class='btn btn-primary' href='connections.php?a=dp&id={$cid}' role='button'>Yes</a>";
+		DivC();
+		Col(true, '', 1);
+			print "<a class='btn btn-primary' href='connections.php' role='button'>No</a>";
+		DivC();
+		Col();
+		DivC();
+	DivC();
+}
 ?>
