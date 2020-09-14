@@ -76,7 +76,7 @@ elseif ($_GET['a'] == "dp")
 	$query = "DELETE FROM connections WHERE id = {$cid}";
 	$admindb->query($query);
 	
-	RowText("<h6>Connection Deleted</h6>";
+	RowText("<h6>Connection Deleted</h6>");
 	RowText("Returning to Connection List shortly");
 	header("refresh:3;url=connections.php");
 }
