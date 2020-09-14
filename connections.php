@@ -34,6 +34,9 @@ elseif ($_GET['a'] == "cp")
 	$cuser = $admindb->real_escape_string($_POST['connectionUser']);
 	$cpassword = $admindb->real_escape_string($_POST['connectionPassword']);
 	
+	$query = "UPDATE connections SET selected = 0 WHERE user = {$uid}";
+	$admindb->query($query);
+	
 	$query = "INSERT INTO connections (user, name, host, dbase, username, password, selected) VALUES ({$uid}, '{$cname}', '{$chost}', '{$cdb}', '{$cuser}', '{$cpassword}', 1)";
 	$admindb->query($query);
 	
