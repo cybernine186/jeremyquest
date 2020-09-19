@@ -26,6 +26,7 @@ $permission_inventory = false;
 $permission_logging = false;
 $permission_users = false;
 $permission_connections = false;
+$permission_copychar = false;
 
 abstract class Logs
 {
@@ -47,7 +48,7 @@ if(basename($_SERVER["SCRIPT_FILENAME"], '.php') == "login" && isset($_GET['a'])
 	$password = $_POST['password'];
 
 	// Look for entry for indicated UserID
-	$query = "SELECT hash, id, permission_handins, permission_trades, permission_looted, permission_dropped, permission_destroyed, permission_inventory, permission_logging, permission_users, permission_connections FROM users WHERE username = '" . $uname . "'";
+	$query = "SELECT hash, id, permission_handins, permission_trades, permission_looted, permission_dropped, permission_destroyed, permission_inventory, permission_logging, permission_users, permission_connections, permission_copychar FROM users WHERE username = '" . $uname . "'";
 	$result = $admindb->query($query);
 	
 	// Login good until otherwise indicated bad
@@ -93,6 +94,8 @@ if(basename($_SERVER["SCRIPT_FILENAME"], '.php') == "login" && isset($_GET['a'])
 				$permission_users = true;
 			if ($row['permission_connections'])
 				$permission_connections = true;
+			if ($row['permission_copychar'])
+				$permission_copychar = true;
 			
 			Logging($admindb, 0, Logs::Session, "Successful Login - User: {$uname} - " . get_client_ip());
 		}
@@ -134,7 +137,7 @@ else
 	// Cookie Present - see if it's legit
 	
 	$cookievalue = $_COOKIE[$cookie_name];
-	$query = "SELECT cookiehashes.id AS id, cookiehashes.userid AS uid, users.id AS uid2, users.permission_handins AS permission_handins, users.permission_trades AS permission_trades, users.permission_looted AS permission_looted, users.permission_dropped AS permission_dropped, users.permission_destroyed AS permission_destroyed, users.permission_inventory AS permission_inventory, users.permission_logging AS permission_logging, users.permission_users AS permission_users, users.permission_connections AS permission_connections, users.username AS username FROM cookiehashes LEFT JOIN users ON cookiehashes.userid=users.id  WHERE cookiehashes.cookiehash='{$cookievalue}'";
+	$query = "SELECT cookiehashes.id AS id, cookiehashes.userid AS uid, users.id AS uid2, users.permission_handins AS permission_handins, users.permission_trades AS permission_trades, users.permission_looted AS permission_looted, users.permission_dropped AS permission_dropped, users.permission_destroyed AS permission_destroyed, users.permission_inventory AS permission_inventory, users.permission_logging AS permission_logging, users.permission_users AS permission_users, users.permission_connections AS permission_connections, users.permission_copychar AS permission_copychar, users.username AS username FROM cookiehashes LEFT JOIN users ON cookiehashes.userid=users.id  WHERE cookiehashes.cookiehash='{$cookievalue}'";
 	$result = $admindb->query($query);
 	if($result->num_rows == 0)
 	{
@@ -173,6 +176,10 @@ else
 		
 		if ($row['permission_connections'])
 			$permission_connections = true;
+		
+		if ($row['permission_copychar'])
+			$permission_copychar = true;
+		
 		$cookieid = $row['id'];
 		// Touch cookie to keep alive after proper use
 		$query = "UPDATE cookiehashes SET used = NOW() WHERE id={$cookieid}";

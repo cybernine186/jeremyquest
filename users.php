@@ -89,6 +89,7 @@ elseif ($_GET['a'] == "pe")
 	$logging = "0";
 	$users = "0";
 	$connections = "0";
+	$copychar = "0";
 	
 	if (isset($_POST['handinsCheckbox']) && $_POST['handinsCheckbox'] == "on")
 		$handins = "1";
@@ -108,9 +109,11 @@ elseif ($_GET['a'] == "pe")
 		$users = "1";
 	if (isset($_POST['connectionsCheckbox']) && $_POST['connectionsCheckbox'] == "on")
 		$connections = "1";
+	if (isset($_POST['copycharCheckbox']) && $_POST['copycharCheckbox'] == "on")
+		$copychar = "1";
 
 	// Update the user information in database
-	$query = "UPDATE users SET username='{$uname}', permission_handins={$handins}, permission_trades={$trades}, permission_looted={$looted}, permission_dropped={$dropped}, permission_destroyed={$destroyed}, permission_inventory={$inventory}, permission_logging={$logging}, permission_users={$users}, permission_connections={$connections} WHERE id={$editid}";
+	$query = "UPDATE users SET username='{$uname}', permission_handins={$handins}, permission_trades={$trades}, permission_looted={$looted}, permission_dropped={$dropped}, permission_destroyed={$destroyed}, permission_inventory={$inventory}, permission_logging={$logging}, permission_users={$users}, permission_connections={$connections}, permission_copychar={$copychar} WHERE id={$editid}";
 	$result = $admindb->query($query);
 	
 	RowText("User information updated.");
@@ -292,7 +295,7 @@ In:			$id - id of user for editing
 *******************************************************************************/
 function display_user_edit($admindb, $id)
 {
-	$query = "SELECT username, permission_handins, permission_trades, permission_looted, permission_dropped, permission_destroyed, permission_inventory, permission_logging, permission_users, permission_connections FROM users WHERE id = {$id}";
+	$query = "SELECT username, permission_handins, permission_trades, permission_looted, permission_dropped, permission_destroyed, permission_inventory, permission_logging, permission_users, permission_connections, permission_copychar FROM users WHERE id = {$id}";
 	$result = $admindb->query($query);
 	
 	// Check results exist
@@ -344,6 +347,10 @@ Row();
 			<div class="form-group form-check">
 				<input type="checkbox" class="form-check-input" id="connectionsCheckbox" name="connectionsCheckbox"<?php print ($row['permission_connections'] ? "checked" : ""); ?>>
 				<label class="form-check-label" for="usersCheckbox">Manage Connections</label>
+			</div>
+			<div class="form-group form-check">
+				<input type="checkbox" class="form-check-input" id="copycharCheckbox" name="copycharCheckbox"<?php print ($row['permission_copychar'] ? "checked" : ""); ?>>
+				<label class="form-check-label" for="copycharCheckbox">Copy Characters</label>
 			</div>
 
 			<button type="submit" class="btn btn-primary">Submit</button>
