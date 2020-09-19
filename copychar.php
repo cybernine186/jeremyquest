@@ -24,4 +24,9 @@ else
 
 include_once("footer.php");
 
+function display_char_search()
+{
+	
+}
+
 ?>
