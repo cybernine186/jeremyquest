@@ -283,7 +283,7 @@ Container();
 <?php
 			}
 			// The ALTER list of menu options
-			if ($eqcgood && $permission_inventory)
+			if ($eqcgood && ($permission_inventory || $permission_copychar))
 			{
 ?>
 				<li class="nav-item dropdown<?php $basename = basename($_SERVER["SCRIPT_FILENAME"], '.php'); if ($basename == "inventory") print " active"; ?>">
@@ -294,6 +294,8 @@ Container();
 <?php
 					if ($permission_inventory)
 						print "<a class='dropdown-item' href='inventory.php'>Inventory</a>";
+					if ($permission_copychar)
+						print "<a class='dropdown-item' href='copychar.php'>Copy Character</a>";
 ?>
 					</div>
 				</li>
