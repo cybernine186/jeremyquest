@@ -56,6 +56,7 @@ function display_select_origin_connection($admindb, $uid)
 ?>
 					</select>
 				</div>
+				<button type="submit" class="btn btn-primary">Next</button>
 			</form>
 <?php
 		DivC();
