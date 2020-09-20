@@ -15,7 +15,7 @@ RowText("<h4>Copy Character</h4>");
 
 if (!isset($_GET['a']))
 {
-	display_select_origin_connection($admindb);
+	display_select_origin_connection($admindb, $uid);
 }
 elseif ($_GET['a'] == "sp")
 {
@@ -28,15 +28,17 @@ elseif ($_GET['a'] == "sp")
 }
 else
 {
-	display_select_origin_connection($admindb);
+	display_select_origin_connection($admindb, $uid);
 }
 
 include_once("footer.php");
 
-function display_select_origin_connection($admindb)
+function display_select_origin_connection($admindb, $uid)
 {
 	RowText("<h6>Select Origin Server</h6>");
 	Row();
+		Col();
+		DivC();
 		Col(true, '', 2);
 ?>
 			<form action="copychar.php?a=sd" method="post">
@@ -45,7 +47,7 @@ function display_select_origin_connection($admindb)
 					<select class="form-control" id="origin" name="origin">
 <?php
 						$query = "SELECT id, name FROM connections WHERE user = {$uid}";
-						$result = $mysqli->query($query);
+						$result = $admindb->query($query);
 				
 						while ($row = $result->fetch_assoc())
 						{
@@ -56,6 +58,8 @@ function display_select_origin_connection($admindb)
 				</div>
 			</form>
 <?php
+		DivC();
+		Col();
 		DivC();
 	DivC();
 }
