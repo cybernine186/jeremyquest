@@ -54,7 +54,7 @@ function display_select_destination_connection($admindb, $uid, $origin)
 	Row();
 		Col();
 		DivC();
-		Col(true, '', 2);
+		Col(true, '', 4);
 ?>
 			<form action="copychar.php?a=s" method="post">
 				<div class="form-group">
@@ -87,7 +87,7 @@ function display_select_origin_connection($admindb, $uid)
 	Row();
 		Col();
 		DivC();
-		Col(true, '', 2);
+		Col(true, '', 4);
 ?>
 			<form action="copychar.php?a=sd" method="post">
 				<div class="form-group">
