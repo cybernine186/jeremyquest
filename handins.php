@@ -209,7 +209,6 @@ function display_handin_search()
 		Col();
 		DivC();
 	DivC();
-		
 }
 
 function display_handin_search_results($eqdb, $playername)
