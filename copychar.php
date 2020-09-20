@@ -17,6 +17,20 @@ if (!isset($_GET['a']))
 {
 	display_select_origin_connection($admindb, $uid);
 }
+elseif ($_GET['a'] == "s")
+{
+	RowText("Origin: {$_POST['origin']}");
+	RowText("Destination: {$_POST['destination']}");
+}
+elseif ($_GET['a'] == "sd")
+{
+	if (!IsNumber($_POST['origin']))
+		data_error();
+	
+	$origin = $_POST['origin'];
+	display_select_destination_connection($admindb, $uid, $origin);
+}
+/*
 elseif ($_GET['a'] == "sp")
 {
 	if (!IsText($_POST['playerName']))
@@ -26,12 +40,46 @@ elseif ($_GET['a'] == "sp")
 	
 	display_handin_search_results($eqdb, $playername);
 }
+*/
 else
 {
 	display_select_origin_connection($admindb, $uid);
 }
 
 include_once("footer.php");
+
+function display_select_destination_connection($admindb, $uid, $origin)
+{
+	RowText("");
+	Row();
+		Col();
+		DivC();
+		Col(true, '', 2);
+?>
+			<form action="copychar.php?a=s" method="post">
+				<div class="form-group">
+					<label for="destination"><h6>Select Destination Server</h6></label>
+					<select class="form-control" id="destination" name="destination">
+<?php
+						$query = "SELECT id, name FROM connections WHERE user = {$uid} AND id <> {$origin}";
+						$result = $admindb->query($query);
+				
+						while ($row = $result->fetch_assoc())
+						{
+							print "<option value='{$row['id']}'>{$row['name']}</option>";
+						}
+?>
+					</select>
+				</div>
+				<input type="hidden" name="origin" value="<?php print $origin; ?>">
+				<button type="submit" class="btn btn-primary">Next</button>
+			</form>
+<?php
+		DivC();
+		Col();
+		DivC();
+	DivC();
+}
 
 function display_select_origin_connection($admindb, $uid)
 {
