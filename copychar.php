@@ -35,6 +35,7 @@ include_once("footer.php");
 
 function display_select_origin_connection($admindb, $uid)
 {
+	RowText("");
 	Row();
 		Col();
 		DivC();
