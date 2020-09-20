@@ -35,7 +35,6 @@ include_once("footer.php");
 
 function display_select_origin_connection($admindb, $uid)
 {
-	RowText("<h6>Select Origin Server</h6>");
 	Row();
 		Col();
 		DivC();
@@ -43,7 +42,7 @@ function display_select_origin_connection($admindb, $uid)
 ?>
 			<form action="copychar.php?a=sd" method="post">
 				<div class="form-group">
-					<label for="origin">Origin Server</label>
+					<label for="origin"><h6>Select Origin Server</h6></label>
 					<select class="form-control" id="origin" name="origin">
 <?php
 						$query = "SELECT id, name FROM connections WHERE user = {$uid}";
