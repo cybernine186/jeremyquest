@@ -36,25 +36,28 @@ include_once("footer.php");
 function display_select_origin_connection($admindb)
 {
 	RowText("<h6>Select Origin Server</h6>");
+	Row();
+		Col(true, '', 2);
 ?>
-	<form action="copychar.php?a=sd" method="post">
-		<div class="form-group">
-			<label for="origin">Origin Server</label>
-			<select class="form-control" id="origin" name="origin">
-				<option value="0">0 - None</option>
+			<form action="copychar.php?a=sd" method="post">
+				<div class="form-group">
+					<label for="origin">Origin Server</label>
+					<select class="form-control" id="origin" name="origin">
 <?php
-				$query = "SELECT id, name FROM connections WHERE user = {$uid}";
-				$result = $mysqli->query($query);
+						$query = "SELECT id, name FROM connections WHERE user = {$uid}";
+						$result = $mysqli->query($query);
 				
-				while ($row = $result->fetch_assoc())
-				{
-					print "<option value='{$row['id']}'>{$row['name']}</option>";
-				}
+						while ($row = $result->fetch_assoc())
+						{
+							print "<option value='{$row['id']}'>{$row['name']}</option>";
+						}
 ?>
-			</select>
-		</div>
-	</form>
+					</select>
+				</div>
+			</form>
 <?php
+		DivC();
+	DivC();
 }
 
 function display_char_search($eqdb)
