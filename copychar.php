@@ -61,7 +61,7 @@ elseif ($_GET['a'] == "sp")
 		include_once("footer.php");
 		die;
 	}	
-	display_handin_search_results($origindb, $playername, $origin, $destination);
+	display_char_search_results($origindb, $playername, $origin, $destination);
 }
 else
 {
