@@ -29,11 +29,11 @@ elseif ($_GET['a'] == "cn")
 	if (!IsNumber($_GET['id']) || !IsNumber($_GET['o']) || !IsNumber($_GET['d']))
 		data_error();
 	
-	$origindb = DatabaseConnection($admindb, $_GET['o']);
+	$origindb = DatabaseConnection($admindb, $_GET['o'], $uid);
 	if (!$origindb)
 		data_error();
 	
-	$destinationdb = DatabaseConnection($admindb, $_GET['d']);
+	$destinationdb = DatabaseConnection($admindb, $_GET['d'], $uid);
 	if (!$destinationdb)
 		data_error();
 	
@@ -128,7 +128,7 @@ elseif ($_GET['a'] == "sp")
 	
 	$playername = $eqdb->real_escape_string($_POST['playerName']);
 	
-	$origindb = DatabaseConnection($admindb, $origin);
+	$origindb = DatabaseConnection($admindb, $origin, $uid);
 	if (!$origindb)
 		data_error();
 	

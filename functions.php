@@ -156,7 +156,7 @@ function Logging($admindb, $userid, $type, $message)
 	$result = $admindb->query($query);
 }
 
-function DatabaseConnection($admindb, $dbid)
+function DatabaseConnection($admindb, $dbid, $uid)
 {
 	$query = "SELECT user, host, dbase, username, password FROM connections WHERE id = {$dbid}";
 	$result = $admindb->query($query);
