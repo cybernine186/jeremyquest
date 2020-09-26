@@ -19,6 +19,75 @@ if (!isset($_GET['a']))
 }
 elseif ($_GET['a'] == "cn")
 {
+	if (!IsNumber($_GET['id']) || !IsNumber($_GET['o']) || !IsNumber($_GET['d']))
+		data_error();
+	
+	// Setup Origin DB
+	$query = "SELECT user, host, dbase, username, password FROM connections WHERE id = {$_GET['o']}";
+	$result = $admindb->query($query);
+	if ($result->num_rows != 1)
+		data_error();
+	
+	$row = $result->fetch_assoc();
+	
+	if ($row['user'] != $uid)
+		data_error();
+	
+	$origindb = new mysqli($row['host'], $row['username'], $row['password'], $row['dbase']);
+
+	if ($origindb->connect_errno)
+	{
+		print "Failed to connect to origin database.";
+		include_once("footer.php");
+		die;
+	}
+	
+	// Setup Destination DB
+	$query = "SELECT user, host, dbase, username, password FROM connections WHERE id = {$_GET['d']}";
+	$result = $admindb->query($query);
+	if ($result->num_rows != 1)
+		data_error();
+	
+	$row = $result->fetch_assoc();
+	
+	if ($row['user'] != $uid)
+		data_error();
+	
+	$destinationdb = new mysqli($row['host'], $row['username'], $row['password'], $row['dbase']);
+
+	if ($destinationdb->connect_errno)
+	{
+		print "Failed to connect to destination database.";
+		include_once("footer.php");
+		die;
+	}
+	
+	$query = "SELECT name, account_id FROM character_data WHERE id = {$_GET['id']}";
+	$result = $origindb->query($query);
+	if ($result->num_rows != 1)
+		data_error();
+	$row = $result->fetch_assoc();
+	$playername = $row['name'];
+	$accountid = $row['account_id'];
+	
+	$query = "SELECT id, account_id FROM character_data WHERE name = '{$playername}'";
+	$result = $destinationdb->query($query);
+	if ($result->num_rows == 0)
+	{
+		// No results - name available
+		RowText("Name <b>{$playername}</b> available on destination server. Checking for space on the account.");
+		$query = "SELECT count(*) AS numchars FROM character_data WHERE account_id = {$accountid}";
+		$result = $destinationdb->query($query);
+		if ($result->num_rows == 0)
+			data_error();
+		$row = $result->fetch_assoc();
+		if ($row['numchars'] < 8)
+		{
+			RowText("Space available on account on destination server.");
+			RowText("Copy to same account");
+			RowText("Copy to different account");
+		}
+	}
 	
 }
 elseif ($_GET['a'] == "s")
@@ -56,6 +125,9 @@ elseif ($_GET['a'] == "sp")
 		data_error();
 	
 	$row = $result->fetch_assoc();
+	
+	if ($row['user'] != $uid)
+		data_error();
 	
 	$origindb = new mysqli($row['host'], $row['username'], $row['password'], $row['dbase']);
 
