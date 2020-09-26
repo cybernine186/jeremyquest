@@ -18,17 +18,22 @@ if (!isset($_GET['a']))
 {
 	display_select_origin_connection($admindb, $uid);
 }
+// Confirm and Process
+elseif ($_GET['a'] == "c")
+{
+	print "fuck yes";
+}
 // Check Name
 elseif ($_GET['a'] == "cn")
 {
 	if (!IsNumber($_GET['id']) || !IsNumber($_GET['o']) || !IsNumber($_GET['d']))
 		data_error();
 	
-	$origindb = DatabaseConnection($_GET['o']);
+	$origindb = DatabaseConnection($admindb, $_GET['o']);
 	if (!$origindb)
 		data_error();
 	
-	$destinationdb = DatabaseConnection($_GET['d']);
+	$destinationdb = DatabaseConnection($admindb, $_GET['d']);
 	if (!$destinationdb)
 		data_error();
 	
@@ -55,7 +60,29 @@ elseif ($_GET['a'] == "cn")
 		{
 			RowText("Space available on account on destination server.");
 			RowText("Copy to same account");
+?>
+			<form action="copychar.php?a=c" method="post">
+				<input type="hidden" name="origin" value="<?php print $_GET['o']; ?>">
+				<input type="hidden" name="destination" value="<?php print $_GET['d']; ?>">
+				<input type="hidden" name="sa" value="1">
+				<input type="hidden" name="sn" value="1">
+				<button type="submit" class="btn btn-primary">Copy to Same Account</button>
+			</form>
+<?php			
 			RowText("Copy to different account");
+?>
+			<form action="copychar.php?a=c" method="post">
+				<div class="form-group">
+					<label for="accountName">Account Name</label>
+					<input type="text" class="form-control" id="accountName" placeholder="Enter Account Name" name="accountName">
+				</div>
+				<input type="hidden" name="origin" value="<?php print $_GET['o']; ?>">
+				<input type="hidden" name="destination" value="<?php print $_GET['d']; ?>">
+				<input type="hidden" name="sa" value="0">
+				<input type="hidden" name="sn" value="1">
+				<button type="submit" class="btn btn-primary">Copy to Different Account</button>
+			</form>
+<?php			
 		}
 	}
 	elseif ($result->num_rows == 1)
@@ -101,7 +128,7 @@ elseif ($_GET['a'] == "sp")
 	
 	$playername = $eqdb->real_escape_string($_POST['playerName']);
 	
-	$origindb = DatabaseConnection($origin);
+	$origindb = DatabaseConnection($admindb, $origin);
 	if (!$origindb)
 		data_error();
 	
