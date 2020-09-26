@@ -59,7 +59,6 @@ elseif ($_GET['a'] == "cn")
 		if ($row['numchars'] < 8)
 		{
 			RowText("Space available on account on destination server.");
-			RowText("Copy to same account");
 			Row();
 				Col();
 				DivC();
@@ -78,7 +77,8 @@ elseif ($_GET['a'] == "cn")
 				DivC();
 			DivC();
 			
-			RowText("Copy to different account");
+			RowText("");
+			
 			Row();
 				Col();
 				DivC();
