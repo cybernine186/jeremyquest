@@ -17,6 +17,10 @@ if (!isset($_GET['a']))
 {
 	display_select_origin_connection($admindb, $uid);
 }
+elseif ($_GET['a'] == "cn")
+{
+	
+}
 elseif ($_GET['a'] == "s")
 {
 	if (!IsNumber($_POST['origin']) || !IsNumber($_POST['destination']))
@@ -165,7 +169,7 @@ function display_char_search_results($origindb, $playername, $origin, $destinati
 					while ($row = $result->fetch_assoc())
 					{
 						print "<tr><td>";
-						Hyperlink("copychar.php?a=cn&id={$row['id']}", $row['charname']);
+						Hyperlink("copychar.php?a=cn&id={$row['id']}&o={$origin}&d={$destination}", $row['charname']);
 						print "</td><td>{$row['gname']}</td><td>{$row['level']}</td></tr>";
 					}
 ?>
