@@ -19,8 +19,12 @@ if (!isset($_GET['a']))
 }
 elseif ($_GET['a'] == "s")
 {
-	RowText("Origin: {$_POST['origin']}");
-	RowText("Destination: {$_POST['destination']}");
+	if (!IsNumber($_POST['origin']) || !IsNumber($_POST['destination']))
+		data_error();
+	$origin = $_POST['origin'];
+	$destination = $_POST['destination'];
+	
+	display_char_search($origin, $destination);
 }
 elseif ($_GET['a'] == "sd")
 {
@@ -30,17 +34,35 @@ elseif ($_GET['a'] == "sd")
 	$origin = $_POST['origin'];
 	display_select_destination_connection($admindb, $uid, $origin);
 }
-/*
 elseif ($_GET['a'] == "sp")
 {
 	if (!IsText($_POST['playerName']))
 		data_error();
 	
+	if (!IsNumber($_POST['origin']) || !IsNumber($_POST['destination']))
+		data_error();
+	$origin = $_POST['origin'];
+	$destination = $_POST['destination'];
+	
 	$playername = $eqdb->real_escape_string($_POST['playerName']);
 	
-	display_handin_search_results($eqdb, $playername);
+	$query = "SELECT user, host, dbase, username, password FROM connections WHERE id = {$origin}";
+	$result = $admindb->query($query);
+	if ($result->num_rows != 1)
+		data_error();
+	
+	$row = $result->fetch_assoc();
+	
+	$origindb = new mysqli($row['host'], $row['username'], $row['password'], $row['dbase']);
+
+	if ($origindb->connect_errno)
+	{
+		print "Failed to connect to origin database.";
+		include_once("footer.php");
+		die;
+	}	
+	display_handin_search_results($origindb, $playername, $origin, $destination);
 }
-*/
 else
 {
 	display_select_origin_connection($admindb, $uid);
@@ -113,10 +135,10 @@ function display_select_origin_connection($admindb, $uid)
 	DivC();
 }
 
-function display_char_search($eqdb)
+function display_char_search_results($origindb, $playername, $origin, $destination)
 {
 	$query = "SELECT character_data.id AS id, character_data.name AS charname, character_data.level AS level, guild_members.guild_id, guilds.name AS gname FROM character_data LEFT JOIN guild_members ON character_data.id = guild_members.char_id LEFT JOIN guilds ON guild_members.guild_id = guilds.id WHERE character_data.name LIKE '%{$playername}%'";
-	$result = $eqdb->query($query);
+	$result = $origindb->query($query);
 	
 	if($result->num_rows < 1)
 	{
@@ -143,12 +165,35 @@ function display_char_search($eqdb)
 					while ($row = $result->fetch_assoc())
 					{
 						print "<tr><td>";
-						Hyperlink("handins.php?a=p&id={$row['id']}", $row['charname']);
+						Hyperlink("copychar.php?a=cn&id={$row['id']}", $row['charname']);
 						print "</td><td>{$row['gname']}</td><td>{$row['level']}</td></tr>";
 					}
 ?>
 				</tbody>
 			</table>
+<?php
+		DivC();
+		Col();
+		DivC();
+	DivC();
+}
+
+function display_char_search($origin, $destination)
+{
+	Row();
+		Col();
+		DivC();
+		Col(false, '', 6);
+?>
+			<form action="copychar.php?a=sp" method="post">
+				<div class="form-group">
+					<label for="playerName">Player Name</label>
+					<input type="text" class="form-control" id="playerName" placeholder="Enter Player Name" name="playerName">
+				</div>
+				<input type="hidden" name="origin" value="<?php print $origin; ?>">
+				<input type="hidden" name="destination" value="<?php print $destination; ?>">
+				<button type="submit" class="btn btn-primary">Submit</button>
+			</form>
 <?php
 		DivC();
 		Col();
