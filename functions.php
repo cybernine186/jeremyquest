@@ -170,7 +170,7 @@ function DatabaseConnection($admindb, $dbid, $uid)
 	
 	$db = new mysqli($row['host'], $row['username'], $row['password'], $row['dbase']);
 
-	if ($destinationdb->connect_errno)
+	if ($db->connect_errno)
 	{
 		print "Failed to connect to destination database.";
 		return false;
