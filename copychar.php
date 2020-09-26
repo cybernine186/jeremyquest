@@ -60,29 +60,46 @@ elseif ($_GET['a'] == "cn")
 		{
 			RowText("Space available on account on destination server.");
 			RowText("Copy to same account");
+			Row();
+				Col();
+				DivC();
+				Col(true, '', 4);
 ?>
-			<form action="copychar.php?a=c" method="post">
-				<input type="hidden" name="origin" value="<?php print $_GET['o']; ?>">
-				<input type="hidden" name="destination" value="<?php print $_GET['d']; ?>">
-				<input type="hidden" name="sa" value="1">
-				<input type="hidden" name="sn" value="1">
-				<button type="submit" class="btn btn-primary">Copy to Same Account</button>
-			</form>
-<?php			
+					<form action="copychar.php?a=c" method="post">
+						<input type="hidden" name="origin" value="<?php print $_GET['o']; ?>">
+						<input type="hidden" name="destination" value="<?php print $_GET['d']; ?>">
+						<input type="hidden" name="sa" value="1">
+						<input type="hidden" name="sn" value="1">
+						<button type="submit" class="btn btn-primary">Copy to Same Account</button>
+					</form>
+<?php
+				DivC();
+				Col();
+				DivC();
+			DivC();
+			
 			RowText("Copy to different account");
+			Row();
+				Col();
+				DivC();
+				Col(true, '', 4);
 ?>
-			<form action="copychar.php?a=c" method="post">
-				<div class="form-group">
-					<label for="accountName">Account Name</label>
-					<input type="text" class="form-control" id="accountName" placeholder="Enter Account Name" name="accountName">
-				</div>
-				<input type="hidden" name="origin" value="<?php print $_GET['o']; ?>">
-				<input type="hidden" name="destination" value="<?php print $_GET['d']; ?>">
-				<input type="hidden" name="sa" value="0">
-				<input type="hidden" name="sn" value="1">
-				<button type="submit" class="btn btn-primary">Copy to Different Account</button>
-			</form>
-<?php			
+					<form action="copychar.php?a=c" method="post">
+						<div class="form-group">
+							<label for="accountName">Account Name</label>
+							<input type="text" class="form-control" id="accountName" placeholder="Enter Account Name" name="accountName">
+						</div>
+						<input type="hidden" name="origin" value="<?php print $_GET['o']; ?>">
+						<input type="hidden" name="destination" value="<?php print $_GET['d']; ?>">
+						<input type="hidden" name="sa" value="0">
+						<input type="hidden" name="sn" value="1">
+						<button type="submit" class="btn btn-primary">Copy to Different Account</button>
+					</form>
+<?php
+				DivC();
+				Col();
+				DivC();
+			DivC();
 		}
 	}
 	elseif ($result->num_rows == 1)
