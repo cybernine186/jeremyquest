@@ -13,54 +13,24 @@ if (!$permission_copychar)
 
 RowText("<h4>Copy Character</h4>");
 
+// Select Origin Connection - Step 1
 if (!isset($_GET['a']))
 {
 	display_select_origin_connection($admindb, $uid);
 }
+// Check Name
 elseif ($_GET['a'] == "cn")
 {
 	if (!IsNumber($_GET['id']) || !IsNumber($_GET['o']) || !IsNumber($_GET['d']))
 		data_error();
 	
-	// Setup Origin DB
-	$query = "SELECT user, host, dbase, username, password FROM connections WHERE id = {$_GET['o']}";
-	$result = $admindb->query($query);
-	if ($result->num_rows != 1)
+	$origindb = DatabaseConnection($_GET['o']);
+	if (!$origindb)
 		data_error();
 	
-	$row = $result->fetch_assoc();
-	
-	if ($row['user'] != $uid)
+	$destinationdb = DatabaseConnection($_GET['d']);
+	if (!$destinationdb)
 		data_error();
-	
-	$origindb = new mysqli($row['host'], $row['username'], $row['password'], $row['dbase']);
-
-	if ($origindb->connect_errno)
-	{
-		print "Failed to connect to origin database.";
-		include_once("footer.php");
-		die;
-	}
-	
-	// Setup Destination DB
-	$query = "SELECT user, host, dbase, username, password FROM connections WHERE id = {$_GET['d']}";
-	$result = $admindb->query($query);
-	if ($result->num_rows != 1)
-		data_error();
-	
-	$row = $result->fetch_assoc();
-	
-	if ($row['user'] != $uid)
-		data_error();
-	
-	$destinationdb = new mysqli($row['host'], $row['username'], $row['password'], $row['dbase']);
-
-	if ($destinationdb->connect_errno)
-	{
-		print "Failed to connect to destination database.";
-		include_once("footer.php");
-		die;
-	}
 	
 	$query = "SELECT name, account_id FROM character_data WHERE id = {$_GET['id']}";
 	$result = $origindb->query($query);
@@ -77,10 +47,10 @@ elseif ($_GET['a'] == "cn")
 		// No results - name available
 		RowText("Name <b>{$playername}</b> available on destination server. Checking for space on the account.");
 		$query = "SELECT count(*) AS numchars FROM character_data WHERE account_id = {$accountid}";
-		$result = $destinationdb->query($query);
-		if ($result->num_rows == 0)
+		$resultaccount = $destinationdb->query($query);
+		if ($resultaccount->num_rows == 0)
 			data_error();
-		$row = $result->fetch_assoc();
+		$row = $resultaccount->fetch_assoc();
 		if ($row['numchars'] < 8)
 		{
 			RowText("Space available on account on destination server.");
@@ -88,8 +58,18 @@ elseif ($_GET['a'] == "cn")
 			RowText("Copy to different account");
 		}
 	}
+	elseif ($result->num_rows == 1)
+	{
+		// Name is taken - prompt for new
+		RowText("Name <b>{$playername}</b> is taken on destination server.");
+		RowText("Choose a new name, or rename/delete existing character on destination server and try again.");
+		display_newname_form($_GET['o'], $_GET['d']);
+	}
+	else	// Multiple characters of same name? Error
+		data_error();
 	
 }
+// Search characters
 elseif ($_GET['a'] == "s")
 {
 	if (!IsNumber($_POST['origin']) || !IsNumber($_POST['destination']))
@@ -99,6 +79,7 @@ elseif ($_GET['a'] == "s")
 	
 	display_char_search($origin, $destination);
 }
+// Select Destination Server
 elseif ($_GET['a'] == "sd")
 {
 	if (!IsNumber($_POST['origin']))
@@ -107,6 +88,7 @@ elseif ($_GET['a'] == "sd")
 	$origin = $_POST['origin'];
 	display_select_destination_connection($admindb, $uid, $origin);
 }
+// Player search results
 elseif ($_GET['a'] == "sp")
 {
 	if (!IsText($_POST['playerName']))
@@ -119,32 +101,43 @@ elseif ($_GET['a'] == "sp")
 	
 	$playername = $eqdb->real_escape_string($_POST['playerName']);
 	
-	$query = "SELECT user, host, dbase, username, password FROM connections WHERE id = {$origin}";
-	$result = $admindb->query($query);
-	if ($result->num_rows != 1)
+	$origindb = DatabaseConnection($origin);
+	if (!$origindb)
 		data_error();
 	
-	$row = $result->fetch_assoc();
-	
-	if ($row['user'] != $uid)
-		data_error();
-	
-	$origindb = new mysqli($row['host'], $row['username'], $row['password'], $row['dbase']);
-
-	if ($origindb->connect_errno)
-	{
-		print "Failed to connect to origin database.";
-		include_once("footer.php");
-		die;
-	}	
 	display_char_search_results($origindb, $playername, $origin, $destination);
 }
+// Select Origin Connection - Step 1
 else
 {
 	display_select_origin_connection($admindb, $uid);
 }
 
 include_once("footer.php");
+
+function display_newname_form($origin, $destination)
+{
+?>
+	<form action="copychar.php?a=s" method="post">
+		<div class="form-group">
+			<label for="destination"><h6>Select Destination Server</h6></label>
+			<select class="form-control" id="destination" name="destination">
+<?php
+				$query = "SELECT id, name FROM connections WHERE user = {$uid} AND id <> {$origin}";
+				$result = $admindb->query($query);
+		
+				while ($row = $result->fetch_assoc())
+				{
+					print "<option value='{$row['id']}'>{$row['name']}</option>";
+				}
+?>
+			</select>
+		</div>
+		<input type="hidden" name="origin" value="<?php print $origin; ?>">
+		<button type="submit" class="btn btn-primary">Next</button>
+	</form>
+<?php
+}
 
 function display_select_destination_connection($admindb, $uid, $origin)
 {

@@ -156,4 +156,27 @@ function Logging($admindb, $userid, $type, $message)
 	$result = $admindb->query($query);
 }
 
+function DatabaseConnection($dbid)
+{
+	$query = "SELECT user, host, dbase, username, password FROM connections WHERE id = {$dbid}";
+	$result = $admindb->query($query);
+	if ($result->num_rows != 1)
+		data_error();
+	
+	$row = $result->fetch_assoc();
+	
+	if ($row['user'] != $uid)
+		data_error();
+	
+	$db = new mysqli($row['host'], $row['username'], $row['password'], $row['dbase']);
+
+	if ($destinationdb->connect_errno)
+	{
+		print "Failed to connect to destination database.";
+		return false;
+	}
+	
+	return $db;
+}
+
 ?>
