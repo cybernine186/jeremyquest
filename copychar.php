@@ -27,6 +27,146 @@ elseif ($_GET['a'] == "p")
 elseif ($_GET['a'] == "ca")
 {
 	RowText("Checking Account");
+	
+	if (!IsNumber($_POST['sn']) || !IsNumber($_POST['sa']) || !IsNumber($_POST['id']) || !IsNumber($_POST['origin']) || !IsNumber($_POST['destination']))
+		data_error();
+	
+	if (!IsTextAndNumbers($_POST['accountName']))
+		data_error();
+	
+	$account_name = $_POST['accountName'];
+	
+	$destinationdb = DatabaseConnection($admindb, $_POST['destination'], $uid);
+	if (!$destinationdb)
+		data_error();
+	
+	// Check for account on destination server, and get ID if exists
+	$query = "SELECT id FROM account WHERE name = '{$account_name}'";
+	$result = $destinationdb->query($query);
+	if ($result->num_rows == 0)
+	{
+		RowText("Destination account does not exist. Please create it or try another.");
+		Row();
+			Col();
+			DivC();
+			Col(true, '', 4);
+				// Check Account context
+?>
+				<form action="copychar.php?a=ca" method="post">
+					<div class="form-group">
+						<!--<label for="accountName">Account Name</label>!-->
+						<input type="text" class="form-control" id="accountName" placeholder="Enter Account Name" name="accountName">
+					</div>
+					<input type="hidden" name="origin" value="<?php print $_POST['origin']; ?>">
+					<input type="hidden" name="destination" value="<?php print $_POST['destination']; ?>">
+					<input type="hidden" name="id" value="<?php print $_POST['id']; ?>">
+					<input type="hidden" name="sa" value="0">
+					<input type="hidden" name="sn" value="1">
+					<button type="submit" class="btn btn-primary">Copy to Different Account</button>
+				</form>
+<?php
+			DivC();
+			Col();
+			DivC();
+		DivC();
+	}
+	elseif ($result->num_rows > 1)
+		data_error();
+		
+	$row = $result->fetch_assoc();
+	$account_id = $row['account_id'];
+	
+	// Check for open slot
+	$query = "SELECT count(*) AS count FROM character_data WHERE account_id = {$account_id}";
+	$result = $destinationdb->query($query);
+	if ($result->num_rows == 0)
+		data_error();
+	$row = $result->fetch_assoc();
+	
+	if ($row['count'] < 8)
+	{
+		// There's space - confirm before processing
+		RowText("Destination account has space.");
+		
+		$origindb = DatabaseConnection($admindb, $_POST['origin'], $uid);
+		if (!$origindb)
+			data_error();
+		
+		// Get Player Name
+		$query = "SELECT name FROM character_data WHERE id = {$_POST['id']}";
+		$result = $origindb->query($query);
+		if ($result->num_rows != 1)
+			data_error();
+		$row = $result->fetch_assoc();
+		$player_name = $row['name'];
+		
+		// Get Origin Server Name
+		$query = "SELECT name, user FROM connections WHERE id = {$_POST['origin']}";
+		$result = $admindb->query($query);
+		if ($result->num_rows != 1)
+			data_error();
+		$row = $result->fetch_assoc();
+		$origin_name = $row['name'];
+		
+		// Get Destination Server Name
+		$query = "SELECT name, user FROM connections WHERE id = {$_POST['destination']}";
+		$result = $admindb->query($query);
+		if ($result->num_rows != 1)
+			data_error();
+		$row = $result->fetch_assoc();
+		$destination_name = $row['name'];
+		
+		RowText("Copy character {$playername} from {$originname} to {$destinationname} keeping the same name and new account {$account_name}?");
+		
+		RowText("");
+		Row();
+			Col();
+			DivC();
+			Col(true, '', 4);
+?>
+				<form action="copychar.php?a=p" method="post">
+					<input type="hidden" name="origin" value="<?php print $_POST['origin']; ?>">
+					<input type="hidden" name="destination" value="<?php print $_POST['destination']; ?>">
+					<input type="hidden" name="id" value="<?php print $_POST['id']; ?>">
+					<input type="hidden" name="account" value="<?php print $account_name; ?>">
+					<input type="hidden" name="sa" value="0">
+					<input type="hidden" name="sn" value="1">
+					<button type="submit" class="btn btn-primary">PROCESS COPY</button>
+				</form>
+<?php
+			DivC();
+			Col();
+			DivC();
+		DivC();
+	}
+	else
+	{
+		RowText("Account is full. Please free a character slot or try another account.");
+		Row();
+			Col();
+			DivC();
+			Col(true, '', 4);
+				// Check Account context
+?>
+				<form action="copychar.php?a=ca" method="post">
+					<div class="form-group">
+						<!--<label for="accountName">Account Name</label>!-->
+						<input type="text" class="form-control" id="accountName" placeholder="Enter Account Name" name="accountName">
+					</div>
+					<input type="hidden" name="origin" value="<?php print $_POST['origin']; ?>">
+					<input type="hidden" name="destination" value="<?php print $_POST['destination']; ?>">
+					<input type="hidden" name="id" value="<?php print $_POST['id']; ?>">
+					<input type="hidden" name="sa" value="0">
+					<input type="hidden" name="sn" value="1">
+					<button type="submit" class="btn btn-primary">Copy to Different Account</button>
+				</form>
+<?php
+			DivC();
+			Col();
+			DivC();
+		DivC();
+	}
+	
 }
 // Confirm
 elseif ($_GET['a'] == "c")

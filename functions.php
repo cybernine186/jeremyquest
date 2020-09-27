@@ -77,6 +77,13 @@ function IsText($text)
 	return true;
 }
 
+function IsTextAndNumbers($text)
+{
+	if (!preg_match("/^[a-zA-Z0-9]+$/", $text, $matches))
+		return false;
+	return true;
+}
+
 /*******************************************************************************
 Function:	data_error
 Purpose:	General error that results in page termination
