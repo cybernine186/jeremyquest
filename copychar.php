@@ -122,7 +122,7 @@ elseif ($_GET['a'] == "ca")
 		$row = $result->fetch_assoc();
 		$destination_name = $row['name'];
 		
-		RowText("Copy character {$playername} from {$originname} to {$destinationname} keeping the same name and new account {$account_name}?");
+		RowText("Copy character {$player_name} from {$origin_name} to {$destination_name} keeping the same name and new account {$account_name}?");
 		
 		RowText("");
 		Row();
