@@ -141,7 +141,7 @@ elseif ($_GET['a'] == "cn")
 					Col();
 					DivC();
 					Col(true, '', 4);
-	?>
+?>
 						<form action="copychar.php?a=c" method="post">
 							<input type="hidden" name="origin" value="<?php print $_GET['o']; ?>">
 							<input type="hidden" name="destination" value="<?php print $_GET['d']; ?>">
@@ -150,7 +150,7 @@ elseif ($_GET['a'] == "cn")
 							<input type="hidden" name="sn" value="1">
 							<button type="submit" class="btn btn-primary">Copy to Same Account</button>
 						</form>
-	<?php
+<?php
 					DivC();
 					Col();
 					DivC();
@@ -181,8 +181,8 @@ elseif ($_GET['a'] == "cn")
 			Col();
 			DivC();
 		DivC();
-		}
 	}
+
 	elseif ($result->num_rows == 1)
 	{
 		// Name is taken - prompt for new
@@ -192,7 +192,6 @@ elseif ($_GET['a'] == "cn")
 	}
 	else	// Multiple characters of same name? Error
 		data_error();
-	
 }
 // Search characters
 elseif ($_GET['a'] == "s")
