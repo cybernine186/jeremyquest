@@ -156,6 +156,7 @@ elseif ($_GET['a'] == "cn")
 					DivC();
 				DivC();
 			}
+			RowText("");
 		}
 		
 		Row();
