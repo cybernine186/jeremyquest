@@ -21,7 +21,24 @@ if (!isset($_GET['a']))
 // Process Copy
 elseif ($_GET['a'] == "p")
 {
+	if (!IsNumber($_POST['sn']) || !IsNumber($_POST['sa']) || !IsNumber($_POST['id']) || !IsNumber($_POST['origin']) || !IsNumber($_POST['destination']))
+		data_error();
+	
 	RowText("Processing Copy");
+	
+	// Same Name, Same Account
+	if ($_POST['sn'] && $_POST['sa'])
+		copy_character($_POST['origin'], $_POST['destination'], true, true, $_POST['id']);
+	// Same Name, Different Account
+	elseif ($_POST['sn'] && !$_POST['sa'])
+	{
+		if (!IsTextAndNumbers($_POST['accountName']))
+			data_error();
+		
+		copy_character($_POST['origin'], $_POST['destination'], true, false, $_POST['id'], "", $_POST['accountName']);
+	}
+		
+		
 }
 // Check account
 elseif ($_GET['a'] == "ca")
@@ -33,8 +50,6 @@ elseif ($_GET['a'] == "ca")
 	
 	if (!IsTextAndNumbers($_POST['accountName']))
 		data_error();
-	
-	var_dump($_POST);
 	
 	$account_name = $_POST['accountName'];
 	
@@ -386,9 +401,15 @@ else
 
 include_once("footer.php");
 
-function copy_character($origindb, $destinationdb)
+function copy_character($origindb, $destinationdb, $same_name, $same_account, $character_id, $new_character_name = "", $new_account_name = "")
 {
-	
+	RowText($origindb);
+	RowText($destinationdb);
+	RowText($same_name);
+	RowText($same_account);
+	RowText($character_id);
+	RowText($new_character_name);
+	RowText($new_account_name);
 }
 
 function display_newname_form($origin, $destination)
