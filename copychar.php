@@ -63,7 +63,7 @@ elseif ($_GET['a'] == "c")
 		$row = $result->fetch_assoc();
 		$destinationname = $row['name'];
 		
-		RowText("Copy character from {$originname} to {$destinationname} keeping the same name and account?");
+		RowText("Copy character {$playername} from {$originname} to {$destinationname} keeping the same name and account?");
 		
 		RowText("");
 		Row();
@@ -248,7 +248,7 @@ function copy_character($origindb, $destinationdb)
 function display_newname_form($origin, $destination)
 {
 ?>
-	<form action="copychar.php?a=s" method="post">
+	<form action="copychar.php?a=nn" method="post">
 		<div class="form-group">
 			<label for="destination"><h6>Select Destination Server</h6></label>
 			<select class="form-control" id="destination" name="destination">
