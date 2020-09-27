@@ -23,6 +23,11 @@ elseif ($_GET['a'] == "p")
 {
 	RowText("Processing Copy");
 }
+// Check account
+elseif ($_GET['a'] == "ca")
+{
+	RowText("Checking Account");
+}
 // Confirm
 elseif ($_GET['a'] == "c")
 {
@@ -153,60 +158,30 @@ elseif ($_GET['a'] == "cn")
 			}
 		}
 		
-		/*
-		$query = "SELECT count(*) AS numchars FROM character_data WHERE account_id = {$newaccountid}";
-		$resultaccount = $destinationdb->query($query);
-		if ($resultaccount->num_rows == 0)
-			data_error();
-		$row = $resultaccount->fetch_assoc();
-		if ($row['numchars'] < 8)
-		{
-			RowText("Space available on account on destination server.");
-			RowText("");
-			Row();
-				Col();
-				DivC();
-				Col(true, '', 4);
-?>
-					<form action="copychar.php?a=c" method="post">
-						<input type="hidden" name="origin" value="<?php print $_GET['o']; ?>">
-						<input type="hidden" name="destination" value="<?php print $_GET['d']; ?>">
-						<input type="hidden" name="id" value="<?php print $_GET['id']; ?>">
-						<input type="hidden" name="sa" value="1">
-						<input type="hidden" name="sn" value="1">
-						<button type="submit" class="btn btn-primary">Copy to Same Account</button>
-					</form>
-<?php
-				DivC();
-				Col();
-				DivC();
+		Row();
+			Col();
 			DivC();
-			
-			RowText("");
-			
-			Row();
-				Col();
-				DivC();
-				Col(true, '', 4);
+			Col(true, '', 4);
+				// Check Account context
 ?>
-					<form action="copychar.php?a=c" method="post">
-						<div class="form-group">
-							<label for="accountName">Account Name</label>
-							<input type="text" class="form-control" id="accountName" placeholder="Enter Account Name" name="accountName">
-						</div>
-						<input type="hidden" name="origin" value="<?php print $_GET['o']; ?>">
-						<input type="hidden" name="destination" value="<?php print $_GET['d']; ?>">
-						<input type="hidden" name="sa" value="0">
-						<input type="hidden" name="sn" value="1">
-						<button type="submit" class="btn btn-primary">Copy to Different Account</button>
-					</form>
+				<form action="copychar.php?a=ca" method="post">
+					<div class="form-group">
+						<label for="accountName">Account Name</label>
+						<input type="text" class="form-control" id="accountName" placeholder="Enter Account Name" name="accountName">
+					</div>
+					<input type="hidden" name="origin" value="<?php print $_GET['o']; ?>">
+					<input type="hidden" name="destination" value="<?php print $_GET['d']; ?>">
+					<input type="hidden" name="id" value="<?php print $_GET['id']; ?>">
+					<input type="hidden" name="sa" value="0">
+					<input type="hidden" name="sn" value="1">
+					<button type="submit" class="btn btn-primary">Copy to Different Account</button>
+				</form>
 <?php
-				DivC();
-				Col();
-				DivC();
 			DivC();
+			Col();
+			DivC();
+		DivC();
 		}
-		*/
 	}
 	elseif ($result->num_rows == 1)
 	{
