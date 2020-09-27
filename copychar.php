@@ -18,7 +18,12 @@ if (!isset($_GET['a']))
 {
 	display_select_origin_connection($admindb, $uid);
 }
-// Confirm and Process
+// Process Copy
+elseif ($_GET['a'] == "p")
+{
+	RowText("Processing Copy");
+}
+// Confirm
 elseif ($_GET['a'] == "c")
 {
 	if (!IsNumber($_POST['sn']) || !IsNumber($_POST['sa']) || !IsNumber($_POST['id']) || !IsNumber($_POST['origin']) || !IsNumber($_POST['destination']))
@@ -29,12 +34,51 @@ elseif ($_GET['a'] == "c")
 	// Same Name, Same Account
 	if ($_POST['sn'] && $_POST['sa'])
 	{
+		// Get Player Name
 		$query = "SELECT name FROM character_data WHERE id = {$_POST['id']}";
 		$result = $origindb->query($query);
 		if ($result->num_rows != 1)
 			data_error();
 		$row = $result->fetch_assoc();
-		print $row['name'];
+		$playername = $row['name'];
+		
+		// Get Origin Server Name
+		$query = "SELECT name, user FROM connections WHERE id = {$_POST['origin']}";
+		$result = $admindb->query($query);
+		if ($result->num_rows != 1)
+			data_error();
+		$row = $result->fetch_assoc();
+		$originname = $row['name'];
+		
+		// Get Destination Server Name
+		$query = "SELECT name, user FROM connections WHERE id = {$_POST['destination']}";
+		$result = $admindb->query($query);
+		if ($result->num_rows != 1)
+			data_error();
+		$row = $result->fetch_assoc();
+		$destinationname = $row['name'];
+		
+		RowText("Copy character from {$originname} to {$destination} keeping the same name and account?");
+		
+		RowText("");
+		Row();
+			Col();
+			DivC();
+			Col(true, '', 4);
+?>
+				<form action="copychar.php?a=p" method="post">
+					<input type="hidden" name="origin" value="<?php print $_POST['origin']; ?>">
+					<input type="hidden" name="destination" value="<?php print $_POST['destination']; ?>">
+					<input type="hidden" name="id" value="<?php print $_POST['id']; ?>">
+					<input type="hidden" name="sa" value="1">
+					<input type="hidden" name="sn" value="1">
+					<button type="submit" class="btn btn-primary">PROCESS COPY</button>
+				</form>
+<?php
+			DivC();
+			Col();
+			DivC();
+		DivC();
 	}
 }
 // Check Name
