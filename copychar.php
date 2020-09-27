@@ -21,7 +21,21 @@ if (!isset($_GET['a']))
 // Confirm and Process
 elseif ($_GET['a'] == "c")
 {
-	print "fuck yes";
+	if (!IsNumber($_POST['sn']) || !IsNumber($_POST['sa']) || !IsNumber($_POST['id']) || !IsNumber($_POST['origin']) || !IsNumber($_POST['destination']))
+		data_error();
+	
+	$origindb = DatabaseConnection($admindb, $_POST['origin'], $uid);
+	
+	// Same Name, Same Account
+	if ($_POST['sn'] && $_POST['sa'])
+	{
+		$query = "SELECT name FROM character_data WHERE id = {$_POST['id']}";
+		$result = $origindb->query($query);
+		if ($result->num_rows != 1)
+			data_error();
+		$row = $result->fetch_assoc();
+		print $row['name'];
+	}
 }
 // Check Name
 elseif ($_GET['a'] == "cn")
@@ -59,6 +73,7 @@ elseif ($_GET['a'] == "cn")
 		if ($row['numchars'] < 8)
 		{
 			RowText("Space available on account on destination server.");
+			RowText("");
 			Row();
 				Col();
 				DivC();
@@ -67,6 +82,7 @@ elseif ($_GET['a'] == "cn")
 					<form action="copychar.php?a=c" method="post">
 						<input type="hidden" name="origin" value="<?php print $_GET['o']; ?>">
 						<input type="hidden" name="destination" value="<?php print $_GET['d']; ?>">
+						<input type="hidden" name="id" value="<?php print $_GET['id']; ?>">
 						<input type="hidden" name="sa" value="1">
 						<input type="hidden" name="sn" value="1">
 						<button type="submit" class="btn btn-primary">Copy to Same Account</button>
