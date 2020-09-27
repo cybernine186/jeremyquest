@@ -156,7 +156,7 @@ elseif ($_GET['a'] == "cn")
 					DivC();
 				DivC();
 			}
-			RowText("");
+			RowText("or");
 		}
 		
 		Row();
