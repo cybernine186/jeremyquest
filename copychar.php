@@ -149,7 +149,7 @@ elseif ($_GET['a'] == "ca")
 					<input type="hidden" name="origin" value="<?php print $_POST['origin']; ?>">
 					<input type="hidden" name="destination" value="<?php print $_POST['destination']; ?>">
 					<input type="hidden" name="id" value="<?php print $_POST['id']; ?>">
-					<input type="hidden" name="account" value="<?php print $account_name; ?>">
+					<input type="hidden" name="accountName" value="<?php print $account_name; ?>">
 					<input type="hidden" name="sa" value="0">
 					<input type="hidden" name="sn" value="1">
 					<button type="submit" class="btn btn-primary">PROCESS COPY</button>
