@@ -80,7 +80,7 @@ elseif ($_GET['a'] == "ca")
 		data_error();
 		
 	$row = $result->fetch_assoc();
-	$account_id = $row['account_id'];
+	$account_id = $row['id'];
 	
 	// Check for open slot
 	$query = "SELECT count(*) AS count FROM character_data WHERE account_id = {$account_id}";
