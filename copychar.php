@@ -34,6 +34,8 @@ elseif ($_GET['a'] == "ca")
 	if (!IsTextAndNumbers($_POST['accountName']))
 		data_error();
 	
+	var_dump($_POST);
+	
 	$account_name = $_POST['accountName'];
 	
 	$destinationdb = DatabaseConnection($admindb, $_POST['destination'], $uid);
