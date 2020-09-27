@@ -69,6 +69,10 @@ elseif ($_GET['a'] == "ca")
 			Col();
 			DivC();
 		DivC();
+		
+		// terminate script
+		include_once("footer.php");
+		die;
 	}
 	elseif ($result->num_rows > 1)
 		data_error();
