@@ -167,7 +167,7 @@ elseif ($_GET['a'] == "cn")
 ?>
 				<form action="copychar.php?a=ca" method="post">
 					<div class="form-group">
-						<label for="accountName">Account Name</label>
+						<!--<label for="accountName">Account Name</label>!-->
 						<input type="text" class="form-control" id="accountName" placeholder="Enter Account Name" name="accountName">
 					</div>
 					<input type="hidden" name="origin" value="<?php print $_GET['o']; ?>">
