@@ -117,7 +117,7 @@ elseif ($_GET['a'] == "cn")
 		$resultaccount = $destinationdb->query($query);
 		if ($resultaccount->num_rows != 1)
 		{
-			RowText("Account <b>{$account_name}</b> does not exist on destination server.";
+			RowText("Account <b>{$account_name}</b> does not exist on destination server.");
 		}
 		else
 		{
