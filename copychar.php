@@ -95,13 +95,15 @@ elseif ($_GET['a'] == "cn")
 	if (!$destinationdb)
 		data_error();
 	
-	$query = "SELECT name, account_id FROM character_data WHERE id = {$_GET['id']}";
+	$query = "SELECT character_data.name AS char_name, character_data.account_id AS account_id, account.name AS account_name FROM character_data LEFT JOIN account ON character_data.account_id = account.id WHERE character_data.id = {$_GET['id']}";
 	$result = $origindb->query($query);
 	if ($result->num_rows != 1)
 		data_error();
 	$row = $result->fetch_assoc();
-	$playername = $row['name'];
-	$accountid = $row['account_id'];
+	$playername = $row['char_name'];
+	$oldaccountid = $row['account_id'];
+	$newaccountid = 0;
+	$account_name = $row['account_name'];
 	
 	$query = "SELECT id, account_id FROM character_data WHERE name = '{$playername}'";
 	$result = $destinationdb->query($query);
@@ -109,7 +111,50 @@ elseif ($_GET['a'] == "cn")
 	{
 		// No results - name available
 		RowText("Name <b>{$playername}</b> available on destination server. Checking for space on the account.");
-		$query = "SELECT count(*) AS numchars FROM character_data WHERE account_id = {$accountid}";
+		
+		// Get account id based on account name on destination server
+		$query = "SELECT id FROM account WHERE name = '{$account_name}'";
+		$resultaccount = $destinationdb->query($query);
+		if ($resultaccount->num_rows != 1)
+		{
+			RowText("Account <b>{$account_name}</b> does not exist on destination server.";
+		}
+		else
+		{
+			$row = $resultaccount->fetch_assoc();
+			$newaccountid = $row['id'];
+			$query = "SELECT count(*) AS numchars FROM character_data WHERE account_id = {$newaccountid}";
+			$resultaccount = $destinationdb->query($query);
+			if ($resultaccount->num_rows == 0)
+				data_error();
+			$row = $resultaccount->fetch_assoc();
+			if ($row['numchars'] < 8)
+			{
+				RowText("Space available on account on destination server.");
+				RowText("");
+				Row();
+					Col();
+					DivC();
+					Col(true, '', 4);
+	?>
+						<form action="copychar.php?a=c" method="post">
+							<input type="hidden" name="origin" value="<?php print $_GET['o']; ?>">
+							<input type="hidden" name="destination" value="<?php print $_GET['d']; ?>">
+							<input type="hidden" name="id" value="<?php print $_GET['id']; ?>">
+							<input type="hidden" name="sa" value="1">
+							<input type="hidden" name="sn" value="1">
+							<button type="submit" class="btn btn-primary">Copy to Same Account</button>
+						</form>
+	<?php
+					DivC();
+					Col();
+					DivC();
+				DivC();
+			}
+		}
+		
+		/*
+		$query = "SELECT count(*) AS numchars FROM character_data WHERE account_id = {$newaccountid}";
 		$resultaccount = $destinationdb->query($query);
 		if ($resultaccount->num_rows == 0)
 			data_error();
@@ -161,6 +206,7 @@ elseif ($_GET['a'] == "cn")
 				DivC();
 			DivC();
 		}
+		*/
 	}
 	elseif ($result->num_rows == 1)
 	{
@@ -218,6 +264,11 @@ else
 }
 
 include_once("footer.php");
+
+function copy_character($origindb, $destinationdb)
+{
+	
+}
 
 function display_newname_form($origin, $destination)
 {
