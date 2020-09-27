@@ -58,7 +58,7 @@ elseif ($_GET['a'] == "c")
 		$row = $result->fetch_assoc();
 		$destinationname = $row['name'];
 		
-		RowText("Copy character from {$originname} to {$destination} keeping the same name and account?");
+		RowText("Copy character from {$originname} to {$destinationname} keeping the same name and account?");
 		
 		RowText("");
 		Row();
