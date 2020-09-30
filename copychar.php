@@ -28,14 +28,14 @@ elseif ($_GET['a'] == "p")
 	
 	// Same Name, Same Account
 	if ($_POST['sn'] && $_POST['sa'])
-		copy_character($_POST['origin'], $_POST['destination'], true, true, $_POST['id']);
+		copy_character($_POST['origin'], $_POST['destination'], $admindb, true, true, $_POST['id']);
 	// Same Name, Different Account
 	elseif ($_POST['sn'] && !$_POST['sa'])
 	{
 		if (!IsTextAndNumbers($_POST['accountName']))
 			data_error();
 		
-		copy_character($_POST['origin'], $_POST['destination'], true, false, $_POST['id'], "", $_POST['accountName']);
+		copy_character($_POST['origin'], $_POST['destination'], $admindb, true, false, $_POST['id'], "", $_POST['accountName']);
 	}
 		
 		
@@ -401,7 +401,7 @@ else
 
 include_once("footer.php");
 
-function copy_character($origindb, $destinationdb, $same_name, $same_account, $character_id, $new_character_name = "", $new_account_name = "")
+function copy_character($odb, $ddb, $adb, $same_name, $same_account, $character_id, $new_character_name = "", $new_account_name = "")
 {
 	RowText($origindb);
 	RowText($destinationdb);
@@ -411,7 +411,9 @@ function copy_character($origindb, $destinationdb, $same_name, $same_account, $c
 	RowText($new_character_name);
 	RowText($new_account_name);
 	
-	$query = "SELECT id, name, race, class FROM character_data WHERE id = {$character_id}";
+	$origindb = DatabaseConnection($adb, $odb, $uid);
+	
+	$query = "SELECT * FROM character_data WHERE id = {$character_id}";
 	$result = $origindb->query($query);
 	$row = $result->fetch_assoc();
 	
