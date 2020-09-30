@@ -413,7 +413,10 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 	$query = "INSERT INTO character_data VALUES (";
 	foreach ($row as $key => $value)
 	{
-		$query =  $query . $value . ', ';
+		if ($value == "")
+			$query = $query . "NULL, ";
+		else
+			$query =  $query . $value . ', ';
 	}
 	
 	RowText($query);
