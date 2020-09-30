@@ -431,6 +431,8 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 	
 	RowText($query);
 	
+	$insert_id = 0;
+	
 	//$result = $destinationdb->query($query);
 	//$insert_id = $destinationdb->insert_id;
 	
@@ -445,24 +447,61 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 		RowText("No Alternate Abilities");
 	else
 	{
-		$query = "INSERT INTO character_alternate_abilities VALUES (";
+		$query = "INSERT INTO character_alternate_abilities VALUES ";
 		while ($row = $result->fetch_assoc())
 		{
 			$query = $query . "(";
 			foreach ($row as $key => $value)
 			{
-				if ($value == "")
-					$query = $query . "NULL, ";
+				if ($key == "id")
+					$query = $query . $insert_id . ",";
 				else
-					$query =  $query . $value . ', ';
+				{
+					if ($value == "")
+						$query = $query . "NULL, ";
+					else
+						$query =  $query . $value . ',';
+				}
 			}
 			$query = $query . "),";
 		}
 		
 		$query = rtrim($query, ",");
-		$query = $query . ")";
+		//$result = $destinationdb->query($query);
 	}
-
+	
+	RowText($query);
+	
+	// character_bind
+	$query = "SELECT * FROM character_bind WHERE id = {$character_id}";
+	$result = $origindb->query($query);
+	
+	if ($result->num_rows < 1)
+		RowText("No Binds?");
+	else
+	{
+		$query = "INSERT INTO character_bind VALUES ";
+		while ($row = $result->fetch_assoc())
+		{
+			$query = $query . "(";
+			foreach ($row as $key => $value)
+			{
+				if ($key == "id")
+					$query = $query . $insert_id . ",";
+				else
+				{
+					if ($value == "")
+						$query = $query . "NULL, ";
+					else
+						$query =  $query . $value . ',';
+				}
+			}
+			$query = $query . "),";
+		}
+		
+		$query = rtrim($query, ",");
+		//$result = $destinationdb->query($query);
+	}
 	
 	RowText($query);
 }
