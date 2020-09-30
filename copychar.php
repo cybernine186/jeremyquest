@@ -411,7 +411,7 @@ function copy_character($origindb, $destinationdb, $same_name, $same_account, $c
 	RowText($new_character_name);
 	RowText($new_account_name);
 	
-	$query = "SELECT * FROM character_data WHERE id = 2";
+	$query = "SELECT * FROM character_data WHERE id = {$character_id}";
 	$result = $origindb->query($query);
 	$row = $result->fetch_assoc();
 	
