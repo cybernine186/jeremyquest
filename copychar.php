@@ -458,9 +458,10 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 			}
 		}
 		$query = $query . "),";
+		$query = rtrim($query, ",");
+		$query = $query . ")";
 	}
-	$query = rtrim($query, ",");
-	$query = $query . ")";
+
 	
 	RowText($query);
 }
