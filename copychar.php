@@ -413,9 +413,10 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 	RowText("");
 	var_dump($row);
 	
-	RowText($row[0]);
-	RowText($row[1]);
-	RowText($row[2]);
+	foreach ($row as $key => $value)
+	{
+		RowText($key . " " . $value);
+	}
 }
 
 function display_newname_form($origin, $destination)
