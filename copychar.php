@@ -403,15 +403,8 @@ include_once("footer.php");
 
 function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $character_id, $new_character_name = "", $new_account_name = "")
 {
-	RowText($odb);
-	RowText($ddb);
-	RowText($same_name);
-	RowText($same_account);
-	RowText($character_id);
-	RowText($new_character_name);
-	RowText($new_account_name);
-	
 	$origindb = DatabaseConnection($adb, $odb, $uid);
+	$destinationdb = DatabaseConnection($adb, $ddb, $uid);
 	
 	$query = "SELECT * FROM character_data WHERE id = {$character_id}";
 	$result = $origindb->query($query);
@@ -419,6 +412,10 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 	
 	RowText("");
 	var_dump($row);
+	
+	RowText($row[0]);
+	RowText($row[1]);
+	RowText($row[2]);
 }
 
 function display_newname_form($origin, $destination)
