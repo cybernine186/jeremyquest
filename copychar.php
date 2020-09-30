@@ -410,13 +410,20 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 	$result = $origindb->query($query);
 	$row = $result->fetch_assoc();
 	
-	RowText("");
-	var_dump($row);
-	
+	$query = "INSERT INTO character_data VALUES (";
 	foreach ($row as $key => $value)
 	{
-		RowText($key . " " . $value);
+		$query =  $query . $value . ', ';
 	}
+	
+	if (!isset($row['is_online']))
+		$query = $query . "0, ";
+
+	$query = rtrim($query, ",");
+	
+	$query = $query . ")";
+	
+	RowText($query);
 }
 
 function display_newname_form($origin, $destination)
