@@ -416,10 +416,17 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 		$query =  $query . $value . ', ';
 	}
 	
+	RowText($query);
+	
 	if (!isset($row['is_online']))
 		$query = $query . "0, ";
 
+	RowText($query);
+
 	$query = rtrim($query, " ");
+	
+	RowText($query);
+	
 	$query = rtrim($query, ",");
 	
 	$query = $query . ")";
