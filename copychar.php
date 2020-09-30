@@ -410,6 +410,13 @@ function copy_character($origindb, $destinationdb, $same_name, $same_account, $c
 	RowText($character_id);
 	RowText($new_character_name);
 	RowText($new_account_name);
+	
+	$query = "SELECT * FROM character_data WHERE id = 2";
+	$result = $origindb->query($query);
+	$row = $result->fetch_assoc();
+	
+	RowText("");
+	var_dump($row);
 }
 
 function display_newname_form($origin, $destination)
