@@ -28,14 +28,14 @@ elseif ($_GET['a'] == "p")
 	
 	// Same Name, Same Account
 	if ($_POST['sn'] && $_POST['sa'])
-		copy_character($_POST['origin'], $_POST['destination'], $admindb, true, true, $_POST['id']);
+		copy_character($_POST['origin'], $_POST['destination'], $uid, $admindb, true, true, $_POST['id']);
 	// Same Name, Different Account
 	elseif ($_POST['sn'] && !$_POST['sa'])
 	{
 		if (!IsTextAndNumbers($_POST['accountName']))
 			data_error();
 		
-		copy_character($_POST['origin'], $_POST['destination'], $admindb, true, false, $_POST['id'], "", $_POST['accountName']);
+		copy_character($_POST['origin'], $_POST['destination'], $admindb, $uid, true, false, $_POST['id'], "", $_POST['accountName']);
 	}
 		
 		
@@ -401,10 +401,11 @@ else
 
 include_once("footer.php");
 
-function copy_character($odb, $ddb, $adb, $same_name, $same_account, $character_id, $new_character_name = "", $new_account_name = "")
+function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $character_id, $new_character_name = "", $new_account_name = "")
 {
-	RowText($origindb);
-	RowText($destinationdb);
+	RowText($odb);
+	RowText($ddb);
+	RowText($adb);
 	RowText($same_name);
 	RowText($same_account);
 	RowText($character_id);
