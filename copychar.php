@@ -405,7 +405,6 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 {
 	RowText($odb);
 	RowText($ddb);
-	RowText($adb);
 	RowText($same_name);
 	RowText($same_account);
 	RowText($character_id);
