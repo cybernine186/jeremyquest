@@ -419,6 +419,7 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 	if (!isset($row['is_online']))
 		$query = $query . "0, ";
 
+	$query = rtrim($query, " ");
 	$query = rtrim($query, ",");
 	
 	$query = $query . ")";
