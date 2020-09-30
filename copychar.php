@@ -406,6 +406,7 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 	$origindb = DatabaseConnection($adb, $odb, $uid);
 	$destinationdb = DatabaseConnection($adb, $ddb, $uid);
 	
+	// character_data table first
 	$query = "SELECT * FROM character_data WHERE id = {$character_id}";
 	$result = $origindb->query($query);
 	$row = $result->fetch_assoc();
@@ -419,19 +420,46 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 			$query =  $query . $value . ', ';
 	}
 	
-	RowText($query);
-	
 	if (!isset($row['is_online']))
 		$query = $query . "0, ";
 
-	RowText($query);
-
 	$query = rtrim($query, " ");
-	
-	RowText($query);
 	
 	$query = rtrim($query, ",");
 	
+	$query = $query . ")";
+	
+	RowText($query);
+	
+	//$result = $destinationdb->query($query);
+	//$insert_id = $destinationdb->insert_id;
+	
+	//RowText("Insert ID: {$insert_id}");
+	
+	// character_alternate_abilities
+	
+	$query = "SELECT * FROM character_alternate_abilities WHERE id = {$character_id}";
+	$result = $origindb->query($query);
+	
+	if ($result->num_rows < 1)
+		RowText("No Alternate Abilities");
+	else
+	{
+		$query = "INSERT INTO character_alternate_abilities VALUES (";
+		while ($row = $result->fetch_assoc())
+		{
+			$query = $query . "(";
+			foreach ($row as $key => $value)
+			{
+				if ($value == "")
+					$query = $query . "NULL, ";
+				else
+					$query =  $query . $value . ', ';
+			}
+		}
+		$query = $query . "),";
+	}
+	$query = rtrim($query, ",");
 	$query = $query . ")";
 	
 	RowText($query);
