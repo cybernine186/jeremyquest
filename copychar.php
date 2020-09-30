@@ -28,7 +28,7 @@ elseif ($_GET['a'] == "p")
 	
 	// Same Name, Same Account
 	if ($_POST['sn'] && $_POST['sa'])
-		copy_character($_POST['origin'], $_POST['destination'], $uid, $admindb, true, true, $_POST['id']);
+		copy_character($_POST['origin'], $_POST['destination'], $admindb, $uid, true, true, $_POST['id']);
 	// Same Name, Different Account
 	elseif ($_POST['sn'] && !$_POST['sa'])
 	{
