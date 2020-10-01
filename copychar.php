@@ -687,6 +687,111 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 			RowText("character_material insert failed");
 	}
 	RowText($query);
+	
+	// character_memmed_spells
+	$query = "SELECT * FROM character_memmed_spells WHERE id = {$character_id}";
+	$result = $origindb->query($query);
+	
+	if ($result->num_rows < 1)
+		RowText("No memmed_spells");
+	else
+	{
+		$query = "INSERT INTO character_memmed_spells VALUES ";
+		while ($row = $result->fetch_assoc())
+		{
+			$query = $query . "(";
+			foreach ($row as $key => $value)
+			{
+				if ($key == "id")
+					$query = $query . $insert_id . ",";
+				else
+				{
+					if ($value == "")
+						$query = $query . "NULL, ";
+					else
+						$query =  $query . $value . ',';
+				}
+			}
+			$query = rtrim($query, ',');
+			$query = $query . "),";
+		}
+		
+		$query = rtrim($query, ",");
+		//$result = $destinationdb->query($query);
+		if (!$result)
+			RowText("character_memmed_spells insert failed");
+	}
+	RowText($query);
+	
+	// character_pvp
+	$query = "SELECT * FROM character_pvp WHERE char_id = {$character_id}";
+	$result = $origindb->query($query);
+	
+	if ($result->num_rows < 1)
+		RowText("No character_pvp");
+	else
+	{
+		$query = "INSERT INTO character_pvp VALUES ";
+		while ($row = $result->fetch_assoc())
+		{
+			$query = $query . "(";
+			foreach ($row as $key => $value)
+			{
+				if ($key == "id" || $key == "char_id")
+					$query = $query . $insert_id . ",";
+				else
+				{
+					if ($value == "")
+						$query = $query . "NULL, ";
+					else
+						$query =  $query . $value . ',';
+				}
+			}
+			$query = rtrim($query, ',');
+			$query = $query . "),";
+		}
+		
+		$query = rtrim($query, ",");
+		//$result = $destinationdb->query($query);
+		if (!$result)
+			RowText("character_pvp insert failed");
+	}
+	RowText($query);
+	
+	// character_skills
+	$query = "SELECT * FROM character_skills WHERE id = {$character_id}";
+	$result = $origindb->query($query);
+	
+	if ($result->num_rows < 1)
+		RowText("No character_skills");
+	else
+	{
+		$query = "INSERT INTO character_skills VALUES ";
+		while ($row = $result->fetch_assoc())
+		{
+			$query = $query . "(";
+			foreach ($row as $key => $value)
+			{
+				if ($key == "id" || $key == "char_id")
+					$query = $query . $insert_id . ",";
+				else
+				{
+					if ($value == "")
+						$query = $query . "NULL, ";
+					else
+						$query =  $query . $value . ',';
+				}
+			}
+			$query = rtrim($query, ',');
+			$query = $query . "),";
+		}
+		
+		$query = rtrim($query, ",");
+		//$result = $destinationdb->query($query);
+		if (!$result)
+			RowText("character_skills insert failed");
+	}
+	RowText($query);
 }
 
 function display_newname_form($origin, $destination)
