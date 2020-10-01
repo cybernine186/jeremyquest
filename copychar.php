@@ -617,6 +617,41 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 			RowText("character_inspect_messages insert failed");
 	}
 	RowText($query);
+	
+	// character_languages
+	$query = "SELECT * FROM character_languages WHERE id = {$character_id}";
+	$result = $origindb->query($query);
+	
+	if ($result->num_rows < 1)
+		RowText("No languages?");
+	else
+	{
+		$query = "INSERT INTO character_languages VALUES ";
+		while ($row = $result->fetch_assoc())
+		{
+			$query = $query . "(";
+			foreach ($row as $key => $value)
+			{
+				if ($key == "id")
+					$query = $query . $insert_id . ",";
+				else
+				{
+					if ($value == "")
+						$query = $query . "NULL, ";
+					else
+						$query =  $query . $value . ',';
+				}
+			}
+			$query = rtrim($query, ',');
+			$query = $query . "),";
+		}
+		
+		$query = rtrim($query, ",");
+		//$result = $destinationdb->query($query);
+		if (!$result)
+			RowText("character_languages insert failed");
+	}
+	RowText($query);
 }
 
 function display_newname_form($origin, $destination)
