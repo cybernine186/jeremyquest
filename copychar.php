@@ -604,7 +604,7 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 					if ($value == "")
 						$query = $query . "NULL, ";
 					else
-						$query =  $query . $value . ',';
+						$query =  $query . "'" . $destinationdb->real_escape_string($value) . "'" . ',';
 				}
 			}
 			$query = rtrim($query, ',');
