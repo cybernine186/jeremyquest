@@ -414,10 +414,13 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 	$query = "INSERT INTO character_data VALUES (";
 	foreach ($row as $key => $value)
 	{
-		if ($value == "")
-			$query = $query . "NULL, ";
-		else
-			$query =  $query . $value . ', ';
+		if ($key != "id")
+		{
+			if ($value == "")
+				$query = $query . "NULL, ";
+			else
+				$query =  $query . $value . ', ';
+		}
 	}
 	
 	if (!isset($row['is_online']))
@@ -496,6 +499,7 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 						$query =  $query . $value . ',';
 				}
 			}
+			$query = rtrim($query, ',');
 			$query = $query . "),";
 		}
 		
