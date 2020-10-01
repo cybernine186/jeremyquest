@@ -792,6 +792,41 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 			RowText("character_skills insert failed");
 	}
 	RowText($query);
+	
+	// character_spells
+	$query = "SELECT * FROM character_spells WHERE id = {$character_id}";
+	$result = $origindb->query($query);
+	
+	if ($result->num_rows < 1)
+		RowText("No character_spells");
+	else
+	{
+		$query = "INSERT INTO character_spells VALUES ";
+		while ($row = $result->fetch_assoc())
+		{
+			$query = $query . "(";
+			foreach ($row as $key => $value)
+			{
+				if ($key == "id" || $key == "char_id")
+					$query = $query . $insert_id . ",";
+				else
+				{
+					if ($value == "")
+						$query = $query . "NULL, ";
+					else
+						$query =  $query . $value . ',';
+				}
+			}
+			$query = rtrim($query, ',');
+			$query = $query . "),";
+		}
+		
+		$query = rtrim($query, ",");
+		//$result = $destinationdb->query($query);
+		if (!$result)
+			RowText("character_spells insert failed");
+	}
+	RowText($query);
 }
 
 function display_newname_form($origin, $destination)
