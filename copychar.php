@@ -403,6 +403,7 @@ include_once("footer.php");
 
 function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $character_id, $new_character_name = "", $new_account_name = "")
 {
+	$process_on = false;
 	$origindb = DatabaseConnection($adb, $odb, $uid);
 	$destinationdb = DatabaseConnection($adb, $ddb, $uid);
 	
@@ -418,6 +419,8 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 		{
 			if ($value == "")
 				$query = $query . "NULL, ";
+			elseif ($key == "name" || $key == "last_name" || $key == "title" || $key == "suffix" || $key == "mailkey")
+				$query = $query . "'" . $value . "', ";
 			else
 				$query =  $query . $value . ', ';
 		}
@@ -436,8 +439,11 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 	
 	$insert_id = 0;
 	
-	$result = $destinationdb->query($query);
-	$insert_id = $destinationdb->insert_id;
+	if ($process_on)
+	{
+		$result = $destinationdb->query($query);
+		$insert_id = $destinationdb->insert_id;
+	}
 	
 	RowText("Insert ID: {$insert_id}");
 	
@@ -471,16 +477,21 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 		}
 		
 		$query = rtrim($query, ",");
-		$result = $destinationdb->query($query);
-		if (!$result)
-			RowText("character_alternate_abilities insert failed");
+		
+		if ($process_on)
+		{
+			$result = $destinationdb->query($query);
+			if (!$result)
+				RowText("character_alternate_abilities insert failed");
+		}
 	}
 	
 	RowText($query);
 	
 	// character_bind
 	$query = "SELECT * FROM character_bind WHERE id = {$character_id}";
-	$result = $origindb->query($query);
+	if ($process_on)
+		$result = $origindb->query($query);
 	
 	if ($result->num_rows < 1)
 		RowText("No Binds?");
@@ -507,9 +518,12 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 		}
 		
 		$query = rtrim($query, ",");
-		$result = $destinationdb->query($query);
-		if (!$result)
-			RowText("character_bind insert failed");
+		if ($process_on)
+		{
+			$result = $destinationdb->query($query);
+			if (!$result)
+				RowText("character_bind insert failed");
+		}
 	}
 	RowText($query);
 
@@ -542,9 +556,12 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 		}
 		
 		$query = rtrim($query, ",");
-		$result = $destinationdb->query($query);
-		if (!$result)
-			RowText("character_currency insert failed");
+		if ($process_on)
+		{
+			$result = $destinationdb->query($query);
+			if (!$result)
+				RowText("character_currency insert failed");
+		}
 	}
 	RowText($query);
 	
@@ -577,9 +594,12 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 		}
 		
 		$query = rtrim($query, ",");
-		$result = $destinationdb->query($query);
-		if (!$result)
-			RowText("character_disciplines insert failed");
+		if ($process_on)
+		{
+			$result = $destinationdb->query($query);
+			if (!$result)
+				RowText("character_disciplines insert failed");
+		}
 	}
 	RowText($query);
 	
@@ -612,9 +632,12 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 		}
 		
 		$query = rtrim($query, ",");
-		$result = $destinationdb->query($query);
-		if (!$result)
-			RowText("character_inspect_messages insert failed");
+		if ($process_on)
+		{
+			$result = $destinationdb->query($query);
+			if (!$result)
+				RowText("character_inspect_messages insert failed");
+		}
 	}
 	RowText($query);
 	
@@ -647,9 +670,12 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 		}
 		
 		$query = rtrim($query, ",");
-		$result = $destinationdb->query($query);
-		if (!$result)
-			RowText("character_languages insert failed");
+		if ($process_on)
+		{
+			$result = $destinationdb->query($query);
+			if (!$result)
+				RowText("character_languages insert failed");
+		}
 	}
 	RowText($query);
 	
@@ -682,9 +708,12 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 		}
 		
 		$query = rtrim($query, ",");
-		$result = $destinationdb->query($query);
-		if (!$result)
-			RowText("character_material insert failed");
+		if ($process_on)
+		{
+			$result = $destinationdb->query($query);
+			if (!$result)
+				RowText("character_material insert failed");
+		}
 	}
 	RowText($query);
 	
@@ -717,9 +746,12 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 		}
 		
 		$query = rtrim($query, ",");
-		$result = $destinationdb->query($query);
-		if (!$result)
-			RowText("character_memmed_spells insert failed");
+		if ($process_on)
+		{
+			$result = $destinationdb->query($query);
+			if (!$result)
+				RowText("character_memmed_spells insert failed");
+		}
 	}
 	RowText($query);
 	
@@ -752,9 +784,12 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 		}
 		
 		$query = rtrim($query, ",");
-		$result = $destinationdb->query($query);
-		if (!$result)
-			RowText("character_pvp insert failed");
+		if ($process_on)
+		{
+			$result = $destinationdb->query($query);
+			if (!$result)
+				RowText("character_pvp insert failed");
+		}
 	}
 	RowText($query);
 	
@@ -787,9 +822,12 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 		}
 		
 		$query = rtrim($query, ",");
-		$result = $destinationdb->query($query);
-		if (!$result)
-			RowText("character_skills insert failed");
+		if ($process_on)
+		{
+			$result = $destinationdb->query($query);
+			if (!$result)
+				RowText("character_skills insert failed");
+		}
 	}
 	RowText($query);
 	
@@ -822,9 +860,12 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 		}
 		
 		$query = rtrim($query, ",");
-		$result = $destinationdb->query($query);
-		if (!$result)
-			RowText("character_spells insert failed");
+		if ($process_on)
+		{
+			$result = $destinationdb->query($query);
+			if (!$result)
+				RowText("character_spells insert failed");
+		}
 	}
 	RowText($query);
 }
