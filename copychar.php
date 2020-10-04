@@ -407,6 +407,16 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 	$origindb = DatabaseConnection($adb, $odb, $uid);
 	$destinationdb = DatabaseConnection($adb, $ddb, $uid);
 	
+	// Find next char ID
+	$query = "SELECT max(id) AS mymax FROM character_data";
+	$result = $destinationdb->query($query);
+	if (!$result)
+		data_error();
+	if ($result->num_rows != 1)
+		data_error();
+	$row = $result->fetch_assoc();
+	$new_id = $row['mymax'] + 1;
+	
 	// character_data table first
 	$query = "SELECT * FROM character_data WHERE id = {$character_id}";
 	$result = $origindb->query($query);
@@ -416,8 +426,7 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 	
 	foreach ($row as $key => $value)
 	{
-		if ($key != "id")
-			$query = $query . "`" . $key . "`, ";
+		$query = $query . "`" . $key . "`, ";
 	}
 	
 	$query = rtrim($query, " ");
@@ -426,15 +435,14 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 	
 	foreach ($row as $key => $value)
 	{
-		if ($key != "id")
-		{
-			if ($value == "")
-				$query = $query . "NULL, ";
-			elseif ($key == "name" || $key == "last_name" || $key == "title" || $key == "suffix" || $key == "mailkey")
-				$query = $query . "'" . $value . "', ";
-			else
-				$query =  $query . $value . ', ';
-		}
+		if ($key == "id")
+			$query = $query . $new_id . ', ';
+		elseif ($value == "")
+			$query = $query . "NULL, ";
+		elseif ($key == "name" || $key == "last_name" || $key == "title" || $key == "suffix" || $key == "mailkey")
+			$query = $query . "'" . $value . "', ";
+		else
+			$query =  $query . $value . ', ';
 	}
 	
 	if (!isset($row['is_online']))
