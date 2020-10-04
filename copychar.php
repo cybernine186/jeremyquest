@@ -417,9 +417,10 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 	foreach ($row as $key => $value)
 	{
 		if ($key != "id")
-			$query = $query . $key . ",";
+			$query = $query . $key . ", ";
 	}
 	
+	$query = rtrim($query, " ");
 	$query = rtrim($query, ",");
 	$query = $query . ") VALUES (";
 	
