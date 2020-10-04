@@ -459,15 +459,10 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 	
 	RowText($query);
 	
-	$insert_id = 0;
-	
 	if ($process_on)
-	{
 		$result = $destinationdb->query($query);
-		$insert_id = $destinationdb->insert_id;
-	}
 	
-	RowText("Insert ID: {$insert_id}");
+	RowText("New ID: {$new_id}");
 	
 	// character_alternate_abilities
 	
@@ -485,7 +480,7 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 			foreach ($row as $key => $value)
 			{
 				if ($key == "id")
-					$query = $query . $insert_id . ",";
+					$query = $query . $new_id . ",";
 				else
 				{
 					if ($value == "")
@@ -526,7 +521,7 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 			foreach ($row as $key => $value)
 			{
 				if ($key == "id")
-					$query = $query . $insert_id . ",";
+					$query = $query . $new_id . ",";
 				else
 				{
 					if ($value == "")
@@ -564,7 +559,7 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 			foreach ($row as $key => $value)
 			{
 				if ($key == "id")
-					$query = $query . $insert_id . ",";
+					$query = $query . $new_id . ",";
 				else
 				{
 					if ($value == "")
@@ -602,7 +597,7 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 			foreach ($row as $key => $value)
 			{
 				if ($key == "id")
-					$query = $query . $insert_id . ",";
+					$query = $query . $new_id . ",";
 				else
 				{
 					if ($value == "")
@@ -640,7 +635,7 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 			foreach ($row as $key => $value)
 			{
 				if ($key == "id")
-					$query = $query . $insert_id . ",";
+					$query = $query . $new_id . ",";
 				else
 				{
 					if ($value == "")
@@ -678,7 +673,7 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 			foreach ($row as $key => $value)
 			{
 				if ($key == "id")
-					$query = $query . $insert_id . ",";
+					$query = $query . $new_id . ",";
 				else
 				{
 					if ($value == "")
@@ -716,7 +711,7 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 			foreach ($row as $key => $value)
 			{
 				if ($key == "id")
-					$query = $query . $insert_id . ",";
+					$query = $query . $new_id . ",";
 				else
 				{
 					if ($value == "")
@@ -754,7 +749,7 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 			foreach ($row as $key => $value)
 			{
 				if ($key == "id")
-					$query = $query . $insert_id . ",";
+					$query = $query . $new_id . ",";
 				else
 				{
 					if ($value == "")
@@ -791,8 +786,8 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 			$query = $query . "(";
 			foreach ($row as $key => $value)
 			{
-				if ($key == "id" || $key == "char_id")
-					$query = $query . $insert_id . ",";
+				if ($key == "char_id")
+					$query = $query . $new_id . ",";
 				else
 				{
 					if ($value == "")
@@ -830,7 +825,7 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 			foreach ($row as $key => $value)
 			{
 				if ($key == "id" || $key == "char_id")
-					$query = $query . $insert_id . ",";
+					$query = $query . $new_id . ",";
 				else
 				{
 					if ($value == "")
@@ -868,7 +863,7 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 			foreach ($row as $key => $value)
 			{
 				if ($key == "id" || $key == "char_id")
-					$query = $query . $insert_id . ",";
+					$query = $query . $new_id . ",";
 				else
 				{
 					if ($value == "")
