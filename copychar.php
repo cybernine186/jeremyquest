@@ -429,6 +429,9 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 		$query = $query . "`" . $key . "`, ";
 	}
 	
+	if (!isset($row['is_online']))
+		$query = $query . "`is_online`, ";
+	
 	$query = rtrim($query, " ");
 	$query = rtrim($query, ",");
 	$query = $query . ") VALUES (";
