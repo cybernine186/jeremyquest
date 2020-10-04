@@ -640,7 +640,7 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 			else
 			{
 				if ($value == "")
-					$query = $query . "'', ";
+					$query = $query . "'',";
 				else
 					$query =  $query . "'" . $destinationdb->real_escape_string($value) . "',";
 			}
