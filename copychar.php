@@ -967,7 +967,7 @@ function display_char_search_results($origindb, $playername, $origin, $destinati
 	if($result->num_rows < 1)
 	{
 		RowText("<h5>No Players Found</h5>");
-		display_handin_search();
+		display_char_search();
 		include_once("footer.php");
 		die;
 	}
