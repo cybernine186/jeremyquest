@@ -507,8 +507,7 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 	
 	// character_bind
 	$query = "SELECT * FROM character_bind WHERE id = {$character_id}";
-	if ($process_on)
-		$result = $origindb->query($query);
+	$result = $origindb->query($query);
 	
 	if ($result->num_rows < 1)
 		RowText("No Binds?");
