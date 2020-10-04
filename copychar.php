@@ -412,7 +412,17 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 	$result = $origindb->query($query);
 	$row = $result->fetch_assoc();
 	
-	$query = "INSERT INTO character_data VALUES (";
+	$query = "INSERT INTO character_data (";
+	
+	foreach ($row as $key => $value)
+	{
+		if ($key != "id")
+			$query = $key . ",";
+	}
+	
+	$query = rtrim($query, ",");
+	$query = $query . ") VALUES (";
+	
 	foreach ($row as $key => $value)
 	{
 		if ($key != "id")
