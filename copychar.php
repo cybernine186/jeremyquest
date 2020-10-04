@@ -441,7 +441,7 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 		if ($key == "id")
 			$query = $query . $new_id . ', ';
 		elseif ($value == "")
-			$query = $query . "NULL, ";
+			$query = $query . "'', ";
 		elseif ($key == "name" || $key == "last_name" || $key == "title" || $key == "suffix" || $key == "mailkey")
 			$query = $query . "'" . $value . "', ";
 		else
