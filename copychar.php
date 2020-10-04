@@ -403,7 +403,7 @@ include_once("footer.php");
 
 function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $character_id, $new_character_name = "", $new_account_name = "")
 {
-	$process_on = true;
+	$process_on = false;
 	$origindb = DatabaseConnection($adb, $odb, $uid);
 	$destinationdb = DatabaseConnection($adb, $ddb, $uid);
 	
@@ -416,6 +416,27 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 		data_error();
 	$row = $result->fetch_assoc();
 	$new_id = $row['mymax'] + 1;
+	
+	// account stuff
+	
+	if ($same_account)
+	{
+		$query = "SELECT character_data.account_id AS account_id, account.name AS account_name FROM character_data LEFT JOIN account ON character_data.account_id = account.id WHERE character_data.id = {$character_id}";
+		$result = $origindb->query($query);
+		if (!$result || $result->num_rows != 1)
+			data_error();
+		$row = $result->fetch_assoc();
+		$new_account_name = $row['account_name'];
+	}
+	
+	$new_account_id = 0;
+	
+	$query = "SELECT id FROM account WHERE name = '{$new_account_name}'";
+	$result = $destinationdb->query($query);
+	if (!$result || $result->num_rows != 1)
+		data_error();
+	$row = $result->fetch_assoc();
+	$new_account_id = $row['id'];
 	
 	// character_data table first
 	$query = "SELECT * FROM character_data WHERE id = {$character_id}";
@@ -440,6 +461,8 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 	{
 		if ($key == "id")
 			$query = $query . $new_id . ', ';
+		elseif ($key == "account_id")
+			$query = $query . $new_account_id . ', ';
 		elseif ($value == "")
 			$query = $query . "'', ";
 		elseif ($key == "name" || $key == "last_name" || $key == "title" || $key == "suffix" || $key == "mailkey")
@@ -881,6 +904,82 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 			$result = $destinationdb->query($query);
 			if (!$result)
 				RowText("character_spells insert failed");
+		}
+	}
+	RowText($query);
+	
+	// faction_values
+	$query = "SELECT * FROM faction_values WHERE char_id = {$character_id}";
+	$result = $origindb->query($query);
+	
+	if ($result->num_rows < 1)
+		RowText("No faction_values");
+	else
+	{
+		$query = "INSERT INTO faction_values VALUES ";
+		while ($row = $result->fetch_assoc())
+		{
+			$query = $query . "(";
+			foreach ($row as $key => $value)
+			{
+				if ($key == "id" || $key == "char_id")
+					$query = $query . $new_id . ",";
+				else
+				{
+					if ($value == "")
+						$query = $query . "'', ";
+					else
+						$query =  $query . $value . ',';
+				}
+			}
+			$query = rtrim($query, ',');
+			$query = $query . "),";
+		}
+		
+		$query = rtrim($query, ",");
+		if ($process_on)
+		{
+			$result = $destinationdb->query($query);
+			if (!$result)
+				RowText("faction_values insert failed");
+		}
+	}
+	RowText($query);
+	
+	// inventory
+	$query = "SELECT * FROM inventory WHERE charid = {$character_id}";
+	$result = $origindb->query($query);
+	
+	if ($result->num_rows < 1)
+		RowText("No faction_values");
+	else
+	{
+		$query = "INSERT INTO inventory VALUES ";
+		while ($row = $result->fetch_assoc())
+		{
+			$query = $query . "(";
+			foreach ($row as $key => $value)
+			{
+				if ($key == "charid")
+					$query = $query . $new_id . ",";
+				else
+				{
+					if ($value == "")
+						$query = $query . "'', ";
+					else
+						$query =  $query . $value . ',';
+				}
+			}
+			$query = rtrim($query, ',');
+			$query = $query . "),";
+		}
+		
+		$query = rtrim($query, ",");
+		if ($process_on)
+		{
+			$result = $destinationdb->query($query);
+			if (!$result)
+				RowText("inventory insert failed");
 		}
 	}
 	RowText($query);
