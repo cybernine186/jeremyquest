@@ -628,26 +628,26 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 	else
 	{
 		$query = "INSERT INTO character_inspect_messages VALUES ";
-		while ($row = $result->fetch_assoc())
+		if (!$result || $result->num_rows != 1)
+			data_error();
+		
+		$row = $result->fetch_assoc();
+		$query = $query . "(";
+		foreach ($row as $key => $value)
 		{
-			$query = $query . "(";
-			foreach ($row as $key => $value)
+			if ($key == "id")
+				$query = $query . $new_id . ",";
+			else
 			{
-				if ($key == "id")
-					$query = $query . $new_id . ",";
+				if ($value == "")
+					$query = $query . "'', ";
 				else
-				{
-					if ($value == "")
-						$query = $query . "NULL, ";
-					else
-						$query =  $query . "'" . $destinationdb->real_escape_string($value) . "'" . ',';
-				}
+					$query =  $query . "'" . $destinationdb->real_escape_string($value) . "',";
 			}
-			$query = rtrim($query, ',');
-			$query = $query . "),";
 		}
 		
 		$query = rtrim($query, ",");
+		$query = $query . ")";
 		if ($process_on)
 		{
 			$result = $destinationdb->query($query);
