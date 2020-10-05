@@ -30,7 +30,7 @@ elseif ($_GET['a'] == "nn")
 	if (!$destinationdb)
 		data_error();
 	
-	$query = "SELECT id FROM character_data WHERE name = '{$POST['characterName']}'";
+	$query = "SELECT id FROM character_data WHERE name = '{$_POST['characterName']}'";
 	$result = $destinationdb->query($query);
 	if (!$result)
 		data_error();
@@ -50,8 +50,8 @@ elseif ($_GET['a'] == "nn")
 						<!--<label for="characterName">Character Name</label>!-->
 						<input type="text" class="form-control" id="characterName" placeholder="Enter New Character Name" name="characterName">
 					</div>
-					<input type="hidden" name="origin" value="<?php print $_GET['o']; ?>">
-					<input type="hidden" name="destination" value="<?php print $_GET['d']; ?>">
+					<input type="hidden" name="origin" value="<?php print $_GET['origin']; ?>">
+					<input type="hidden" name="destination" value="<?php print $_GET['destination']; ?>">
 					<input type="hidden" name="id" value="<?php print $_GET['id']; ?>">
 					<button type="submit" class="btn btn-primary">Check Name</button>
 				</form>
@@ -66,7 +66,7 @@ elseif ($_GET['a'] == "nn")
 	elseif ($result->num_rows > 1)
 		data_error();
 		
-	$origindb = DatabaseConnection($admindb, $_GET['o'], $uid);
+	$origindb = DatabaseConnection($admindb, $_GET['origin'], $uid);
 	if (!$origindb)
 		data_error();
 		
