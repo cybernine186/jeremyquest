@@ -139,9 +139,9 @@ elseif ($_GET['a'] == "nn")
 					<!--<label for="accountName">Account Name</label>!-->
 					<input type="text" class="form-control" id="accountName" placeholder="Enter Account Name" name="accountName">
 				</div>
-				<input type="hidden" name="origin" value="<?php print $_GET['o']; ?>">
-				<input type="hidden" name="destination" value="<?php print $_GET['d']; ?>">
-				<input type="hidden" name="id" value="<?php print $_GET['id']; ?>">
+				<input type="hidden" name="origin" value="<?php print $_POST['origin']; ?>">
+				<input type="hidden" name="destination" value="<?php print $_POST['destination']; ?>">
+				<input type="hidden" name="id" value="<?php print $_POST['id']; ?>">
 				<input type="hidden" name="sa" value="0">
 				<input type="hidden" name="sn" value="0">
 				<button type="submit" class="btn btn-primary">Copy to Different Account</button>
