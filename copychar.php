@@ -144,6 +144,7 @@ elseif ($_GET['a'] == "nn")
 				<input type="hidden" name="id" value="<?php print $_POST['id']; ?>">
 				<input type="hidden" name="sa" value="0">
 				<input type="hidden" name="sn" value="0">
+				<input type="hidden" name="characterName" value="<?php print $_POST['characterName']; ?>">
 				<button type="submit" class="btn btn-primary">Copy to Different Account</button>
 			</form>
 <?php
