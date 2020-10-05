@@ -416,7 +416,7 @@ elseif ($_GET['a'] == "c")
 <?php
 					if (isset($_POST['characterName']))
 						print "<input type='hidden' name='characterName' value='{$_POST['characterName']}'>";
-					
+?>					
 				<button type="submit" class="btn btn-primary">PROCESS COPY</button>
 			</form>
 <?php
