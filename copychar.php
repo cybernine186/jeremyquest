@@ -174,20 +174,6 @@ elseif ($_GET['a'] == "p")
 	RowText("Processing Copy");
 	
 	copy_character($_POST['origin'], $_POST['destination'], $admindb, $uid, $_POST['sn'], $_POST['sa'], $_POST['id'], ($_POST['sn'] ? "" : $_POST['characterName']), ($_POST['sa'] ? "" : $_POST['accountName']));
-	
-	/*
-	// Same Name, Same Account
-	if ($_POST['sn'] && $_POST['sa'])
-		copy_character($_POST['origin'], $_POST['destination'], $admindb, $uid, true, true, $_POST['id']);
-	// Same Name, Different Account
-	elseif ($_POST['sn'] && !$_POST['sa'])
-	{
-		if (!IsTextAndNumbers($_POST['accountName']))
-			data_error();
-		
-		copy_character($_POST['origin'], $_POST['destination'], $admindb, $uid, true, false, $_POST['id'], "", $_POST['accountName']);
-	}
-	*/
 }
 // Check account
 elseif ($_GET['a'] == "ca")
@@ -608,7 +594,7 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 	RowText($new_character_name);
 	RowText($new_account_name);
 	
-	$process_on = false;
+	$process_on = true;
 	$origindb = DatabaseConnection($adb, $odb, $uid);
 	$destinationdb = DatabaseConnection($adb, $ddb, $uid);
 	
