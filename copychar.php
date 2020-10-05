@@ -171,7 +171,7 @@ elseif ($_GET['a'] == "p")
 	
 	RowText("Processing Copy");
 	
-	copy_character($_POST['origin'], $_POST['destination'], $admindb, $uid, $_POST['sn'], $_POST['sa'], $_POST['id'], ($_POST['sn'] ? $_POST['characterName'] : ""), ($_POST['sa'] ? $_POST['accountName'] : ""));
+	copy_character($_POST['origin'], $_POST['destination'], $admindb, $uid, $_POST['sn'], $_POST['sa'], $_POST['id'], ($_POST['sn'] ? "" : $_POST['characterName']), ($_POST['sa'] ? "" : $_POST['accountName']));
 	
 	/*
 	// Same Name, Same Account
