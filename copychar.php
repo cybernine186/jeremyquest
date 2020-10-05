@@ -158,6 +158,8 @@ elseif ($_GET['a'] == "nn")
 // Process Copy
 elseif ($_GET['a'] == "p")
 {
+	var_dump($_POST);
+	
 	if (!IsNumber($_POST['sn']) || !IsNumber($_POST['sa']) || !IsNumber($_POST['id']) || !IsNumber($_POST['origin']) || !IsNumber($_POST['destination']))
 		data_error();
 	
