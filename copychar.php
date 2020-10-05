@@ -171,10 +171,9 @@ elseif ($_GET['a'] == "p")
 	
 	RowText("Processing Copy");
 	
-	var_dump($_POST);
+	copy_character($_POST['origin'], $_POST['destination'], $admindb, $uid, $_POST['sn'], $_POST['sa'], $_POST['id'], ($_POST['sn'] ? $_POST['characterName'] : ""), ($_POST['sa'] ? $_POST['accountName'] : ""))
 	
 	/*
-	
 	// Same Name, Same Account
 	if ($_POST['sn'] && $_POST['sa'])
 		copy_character($_POST['origin'], $_POST['destination'], $admindb, $uid, true, true, $_POST['id']);
@@ -187,13 +186,10 @@ elseif ($_GET['a'] == "p")
 		copy_character($_POST['origin'], $_POST['destination'], $admindb, $uid, true, false, $_POST['id'], "", $_POST['accountName']);
 	}
 	*/
-	
 }
 // Check account
 elseif ($_GET['a'] == "ca")
 {
-	var_dump($_POST);
-	
 	RowText("Checking Account");
 	
 	if (!IsNumber($_POST['sn']) || !IsNumber($_POST['sa']) || !IsNumber($_POST['id']) || !IsNumber($_POST['origin']) || !IsNumber($_POST['destination']))
