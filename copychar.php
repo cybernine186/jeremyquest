@@ -65,6 +65,8 @@ elseif ($_GET['a'] == "nn")
 	}
 	elseif ($result->num_rows > 1)
 		data_error();
+	else
+		RowText("Name {$_POST['characterName']} available on destination server.");
 		
 	$origindb = DatabaseConnection($admindb, $_POST['origin'], $uid);
 	if (!$origindb)
