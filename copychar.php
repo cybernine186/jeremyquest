@@ -66,7 +66,7 @@ elseif ($_GET['a'] == "nn")
 	elseif ($result->num_rows > 1)
 		data_error();
 		
-	$origindb = DatabaseConnection($admindb, $_GET['origin'], $uid);
+	$origindb = DatabaseConnection($admindb, $_POST['origin'], $uid);
 	if (!$origindb)
 		data_error();
 		
