@@ -350,7 +350,28 @@ elseif ($_GET['a'] == "cn")
 		// Name is taken - prompt for new
 		RowText("Name <b>{$playername}</b> is taken on destination server.");
 		RowText("Choose a new name, or rename/delete existing character on destination server and try again.");
-		display_newname_form($_GET['o'], $_GET['d']);
+
+		Row();
+			Col();
+			DivC();
+			Col(true, '', 4);
+?>
+				<form action="copychar.php?a=nn" method="post">
+					<div class="form-group">
+						<!--<label for="characterName">Character Name</label>!-->
+						<input type="text" class="form-control" id="characterName" placeholder="Enter New Character Name" name="characterName">
+					</div>
+					<input type="hidden" name="origin" value="<?php print $_GET['o']; ?>">
+					<input type="hidden" name="destination" value="<?php print $_GET['d']; ?>">
+					<input type="hidden" name="id" value="<?php print $_GET['id']; ?>">
+					<button type="submit" class="btn btn-primary">Check Name</button>
+				</form>
+<?php
+			DivC();
+			Col();
+			DivC();
+		DivC();
+
 	}
 	else	// Multiple characters of same name? Error
 		data_error();
@@ -989,30 +1010,6 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 		}
 	}
 	RowText($query);
-}
-
-function display_newname_form($origin, $destination)
-{
-?>
-	<form action="copychar.php?a=nn" method="post">
-		<div class="form-group">
-			<label for="destination"><h6>Select Destination Server</h6></label>
-			<select class="form-control" id="destination" name="destination">
-<?php
-				$query = "SELECT id, name FROM connections WHERE user = {$uid} AND id <> {$origin}";
-				$result = $admindb->query($query);
-		
-				while ($row = $result->fetch_assoc())
-				{
-					print "<option value='{$row['id']}'>{$row['name']}</option>";
-				}
-?>
-			</select>
-		</div>
-		<input type="hidden" name="origin" value="<?php print $origin; ?>">
-		<button type="submit" class="btn btn-primary">Next</button>
-	</form>
-<?php
 }
 
 function display_select_destination_connection($admindb, $uid, $origin)
