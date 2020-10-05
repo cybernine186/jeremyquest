@@ -672,8 +672,10 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 			$query = $query . "'', ";
 		elseif ($value == "name")
 		{
+			RowText($new_character_name);
 			if ($same_name)
 				$new_character_name = $value;
+			RowText($new_character_name);
 			$query = $query . "'" . $new_character_name . "', ";
 		}
 		elseif ($key == "last_name" || $key == "title" || $key == "suffix" || $key == "mailkey")
