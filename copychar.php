@@ -108,9 +108,9 @@ elseif ($_GET['a'] == "nn")
 				Col(true, '', 4);
 ?>
 					<form action="copychar.php?a=c" method="post">
-						<input type="hidden" name="origin" value="<?php print $_GET['o']; ?>">
-						<input type="hidden" name="destination" value="<?php print $_GET['d']; ?>">
-						<input type="hidden" name="id" value="<?php print $_GET['id']; ?>">
+						<input type="hidden" name="origin" value="<?php print $_POST['origin']; ?>">
+						<input type="hidden" name="destination" value="<?php print $_POST['destination']; ?>">
+						<input type="hidden" name="id" value="<?php print $_POST['id']; ?>">
 						<input type="hidden" name="sa" value="1">
 						<input type="hidden" name="sn" value="0">
 						<input type="hidden" name="characterName" value="<?php print $_POST['characterName']; ?>">
