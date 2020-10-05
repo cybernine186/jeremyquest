@@ -189,6 +189,8 @@ elseif ($_GET['a'] == "p")
 // Check account
 elseif ($_GET['a'] == "ca")
 {
+	var_dump($_POST);
+	
 	RowText("Checking Account");
 	
 	if (!IsNumber($_POST['sn']) || !IsNumber($_POST['sa']) || !IsNumber($_POST['id']) || !IsNumber($_POST['origin']) || !IsNumber($_POST['destination']))
