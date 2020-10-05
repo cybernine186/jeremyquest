@@ -18,6 +18,10 @@ if (!isset($_GET['a']))
 {
 	display_select_origin_connection($admindb, $uid);
 }
+elseif ($_GET['a'] == "nn")
+{
+	RowText("New Name");
+}
 // Process Copy
 elseif ($_GET['a'] == "p")
 {
