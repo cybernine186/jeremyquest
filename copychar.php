@@ -20,7 +20,137 @@ if (!isset($_GET['a']))
 }
 elseif ($_GET['a'] == "nn")
 {
-	RowText("New Name");
+	if (!IsNumber($_POST['id']) || !IsNumber($_POST['origin']) || !IsNumber($_POST['destination']))
+		data_error();
+	
+	if (!IsText($_POST['characterName']))
+		data_error();
+	
+	$destinationdb = DatabaseConnection($admindb, $_POST['destination'], $uid);
+	if (!$destinationdb)
+		data_error();
+	
+	$query = "SELECT id FROM character_data WHERE name = '{$POST['characterName']}'";
+	$result = $destinationdb->query($query);
+	if (!$result)
+		data_error();
+	
+	if ($result->num_rows == 1)
+	{
+		// Name not available
+		RowText("Name not available. Please try another.");
+		
+		Row();
+			Col();
+			DivC();
+			Col(true, '', 4);
+?>
+				<form action="copychar.php?a=nn" method="post">
+					<div class="form-group">
+						<!--<label for="characterName">Character Name</label>!-->
+						<input type="text" class="form-control" id="characterName" placeholder="Enter New Character Name" name="characterName">
+					</div>
+					<input type="hidden" name="origin" value="<?php print $_GET['o']; ?>">
+					<input type="hidden" name="destination" value="<?php print $_GET['d']; ?>">
+					<input type="hidden" name="id" value="<?php print $_GET['id']; ?>">
+					<button type="submit" class="btn btn-primary">Check Name</button>
+				</form>
+<?php
+			DivC();
+			Col();
+			DivC();
+		DivC();
+		include_once("footer.php");
+		die;
+	}
+	elseif ($result->num_rows > 1)
+		data_error();
+		
+	$origindb = DatabaseConnection($admindb, $_GET['o'], $uid);
+	if (!$origindb)
+		data_error();
+		
+	$query = "SELECT character_data.account_id AS account_id, account.name AS account_name FROM character_data LEFT JOIN account ON character_data.account_id = account.id WHERE character_data.id = {$_POST['id']}";
+	$result = $origindb->query($query);
+	if (!$result)
+		data_error();
+	$row = $result->fetch_assoc();
+	$oldaccountid = $row['account_id'];
+	$newaccountid = 0;
+	$account_name = $row['account_name'];
+	
+	$query = "SELECT id FROM account WHERE name = '{$account_name}'";
+	$result = $destinationdb->query($query);
+	if (!$result)
+		data_error();
+	
+	if ($result->num_rows == 0)
+	{
+		// account does not exist on destination server
+		RowText("Account does not exist on destination server. Have player login to account if you would like to copy to this account, and try again.");
+	}
+	elseif ($result->num_rows == 1)
+	{
+		// Account exists - check for open slot.
+		$row = $result->fetch_assoc();
+		$newaccountid = $row['id'];
+		$query = "SELECT count(*) AS numchars FROM character_data WHERE account_id = {$newaccountid}";
+		$accountresult = $destinationdb->query($query);
+		if (!$accountresult)
+			data_error();
+		if ($accountresult->num_rows < 8)
+		{
+			RowText("Space available on account on destination server.");
+			RowText("");
+			Row();
+				Col();
+				DivC();
+				Col(true, '', 4);
+?>
+					<form action="copychar.php?a=c" method="post">
+						<input type="hidden" name="origin" value="<?php print $_GET['o']; ?>">
+						<input type="hidden" name="destination" value="<?php print $_GET['d']; ?>">
+						<input type="hidden" name="id" value="<?php print $_GET['id']; ?>">
+						<input type="hidden" name="sa" value="1">
+						<input type="hidden" name="sn" value="0">
+						<input type="hidden" name="characterName" value="<?php print $_POST['characterName']; ?>">
+						<button type="submit" class="btn btn-primary">Copy to Same Account</button>
+					</form>
+<?php
+				DivC();
+				Col();
+				DivC();
+			DivC();
+			RowText("or");
+		}
+		
+	}
+	elseif ($result->num_rows > 1)
+		data_error();
+		
+	Row();
+		Col();
+		DivC();
+		Col(true, '', 4);
+			// Check Account context
+?>
+			<form action="copychar.php?a=ca" method="post">
+				<div class="form-group">
+					<!--<label for="accountName">Account Name</label>!-->
+					<input type="text" class="form-control" id="accountName" placeholder="Enter Account Name" name="accountName">
+				</div>
+				<input type="hidden" name="origin" value="<?php print $_GET['o']; ?>">
+				<input type="hidden" name="destination" value="<?php print $_GET['d']; ?>">
+				<input type="hidden" name="id" value="<?php print $_GET['id']; ?>">
+				<input type="hidden" name="sa" value="0">
+				<input type="hidden" name="sn" value="0">
+				<button type="submit" class="btn btn-primary">Copy to Different Account</button>
+			</form>
+<?php
+		DivC();
+		Col();
+		DivC();
+	DivC();
 }
 // Process Copy
 elseif ($_GET['a'] == "p")
@@ -28,7 +158,19 @@ elseif ($_GET['a'] == "p")
 	if (!IsNumber($_POST['sn']) || !IsNumber($_POST['sa']) || !IsNumber($_POST['id']) || !IsNumber($_POST['origin']) || !IsNumber($_POST['destination']))
 		data_error();
 	
+	if (isset($_POST['accountName']) && !IsTextAndNumber($_POST['accountName']))
+	{
+		data_error();
+	}
+	
+	if (isset($_POST['characterName']) && !IsText($_POST['characterName']))
+		data_error();
+	
 	RowText("Processing Copy");
+	
+	var_dump($_POST);
+	
+	/*
 	
 	// Same Name, Same Account
 	if ($_POST['sn'] && $_POST['sa'])
@@ -41,8 +183,8 @@ elseif ($_GET['a'] == "p")
 		
 		copy_character($_POST['origin'], $_POST['destination'], $admindb, $uid, true, false, $_POST['id'], "", $_POST['accountName']);
 	}
-		
-		
+	*/
+	
 }
 // Check account
 elseif ($_GET['a'] == "ca")
@@ -54,6 +196,11 @@ elseif ($_GET['a'] == "ca")
 	
 	if (!IsTextAndNumbers($_POST['accountName']))
 		data_error();
+	
+	if (isset($_POST['characterName']) && !IsText($_POST['character_name']))
+	{
+		data_error();
+	}
 	
 	$account_name = $_POST['accountName'];
 	
@@ -82,7 +229,11 @@ elseif ($_GET['a'] == "ca")
 					<input type="hidden" name="destination" value="<?php print $_POST['destination']; ?>">
 					<input type="hidden" name="id" value="<?php print $_POST['id']; ?>">
 					<input type="hidden" name="sa" value="0">
-					<input type="hidden" name="sn" value="1">
+					<input type="hidden" name="sn" value="<?php print $_POST['sn']; ?>">
+<?php
+					if (isset($_POST['characterName']))
+						print "<input type='hidden' name='characterName' value='{$_POST['characterName']}'>";
+?>
 					<button type="submit" class="btn btn-primary">Copy to Different Account</button>
 				</form>
 <?php
@@ -141,7 +292,10 @@ elseif ($_GET['a'] == "ca")
 		$row = $result->fetch_assoc();
 		$destination_name = $row['name'];
 		
-		RowText("Copy character {$player_name} from {$origin_name} to {$destination_name} keeping the same name and new account {$account_name}?");
+		if ($_POST['sn'])		
+			RowText("Copy character {$player_name} from {$origin_name} to {$destination_name} keeping the same name and new account {$account_name}?");
+		else
+			RowText("Copy character {$player_name} from {$origin_name} to {$destination_name} using new name {$_POST['characterName']} and new account {$account_name}?");
 		
 		RowText("");
 		Row();
@@ -154,8 +308,12 @@ elseif ($_GET['a'] == "ca")
 					<input type="hidden" name="destination" value="<?php print $_POST['destination']; ?>">
 					<input type="hidden" name="id" value="<?php print $_POST['id']; ?>">
 					<input type="hidden" name="accountName" value="<?php print $account_name; ?>">
-					<input type="hidden" name="sa" value="0">
-					<input type="hidden" name="sn" value="1">
+					<input type="hidden" name="sa" value="<?php print $_POST['sa']; ?>">
+					<input type="hidden" name="sn" value="<?php print $_POST['sn']; ?>">
+<?php
+					if (isset($_POST['characterName']))
+						print "<input type='hidden' name='characterName' value='{$_POST['characterName']}'>";
+?>
 					<button type="submit" class="btn btn-primary">PROCESS COPY</button>
 				</form>
 <?php
@@ -181,8 +339,12 @@ elseif ($_GET['a'] == "ca")
 					<input type="hidden" name="origin" value="<?php print $_POST['origin']; ?>">
 					<input type="hidden" name="destination" value="<?php print $_POST['destination']; ?>">
 					<input type="hidden" name="id" value="<?php print $_POST['id']; ?>">
-					<input type="hidden" name="sa" value="0">
-					<input type="hidden" name="sn" value="1">
+					<input type="hidden" name="sa" value="<?php print $_POST['sa']; ?>">
+					<input type="hidden" name="sn" value="<?php print $_POST['sn']; ?>">
+<?php
+					if (isset($_POST['characterName']))
+						print "<input type='hidden' name='characterName' value='{$_POST['characterName']}'>";
+?>
 					<button type="submit" class="btn btn-primary">Copy to Different Account</button>
 				</form>
 <?php
