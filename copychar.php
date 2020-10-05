@@ -159,7 +159,7 @@ elseif ($_GET['a'] == "p")
 	if (!IsNumber($_POST['sn']) || !IsNumber($_POST['sa']) || !IsNumber($_POST['id']) || !IsNumber($_POST['origin']) || !IsNumber($_POST['destination']))
 		data_error();
 	
-	if (isset($_POST['accountName']) && !IsTextAndNumber($_POST['accountName']))
+	if (isset($_POST['accountName']) && !IsTextAndNumbers($_POST['accountName']))
 	{
 		data_error();
 	}
