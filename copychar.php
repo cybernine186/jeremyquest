@@ -236,6 +236,8 @@ elseif ($_GET['a'] == "ca")
 <?php
 					if (isset($_POST['characterName']))
 						print "<input type='hidden' name='characterName' value='{$_POST['characterName']}'>";
+					if (isset($_POST['accountName']))
+						print "<input type='hidden' name='accountName' value='{$_POST['accountName']}'>";
 ?>
 					<button type="submit" class="btn btn-primary">Copy to Different Account</button>
 				</form>
@@ -364,57 +366,64 @@ elseif ($_GET['a'] == "c")
 	if (!IsNumber($_POST['sn']) || !IsNumber($_POST['sa']) || !IsNumber($_POST['id']) || !IsNumber($_POST['origin']) || !IsNumber($_POST['destination']))
 		data_error();
 	
+	if (isset($_POST['characterName']) && !IsText($_POST['characterName']))
+		data_error();
+	
+	if (isset($_POST['accountName']) && !IsTextAndNumbers($_POST['accountName']))
+		data_error();
+	
 	$origindb = DatabaseConnection($admindb, $_POST['origin'], $uid);
 	
-	// Same Name, Same Account
-	if ($_POST['sn'] && $_POST['sa'])
-	{
-		// Get Player Name
-		$query = "SELECT name FROM character_data WHERE id = {$_POST['id']}";
-		$result = $origindb->query($query);
-		if ($result->num_rows != 1)
-			data_error();
-		$row = $result->fetch_assoc();
-		$playername = $row['name'];
-		
-		// Get Origin Server Name
-		$query = "SELECT name, user FROM connections WHERE id = {$_POST['origin']}";
-		$result = $admindb->query($query);
-		if ($result->num_rows != 1)
-			data_error();
-		$row = $result->fetch_assoc();
-		$originname = $row['name'];
-		
-		// Get Destination Server Name
-		$query = "SELECT name, user FROM connections WHERE id = {$_POST['destination']}";
-		$result = $admindb->query($query);
-		if ($result->num_rows != 1)
-			data_error();
-		$row = $result->fetch_assoc();
-		$destinationname = $row['name'];
-		
-		RowText("Copy character {$playername} from {$originname} to {$destinationname} keeping the same name and account?");
-		
-		RowText("");
-		Row();
-			Col();
-			DivC();
-			Col(true, '', 4);
-?>
-				<form action="copychar.php?a=p" method="post">
-					<input type="hidden" name="origin" value="<?php print $_POST['origin']; ?>">
-					<input type="hidden" name="destination" value="<?php print $_POST['destination']; ?>">
-					<input type="hidden" name="id" value="<?php print $_POST['id']; ?>">
-					<input type="hidden" name="sa" value="1">
-					<input type="hidden" name="sn" value="1">
-					<button type="submit" class="btn btn-primary">PROCESS COPY</button>
-				</form>
-<?php
-			DivC();
-			Col();
-			DivC();
+	// Get Player Name
+	$query = "SELECT name FROM character_data WHERE id = {$_POST['id']}";
+	$result = $origindb->query($query);
+	if ($result->num_rows != 1)
+		data_error();
+	$row = $result->fetch_assoc();
+	$oldplayername = $row['name'];
+	
+	// Get Origin Server Name
+	$query = "SELECT name, user FROM connections WHERE id = {$_POST['origin']}";
+	$result = $admindb->query($query);
+	if ($result->num_rows != 1)
+		data_error();
+	$row = $result->fetch_assoc();
+	$originname = $row['name'];
+	
+	// Get Destination Server Name
+	$query = "SELECT name, user FROM connections WHERE id = {$_POST['destination']}";
+	$result = $admindb->query($query);
+	if ($result->num_rows != 1)
+		data_error();
+	$row = $result->fetch_assoc();
+	$destinationname = $row['name'];
+	
+	$myconfirmation = "Copy character {$oldplayername} from {$originname} to {$destinationname} " . ($_POST['sn'] ? "keeping the same name " : "using new name {$_POST['characterName']} ") . ($_POST['sa'] ? "and keeping the same account?" : "using new account {$_POST['accountName']}?");
+	RowText($myconfirmation);
+	
+	RowText("");
+	Row();
+		Col();
 		DivC();
-	}
+		Col(true, '', 4);
+?>
+			<form action="copychar.php?a=p" method="post">
+				<input type="hidden" name="origin" value="<?php print $_POST['origin']; ?>">
+				<input type="hidden" name="destination" value="<?php print $_POST['destination']; ?>">
+				<input type="hidden" name="id" value="<?php print $_POST['id']; ?>">
+				<input type="hidden" name="sa" value="<?php print $_POST['sa']; ?>">
+				<input type="hidden" name="sn" value="<?php print $_POST['sn']; ?>">
+<?php
+					if (isset($_POST['characterName']))
+						print "<input type='hidden' name='characterName' value='{$_POST['characterName']}'>";
+					
+				<button type="submit" class="btn btn-primary">PROCESS COPY</button>
+			</form>
+<?php
+		DivC();
+		Col();
+		DivC();
+	DivC();
 }
 // Check Name
 elseif ($_GET['a'] == "cn")
