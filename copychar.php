@@ -200,7 +200,7 @@ elseif ($_GET['a'] == "ca")
 	if (!IsTextAndNumbers($_POST['accountName']))
 		data_error();
 	
-	if (isset($_POST['characterName']) && !IsText($_POST['character_name']))
+	if (isset($_POST['characterName']) && !IsText($_POST['characterName']))
 	{
 		data_error();
 	}
