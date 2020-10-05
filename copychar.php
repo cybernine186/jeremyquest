@@ -602,6 +602,12 @@ include_once("footer.php");
 
 function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $character_id, $new_character_name = "", $new_account_name = "")
 {
+	RowText($same_name);
+	RowText($same_account);
+	RowText($character_id);
+	RowText($new_character_name);
+	RowText($new_account_name);
+	
 	$process_on = false;
 	$origindb = DatabaseConnection($adb, $odb, $uid);
 	$destinationdb = DatabaseConnection($adb, $ddb, $uid);
