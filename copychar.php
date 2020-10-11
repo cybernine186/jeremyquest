@@ -641,8 +641,10 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 		$query = $query . "`" . $key . "`, ";
 	}
 	
+	/* Disabled is_online column now
 	if (!isset($row['is_online']))
 		$query = $query . "`is_online`, ";
+	*/
 	
 	$query = rtrim($query, " ");
 	$query = rtrim($query, ",");
@@ -668,8 +670,10 @@ function copy_character($odb, $ddb, $adb, $uid, $same_name, $same_account, $char
 			$query =  $query . $value . ', ';
 	}
 	
+	/* Disabled is_online column now
 	if (!isset($row['is_online']))
 		$query = $query . "0, ";
+	*/
 
 	$query = rtrim($query, " ");
 	
