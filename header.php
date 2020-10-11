@@ -28,6 +28,7 @@ $permission['logging'] = false;
 $permission['users'] = false;
 $permission['connections'] = false;
 $permission['copychar'] = false;
+$permission['purgechar'] = false;
 
 abstract class Logs
 {
@@ -49,7 +50,7 @@ if(basename($_SERVER["SCRIPT_FILENAME"], '.php') == "login" && isset($_GET['a'])
 	$password = $_POST['password'];
 
 	// Look for entry for indicated UserID
-	$query = "SELECT hash, id, permission_handins, permission_trades, permission_looted, permission_dropped, permission_destroyed, permission_inventory, permission_logging, permission_users, permission_connections, permission_copychar FROM users WHERE username = '" . $uname . "'";
+	$query = "SELECT hash, id, permission_handins, permission_trades, permission_looted, permission_dropped, permission_destroyed, permission_inventory, permission_logging, permission_users, permission_connections, permission_copychar, permission_purgechar FROM users WHERE username = '" . $uname . "'";
 	$result = $admindb->query($query);
 	
 	// Login good until otherwise indicated bad
@@ -97,6 +98,8 @@ if(basename($_SERVER["SCRIPT_FILENAME"], '.php') == "login" && isset($_GET['a'])
 				$permission['connections'] = true;
 			if ($row['permission_copychar'])
 				$permission['copychar'] = true;
+			if ($row['permission_purgechar'])
+				$permission['purgechar'] = true;
 			
 			Logging($admindb, 0, Logs::Session, "Successful Login - User: {$uname} - " . get_client_ip());
 		}
@@ -138,7 +141,7 @@ else
 	// Cookie Present - see if it's legit
 	
 	$cookievalue = $_COOKIE[$cookie_name];
-	$query = "SELECT cookiehashes.id AS id, cookiehashes.userid AS uid, users.id AS uid2, users.permission_handins AS permission_handins, users.permission_trades AS permission_trades, users.permission_looted AS permission_looted, users.permission_dropped AS permission_dropped, users.permission_destroyed AS permission_destroyed, users.permission_inventory AS permission_inventory, users.permission_logging AS permission_logging, users.permission_users AS permission_users, users.permission_connections AS permission_connections, users.permission_copychar AS permission_copychar, users.username AS username FROM cookiehashes LEFT JOIN users ON cookiehashes.userid=users.id  WHERE cookiehashes.cookiehash='{$cookievalue}'";
+	$query = "SELECT cookiehashes.id AS id, cookiehashes.userid AS uid, users.id AS uid2, users.permission_handins AS permission_handins, users.permission_trades AS permission_trades, users.permission_looted AS permission_looted, users.permission_dropped AS permission_dropped, users.permission_destroyed AS permission_destroyed, users.permission_inventory AS permission_inventory, users.permission_logging AS permission_logging, users.permission_users AS permission_users, users.permission_connections AS permission_connections, users.permission_copychar AS permission_copychar, users.permission_purgechar AS permission_purgechar, users.username AS username FROM cookiehashes LEFT JOIN users ON cookiehashes.userid=users.id  WHERE cookiehashes.cookiehash='{$cookievalue}'";
 	$result = $admindb->query($query);
 	if($result->num_rows == 0)
 	{
@@ -180,6 +183,9 @@ else
 		
 		if ($row['permission_copychar'])
 			$permission['copychar'] = true;
+		
+		if ($row['permission_purgechar'])
+			$permission['purgechar'] = true;
 		
 		$cookieid = $row['id'];
 		// Touch cookie to keep alive after proper use
@@ -284,7 +290,7 @@ Container();
 <?php
 			}
 			// The ALTER list of menu options
-			if ($eqcgood && ($permission['inventory'] || $permission['copychar']))
+			if ($eqcgood && ($permission['inventory'] || $permission['copychar'] || $permission['purgechar']))
 			{
 ?>
 				<li class="nav-item dropdown<?php $basename = basename($_SERVER["SCRIPT_FILENAME"], '.php'); if ($basename == "inventory") print " active"; ?>">
@@ -297,6 +303,8 @@ Container();
 						print "<a class='dropdown-item' href='inventory.php'>Inventory</a>";
 					if ($permission['copychar'])
 						print "<a class='dropdown-item' href='copychar.php'>Copy Character</a>";
+					if ($permission['purgechar'])
+						print "<a class='dropdown-item' href='purgechar.php'>Purge Character Data</a>";
 ?>
 					</div>
 				</li>
