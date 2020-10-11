@@ -12,6 +12,7 @@ CREATE TABLE users (
 	permission_users TINYINT NOT NULL DEFAULT 0,
 	permission_connections TINYINT NOT NULL DEFAULT 0,
 	permission_copychar TINYINT NOT NULL DEFAULT 0,
+	permission_purgechar TINYINT NOT NULL DEFAULT 0,
 	PRIMARY KEY (id)
 );
 
