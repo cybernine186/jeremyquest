@@ -4,7 +4,7 @@ include_once("functions.php");
 include_once("header.php");
 
 // Check for permissions
-if (!$permission_copychar)
+if (!$permission['copychar'])
 {
 	RowText("<h5>You are not authorized!</h5>");
 	include_once("footer.php");
