@@ -17,16 +17,17 @@ $cookie_name = 'jeremyquest';
 $uid = -1;
 $username = "";
 // Allowed Permissions
-$permission_handins = false;
-$permission_trades = false;
-$permission_looted = false;
-$permission_dropped = false;
-$permission_destroyed = false;
-$permission_inventory = false;
-$permission_logging = false;
-$permission_users = false;
-$permission_connections = false;
-$permission_copychar = false;
+$permission = array();
+$permission['handins'] = false;
+$permission['trades'] = false;
+$permission['looted'] = false;
+$permission['dropped'] = false;
+$permission['destroyed'] = false;
+$permission['inventory'] = false;
+$permission['logging'] = false;
+$permission['users'] = false;
+$permission['connections'] = false;
+$permission['copychar'] = false;
 
 abstract class Logs
 {
@@ -77,25 +78,25 @@ if(basename($_SERVER["SCRIPT_FILENAME"], '.php') == "login" && isset($_GET['a'])
 			$uid = $row['id'];
 			$username = $uname;
 			if ($row['permission_handins'])
-				$permission_handins = true;
+				$permission['handins'] = true;
 			if ($row['permission_trades'])
-				$permission_trades = true;
+				$permission['trades'] = true;
 			if ($row['permission_looted'])
-				$permission_looted = true;
+				$permission['looted'] = true;
 			if ($row['permission_dropped'])
-				$permission_dropped = true;			
+				$permission['dropped'] = true;			
 			if ($row['permission_destroyed'])
-				$permission_destroyed = true;
+				$permission['destroyed'] = true;
 			if ($row['permission_inventory'])
-				$permission_inventory = true;
+				$permission['inventory'] = true;
 			if ($row['permission_logging'])
-				$permission_logging = true;
+				$permission['logging'] = true;
 			if ($row['permission_users'])
-				$permission_users = true;
+				$permission['users'] = true;
 			if ($row['permission_connections'])
-				$permission_connections = true;
+				$permission['connections'] = true;
 			if ($row['permission_copychar'])
-				$permission_copychar = true;
+				$permission['copychar'] = true;
 			
 			Logging($admindb, 0, Logs::Session, "Successful Login - User: {$uname} - " . get_client_ip());
 		}
@@ -151,34 +152,34 @@ else
 		$uid = $row['uid'];
 		$username = $row['username'];
 		if ($row['permission_handins'])
-			$permission_handins = true;
+			$permission['handins'] = true;
 		
 		if ($row['permission_trades'])
-			$permission_trades = true;
+			$permission['trades'] = true;
 		
 		if ($row['permission_looted'])
-			$permission_looted = true;
+			$permission['looted'] = true;
 		
 		if ($row['permission_dropped'])
-			$permission_dropped = true;
+			$permission['dropped'] = true;
 		
 		if ($row['permission_destroyed'])
-			$permission_destroyed = true;
+			$permission['destroyed'] = true;
 		
 		if ($row['permission_inventory'])
-			$permission_inventory = true;
+			$permission['inventory'] = true;
 		
 		if ($row['permission_logging'])
-			$permission_logging = true;
+			$permission['logging'] = true;
 		
 		if ($row['permission_users'])
-			$permission_users = true;
+			$permission['users'] = true;
 		
 		if ($row['permission_connections'])
-			$permission_connections = true;
+			$permission['connections'] = true;
 		
 		if ($row['permission_copychar'])
-			$permission_copychar = true;
+			$permission['copychar'] = true;
 		
 		$cookieid = $row['id'];
 		// Touch cookie to keep alive after proper use
@@ -258,7 +259,7 @@ Container();
 		if ($uid >= 0)
 		{
 			// The READ list of menu options
-			if ($eqcgood && ($permission_handins || $permission_trades || $permission_looted || $permission_dropped || $permission_destroyed))
+			if ($eqcgood && ($permission['handins'] || $permission['trades'] || $permission['looted'] || $permission['dropped'] || $permission['destroyed']))
 			{
 ?>
 				<li class="nav-item dropdown<?php $basename = basename($_SERVER["SCRIPT_FILENAME"], '.php'); if ($basename == "handins" || $basename == "trades" || $basename == "looted" || $basename == "dropped" || $basename == "destroyed") print " active"; ?>">
@@ -267,15 +268,15 @@ Container();
 					</a>
 					<div class="dropdown-menu" aria-labelledby="navbarMenuLink">
 <?php
-					if ($permission_handins)
+					if ($permission['handins'])
 						print "<a class='dropdown-item' href='handins.php'>Handins</a>";
-					if ($permission_trades)
+					if ($permission['trades'])
 						print "<a class='dropdown-item' href='trades.php'>Trades</a>";
-					if ($permission_looted)
+					if ($permission['looted'])
 						print "<a class='dropdown-item' href='looted.php'>Looted</a>";
-					if ($permission_dropped)
+					if ($permission['dropped'])
 						print "<a class='dropdown-item' href='dropped.php'>Dropped</a>";
-					if ($permission_destroyed)
+					if ($permission['destroyed'])
 						print "<a class='dropdown-item' href='destroyed.php'>Destroyed</a>";
 ?>
 					</div>
@@ -283,7 +284,7 @@ Container();
 <?php
 			}
 			// The ALTER list of menu options
-			if ($eqcgood && ($permission_inventory || $permission_copychar))
+			if ($eqcgood && ($permission['inventory'] || $permission['copychar']))
 			{
 ?>
 				<li class="nav-item dropdown<?php $basename = basename($_SERVER["SCRIPT_FILENAME"], '.php'); if ($basename == "inventory") print " active"; ?>">
@@ -292,9 +293,9 @@ Container();
 					</a>
 					<div class="dropdown-menu" aria-labelledby="navbarMenuLink">
 <?php
-					if ($permission_inventory)
+					if ($permission['inventory'])
 						print "<a class='dropdown-item' href='inventory.php'>Inventory</a>";
-					if ($permission_copychar)
+					if ($permission['copychar'])
 						print "<a class='dropdown-item' href='copychar.php'>Copy Character</a>";
 ?>
 					</div>
@@ -302,7 +303,7 @@ Container();
 <?php
 			}
 			// Check for permission to view logging data
-			if ($permission_logging || $permission_users || $permission_connections)
+			if ($permission['logging'] || $permission['users'] || $permission['connections'])
 			{
 ?>
 				<li class="nav-item dropdown<?php $basename = basename($_SERVER["SCRIPT_FILENAME"], '.php'); if ($basename == "logs" || $basename == "users") print " active"; ?>">
@@ -311,11 +312,11 @@ Container();
 					</a>
 					<div class="dropdown-menu" aria-labelledby="navbarMenuLink">
 <?php
-					if ($permission_logging)
+					if ($permission['logging'])
 						print "<a class='dropdown-item' href='logs.php'>Logs</a>";
-					if ($permission_users)
+					if ($permission['users'])
 						print "<a class='dropdown-item' href='users.php'>Users</a>";
-					if ($permission_connections)
+					if ($permission['connections'])
 						print "<a class='dropdown-item' href='connections.php'>Connections</a>";
 ?>
 					</div>
