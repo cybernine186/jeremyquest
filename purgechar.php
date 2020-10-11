@@ -116,6 +116,16 @@ elseif ($_GET['a'] == "p")
 	
 	foreach($queries as $key => $value)
 		RowText($value);
+		
+	foreach($queries as $key => $value)
+	{
+		$result = $eqdb->query($value);
+		if (!$result)
+			RowText("Query Failed: {$value}");
+		
+	}
+	
+	RowText("Done");
 }
 else
 	display_purge_form();
