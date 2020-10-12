@@ -480,8 +480,10 @@ elseif ($_GET['a'] == "cn")
 					Col();
 					DivC();
 				DivC();
+				RowText("or");
 			}
-			RowText("or");
+			else
+				RowText("Destination Account is full.");
 		}
 		
 		Row();
