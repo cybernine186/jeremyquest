@@ -96,11 +96,11 @@ elseif ($_GET['a'] == "nn")
 		// Account exists - check for open slot.
 		$row = $result->fetch_assoc();
 		$newaccountid = $row['id'];
-		$query = "SELECT count(*) AS numchars FROM character_data WHERE account_id = {$newaccountid}";
+		$query = "SELECT count(*) AS numchars FROM character_data WHERE account_id = {$newaccountid} AND deleted_at IS NULL";
 		$accountresult = $destinationdb->query($query);
 		if (!$accountresult)
 			data_error();
-		if ($accountresult->num_rows < 8)
+		if ($accountresult->num_rows < 12)
 		{
 			RowText("Space available on account on destination server.");
 			RowText("");
@@ -244,13 +244,13 @@ elseif ($_GET['a'] == "ca")
 	$account_id = $row['id'];
 	
 	// Check for open slot
-	$query = "SELECT count(*) AS count FROM character_data WHERE account_id = {$account_id}";
+	$query = "SELECT count(*) AS count FROM character_data WHERE account_id = {$account_id} AND deleted_at IS NULL";
 	$result = $destinationdb->query($query);
 	if ($result->num_rows == 0)
 		data_error();
 	$row = $result->fetch_assoc();
 	
-	if ($row['count'] < 8)
+	if ($row['count'] < 12)
 	{
 		// There's space - confirm before processing
 		RowText("Destination account has space.");
@@ -453,12 +453,12 @@ elseif ($_GET['a'] == "cn")
 		{
 			$row = $resultaccount->fetch_assoc();
 			$newaccountid = $row['id'];
-			$query = "SELECT count(*) AS numchars FROM character_data WHERE account_id = {$newaccountid}";
+			$query = "SELECT count(*) AS numchars FROM character_data WHERE account_id = {$newaccountid} AND deleted_at IS NULL";
 			$resultaccount = $destinationdb->query($query);
 			if ($resultaccount->num_rows == 0)
 				data_error();
 			$row = $resultaccount->fetch_assoc();
-			if ($row['numchars'] < 8)
+			if ($row['numchars'] < 12)
 			{
 				RowText("Space available on account on destination server.");
 				RowText("");
