@@ -91,6 +91,7 @@ elseif ($_GET['a'] == "pe")
 	$connections = "0";
 	$copychar = "0";
 	$purgechar = "0";
+	$zonemerger = "0";
 	
 	if (isset($_POST['handinsCheckbox']) && $_POST['handinsCheckbox'] == "on")
 		$handins = "1";
@@ -114,9 +115,11 @@ elseif ($_GET['a'] == "pe")
 		$copychar = "1";
 	if (isset($_POST['purgecharCheckbox']) && $_POST['purgecharCheckbox'] == "on")
 		$purgechar = "1";
-
+	if (isset($_POST['zonemergerCheckbox']) && $_POST['zonemergerCheckbox'] == "on")
+		$zonemerger = "1";
+	
 	// Update the user information in database
-	$query = "UPDATE users SET username='{$uname}', permission_handins={$handins}, permission_trades={$trades}, permission_looted={$looted}, permission_dropped={$dropped}, permission_destroyed={$destroyed}, permission_inventory={$inventory}, permission_logging={$logging}, permission_users={$users}, permission_connections={$connections}, permission_copychar={$copychar}, permission_purgechar={$purgechar} WHERE id={$editid}";
+	$query = "UPDATE users SET username='{$uname}', permission_handins={$handins}, permission_trades={$trades}, permission_looted={$looted}, permission_dropped={$dropped}, permission_destroyed={$destroyed}, permission_inventory={$inventory}, permission_logging={$logging}, permission_users={$users}, permission_connections={$connections}, permission_copychar={$copychar}, permission_purgechar={$purgechar}, permission_zonemerger={$zonemerger} WHERE id={$editid}";
 	$result = $admindb->query($query);
 	
 	RowText("User information updated.");
@@ -359,7 +362,10 @@ Row();
 				<input type="checkbox" class="form-check-input" id="purgecharCheckbox" name="purgecharCheckbox"<?php print ($row['permission_purgechar'] ? "checked" : ""); ?>>
 				<label class="form-check-label" for="purgecharCheckbox">Purge Character Data</label>
 			</div>
-
+			<div class="form-group form-check">
+				<input type="checkbox" class="form-check-input" id="zonemergerCheckbox" name="zonemergerCheckbox"<?php print ($row['permission_zonemerger'] ? "checked" : ""); ?>>
+				<label class="form-check-label" for="zonemergerCheckbox">Zone Merger</label>
+			</div>
 			<button type="submit" class="btn btn-primary">Submit</button>
 			<a class="btn btn-primary" href="users.php" role="button">Cancel</a>
 		</form>
