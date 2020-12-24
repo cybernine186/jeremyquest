@@ -180,11 +180,39 @@ function copy_wfh_npcs($eqdb, $p2002db, $zone_id)
 				chesttexture, armtexture, bracertexture, handtexture, legtexture, feettexture, light, walkspeed, peqid, unique_, fixed, combat_hp_regen, combat_mana_regen, aggro_pc, 
 				ignore_distance, ignore_despawn, show_name, untargetable, disable_instance FROM npc_types WHERE id >= {$npc_id_min} AND id < {$npc_id_max}";
 	
-	RowText($query);
 	$result = $p2002db->query($query);
 	RowText("Found {$result->num_rows} NPCs in p2002 database for zone {$zone_id}.<br />");
 	$r = $result->fetch_assoc();
-	var_dump($r);
+	
+	//																																					hp_regen_rate, mana_regen_rate
+	$query = "INSERT INTO npc_types (id, name, lastname, level, race, class, bodytype, hp, mana, gender, texture, helmtexture, herosforgemodel, size, 
+				loottable_id, merchant_id, alt_currency_id, npc_spells_id, npc_spells_effects_id, npc_faction_id, adventure_template_id, trap_template, 
+				mindmg, maxdmg, attack_count, npcspecialattks, special_abilities, aggroradius, assistradius, 
+				face, luclin_hairstyle, luclin_haircolor, luclin_eyecolor, luclin_eyecolor2, luclin_beardcolor, luclin_beard, drakkin_heritage, drakkin_tattoo, drakkin_details, 
+				armortint_id, armortint_red, armortint_green, armortint_blue, d_melee_texture1, d_melee_texture2, ammo_idfile, prim_melee_type, sec_melee_type, ranged_type, runspeed, 
+				MR, CR, DR, FR, PR, Corrup, PhR, see_invis, see_invis_undead, qglobal, AC, npc_aggro, spawn_limit, attack_speed, attack_delay, findable, 
+				STR, STA, DEX, AGI, _INT, WIS, CHA, see_hide, see_improved_hide, trackable, isbot, exclude, ATK, Accuracy, Avoidance, slow_mitigation, 
+				version, maxlevel, scalerate, private_corpse, unique_spawn_by_name, underwater, isquest, emoteid, spellscale, healscale, no_target_hotkey, raid_target, " .
+				// chesttexture																												combat_hp_regen, combat_mana_regen, aggro_pc,
+								"armtexture, bracertexture, handtexture, legtexture, feettexture, light, walkspeed, peqid, unique_, fixed, " . 
+				// ignore_distance											  disable_instance, 
+									"ignore_despawn, show_name, untargetable, 					charm_ac, charm_min_dmg, charm_max_dmg, charm_attack_delay, charm_accuracy_rating, charm_avoidance_rating, charm_atk, 
+				skip_global_loot, rare_spawn, stuck_behavior, model, combat_hp_regen, hp_regen_rate, combat_mana_regen, mana_regen_rate, always_aggro, flymode) VALUES 
+				
+				({$r['id']}, '{$r['name']}', '{$r['lastname']}', {$r['level']}, {$r['race']}, {$r['bodytype']}, {$r['hp']}, {$r['mana']}, {$r['gender']}, {$r['texture']}, {$r['helmtexture']}, {$r['herosforgemodel']}, '{$r['size']}', 
+				{$r['loottable_id']}, {$r['merchant_id']}, {$r['alt_currency_id']}, {$r['npc_spells_id']}, {$r['npc_spells_effects_id']}, {$r['npc_faction_id']}, {$r['adventure_template_id']}, {$r['adventure_template_id']}, 
+				{$r['mindmg']}, {$r['maxdmg']}, {$r['attack_count']}, '{$r['npcspecialattks']}', '{$r['special_abilities']}', {$r['aggroradius']}, {$r['assistradius']}, 
+				{$r['face']}, {$r['luclin_hairstyle']}, {$r['luclin_haircolor']}, {$r['luclin_eyecolor']}, {$r['luclin_eyecolor2']}, {$r['luclin_beardcolor']}, {$r['luclin_beard']}, {$r['drakkin_heritage']}, {$r['drakkin_tattoo']}, {$r['drakkin_details']}, 
+				{$r['armortint_id']}, {$r['armortint_red']}, {$r['armortint_green']}, {$r['armortint_blue']}, {$r['d_melee_texture1']}, {$r['d_melee_texture2']}, '{$r['ammo_idfile']}', {$r['prim_melee_type']}, {$r['sec_melee_type']}, {$r['ranged_type']}, '{$r['runspeed']}', 
+				{$r['MR']}, {$r['CR']}, {$r['DR']}, {$r['FR']}, {$r['PR']}, {$r['Corrup']}, {$r['PhR']}, {$r['see_invis']}, {$r['see_invis_undead']}, {$r['qglobal']}, {$r['AC']}, {$r['npc_aggro']}, {$r['spawn_limit']}, '{$r['attack_speed']}', {$r['attack_delay']}, {$r['findable']}, 
+				{$r['STR']}, {$r['STA']}, {$r['DEX']}, {$r['AGI']}, {$r['_INT']}, {$r['WIS']}, {$r['CHA']}, {$r['see_hide']}, {$r['see_improved_hide']}, {$r['trackable']}, {$r['isbot']}, {$r['exclude']}, {$r['ATK']}, {$r['Accuracy']}, {$r['Avoidance']}, {$r['slow_mitigation']}, 
+				{$r['version']}, {$r['maxlevel']}, {$r['scalerate']}, {$r['private_corpse']}, {$r['unique_spawn_by_name']}, {$r['underwater']}, {$r['isquest']}, {$r['emoteid']}, '{$r['spellscale']}', '{$r['healscale']}', {$r['no_target_hotkey']}, {$r['raid_target']}, 
+				{$r['armtexture']}, {$r['bracertexture']}, {$r['handtexture']}, {$r['legtexture']}, {$r['feettexture']}, {$r['light']}, {$r['walkspeed']}, {$r['peqid']}, {$r['unique_']}, {$r['fixed']}, 
+				{$r['ignore_despawn']}, {$r['show_name']}, {$r['untargetable']}, 0, 0, 0, 0, 0, 0, 0, 
+				0, 0, 0, 0, {$r['combat_hp_regen']}, {$r['hp_regen_rate']}, {$r['combat_mana_regen']}, {$r['mana_regen_rate']}, {$r['aggro_pc']}, '-1')";
+				
+	RowText($query);
+				
 }
 
 function delete_existing_npcs($eqdb, $zone_id)
