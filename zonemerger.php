@@ -14,13 +14,13 @@ if (!$permission['zonemerger'])
 RowText("<h4>Zone Merger</h4>");
 
 if (!isset($_GET['a']))
-	display_zonemerger_form($mysqli);
+	display_zonemerger_form($eqdb);
 else
-	display_zonemerger_form($mysqli);
+	display_zonemerger_form($eqdb);
 
 include_once("footer.php");
 
-function display_zonemerger_form($mysqli = NULL)
+function display_zonemerger_form($eqdb = NULL)
 {
 	RowText("");
 	
@@ -42,7 +42,7 @@ function display_zonemerger_form($mysqli = NULL)
 					<select class="form-control" id="inputZone" name="inputZone">
 <?php
 						$query = "SELECT short_name, zoneidnumber FROM zones WHERE zoneidnumber >= 200 AND zoneidnumber <= 223";
-						$result = $mysqli->query($query);
+						$result = $eqdb->query($query);
 				
 						while ($row = $result->fetch_assoc())
 						{
