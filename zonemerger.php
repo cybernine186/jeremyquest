@@ -24,7 +24,7 @@ function display_zonemerger_form($eqdb = NULL)
 {
 	RowText("");
 	
-	if ($mysqli == NULL)
+	if ($eqdb == NULL)
 	{
 		RowText("No Database Connection");
 		include_once("footer.php");
