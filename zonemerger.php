@@ -157,6 +157,7 @@ function swap_zone_data($eqdb, $p2002db, $zone_id)
 				{$r['gravity']}, {$r['type']}, {$r['skylock']}, 180, 180, 180, 600, 600, 
 				0, 0, 0, 0, 0, 0, NULL, NULL)";
 	
+	RowText($query);
 	$result = $eqdb->query($query);
 	if ($result)
 		RowText("Zone Header Data for Zone {$zone_id} successfully inserted!");
