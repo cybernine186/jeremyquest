@@ -3,6 +3,15 @@
 include_once("functions.php");
 include_once("header.php");
 
+$p2002db = new mysqli($dbhost, $dbuser, $dbpass, "p2002");
+
+if ($p2002db->connect_errno)
+{
+	print "Failed to connect to p2002 database.";
+	include_once("footer.php");
+	die;
+}
+
 // Check for permissions
 if (!$permission['zonemerger'])
 {
@@ -15,6 +24,8 @@ RowText("<h4>Zone Merger</h4>");
 
 if (!isset($_GET['a']))
 	display_zoneselect_form($eqdb);
+
+// Show Zone
 elseif ($_GET['a'] == "sz")
 {
 	if (!IsNumber($_POST['inputZone']))
@@ -23,6 +34,30 @@ elseif ($_GET['a'] == "sz")
 	
 	show_zone_tasks($eqdb, $zone_id);
 }
+
+// Swap Zone Data
+elseif ($_GET['a'] == "szd")
+{
+	if (!IsNumber($_GET['zid']))
+		data_error();
+	$zone_id = $_GET['zid'];
+	
+	swap_zone_data($eqdb, $p2002db, $zone_id);
+	show_zone_tasks($eqdb, $zone_id);
+}
+
+// Copy Over NPCs
+elseif ($_GET['a'] == "con")
+{
+	if (!IsNumber($_GET['zid']))
+		data_error();
+	$zone_id = $_GET['zid'];
+	
+	copy_wfh_npcs($eqdb, $p2002db, $zone_id);
+	show_zone_tasks($eqdb, $zone_id);
+}
+
+// Delete Existing NPCs
 elseif ($_GET['a'] == "den")
 {
 	if (!IsNumber($_GET['zid']))
@@ -61,8 +96,16 @@ function show_zone_tasks($eqdb, $zone_id)
 				</thead>
 				<tbody>
 					<tr>
+						<td>Swap Over Zone Data</td>
+						<td><a class="btn btn-primary" href="zonemerger.php?a=szd&zid=<?php print $zone_id; ?>" role="button">Go</a></td>
+					</tr>
+					<tr>
 						<td>Delete Existing NPCs</td>
 						<td><a class="btn btn-primary" href="zonemerger.php?a=den&zid=<?php print $zone_id; ?>" role="button">Go</a></td>
+					</tr>
+					<tr>
+						<td>Copy Over WFH NPCs</td>
+						<td><a class="btn btn-primary" href="zonemerger.php?a=con&zid=<?php print $zone_id; ?>" role="button">Go</a></td>
 					</tr>
 				</tbody>
 			</table>
@@ -71,6 +114,35 @@ function show_zone_tasks($eqdb, $zone_id)
 		Col();
 		DivC();
 	DivC();
+}
+
+function swap_zone_data($eqdb, $p2002db, $zone_id)
+{
+	/*
+	$query = "DELETE FROM zone WHERE zoneidnumber = {$zone_id}";
+	$result = $eqdb->query($query);
+	$affected_rows = $eqdb->affected_rows;
+	RowText("{$affected_rows} zone header(s) were deleted for Zone {$zone_id}");
+	*/
+	
+	$query = "SELECT short_name, id, file_name, long_name, map_file_name, safe_x, safe_y, safe_z, graveyard_id, min_level, min_status, zoneidnumber, version, timezone, maxclients, ruleset, note, underworld, 
+				minclip, maxclip, fog_minclip, fog_maxclip, fog_blue, fog_red, fog_green, sky, ztype, zone_exp_multiplier, walkspeed, time_type, fog_red1, fog_green1, fog_blue1, fog_minclip1, fog_maxclip1, 
+				fog_red2, fog_green2, fog_blue2, fog_minclip2, fog_maxclip2, fog_red3, fog_green3, fog_blue3, fog_minclip3, fog_maxclip3, fog_red4, fog_green4, fog_blue4, fog_minclip4, fog_maxclip4, 
+				fog_density, flag_needed, canbind, cancombat, canlevitate, castoutdoor, hotzone, insttype, shutdowndelay, peqzone, expansion, suspendbuffs, 
+				rain_chance1, rain_chance2, rain_chance3, rain_chance4, rain_duration1, rain_duration2, rain_duration3, rain_duration4, 
+				snow_chance1, snow_chance2, snow_chance3, snow_chance4, snow_duration1, snow_duration2, snow_duration3, snow_duration4, 
+				gravity, type, skylock, skip_los, music FROM zone WHERE zoneidnumber = {$zone_id}";
+	
+	$result = $p2002db->query($query);
+	if ($result->num_rows != 1)
+		data_error();
+	$row = $result->fetch_assoc();
+	var_dump($row);
+}
+
+function copy_wfh_npcs($eqdb, $p2002db, $zone_id)
+{
+	
 }
 
 function delete_existing_npcs($eqdb, $zone_id)
