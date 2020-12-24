@@ -155,7 +155,7 @@ function swap_zone_data($eqdb, $p2002db, $zone_id)
 				{$r['rain_chance1']}, {$r['rain_chance2']}, {$r['rain_chance3']}, {$r['rain_chance4']}, {$r['rain_duration1']}, {$r['rain_duration2']}, {$r['rain_duration3']}, {$r['rain_duration4']}, 
 				{$r['snow_chance1']}, {$r['snow_chance2']}, {$r['snow_chance3']}, {$r['snow_chance4']}, {$r['snow_duration1']}, {$r['snow_duration2']}, {$r['snow_duration3']}, {$r['snow_duration4']}, 
 				{$r['gravity']}, {$r['type']}, {$r['skylock']}, 180, 180, 180, 600, 600, 
-				0, 0, 0, 0, 0, 0, NULL, NULL)";
+				0, 0, 0, 0, 0, NULL, NULL)";
 	
 	RowText($query);
 	$result = $eqdb->query($query);
