@@ -3,7 +3,7 @@
 include_once("functions.php");
 include_once("header.php");
 
-$p2002db = new mysqli($dbhost, $dbuser, $dbpass, "p2002");
+$p2002db = new mysqli($dbhost, "neq", "mariaslargesekrets", "p2002");
 
 if ($p2002db->connect_errno)
 {
