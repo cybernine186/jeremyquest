@@ -136,8 +136,30 @@ function swap_zone_data($eqdb, $p2002db, $zone_id)
 	$result = $p2002db->query($query);
 	if ($result->num_rows != 1)
 		data_error();
-	$row = $result->fetch_assoc();
-	var_dump($row);
+	$r = $result->fetch_assoc();
+
+	$query = "INSERT INTO zone (short_name, id, file_name, long_name, map_file_name, safe_x, safe_y, safe_z, graveyard_id, min_level, min_status, zoneidnumber, version, timezone, maxclients, ruleset, note, underworld, 
+				minclip, maxclip, fog_minclip, fog_maxclip, fog_blue, fog_red, fog_green, sky, ztype, zone_exp_multiplier, walkspeed, time_type, fog_red1, fog_green1, fog_blue1, fog_minclip1, fog_maxclip1, 
+				fog_red2, fog_green2, fog_blue2, fog_minclip2, fog_maxclip2, fog_red3, fog_green3, fog_blue3, fog_minclip3, fog_maxclip3, fog_red4, fog_green4, fog_blue4, fog_minclip4, fog_maxclip4, 
+				fog_density, flag_needed, canbind, cancombat, canlevitate, castoutdoor, hotzone, insttype, shutdowndelay, peqzone, expansion, suspendbuffs, 
+				rain_chance1, rain_chance2, rain_chance3, rain_chance4, rain_duration1, rain_duration2, rain_duration3, rain_duration4, 
+				snow_chance1, snow_chance2, snow_chance3, snow_chance4, snow_duration1, snow_duration2, snow_duration3, snow_duration4, 
+				gravity, type, skylock, fast_regen_hp, fast_regen_mana, fast_regen_endurance, npc_max_aggro_dist, max_movement_update_range,
+				ffa, lockout, logout_kick_timer, min_expansion, max_expansion, content_flags, content_flags_disabled) VALUES
+				('{$r['short_name']}', {$r['id']}, '{$r['file_name']}', '{$r['long_name']}', '{$r['map_file_name']}', '{$r['safe_x']}', '{$r['safe_y']}', '{$r['safe_z']}', 
+				'{$r['graveyard_id']}', {$r['min_level']}, {$r['min_status']}, {$r['zoneidnumber']}, {$r['version']}, {$r['timezone']}, {$r['maxclients']}, {$r['ruleset']}, '{$r['note']}', '{$r['underworld']}', 
+				'{$r['minclip']}', '{$r['maxclip']}', '{$r['fog_minclip']}', '{$r['fog_maxclip']}', {$r['fog_blue']}, {$r['fog_red']}, {$r['fog_green']}, {$r['sky']}, {$r['ztype']}, '{$r['zone_exp_multiplier']}', '{$r['walkspeed']}', {$r['time_type']}, 
+				{$r['fog_red1']}, {$r['fog_green1']}, {$r['fog_blue1']}, '{$r['fog_minclip1']}', '{$r['fog_maxclip1']}', 
+				{$r['fog_red2']}, {$r['fog_green2']}, {$r['fog_blue2']}, '{$r['fog_minclip2']}', '{$r['fog_maxclip2']}', 
+				{$r['fog_red3']}, {$r['fog_green3']}, {$r['fog_blue3']}, '{$r['fog_minclip3']}', '{$r['fog_maxclip3']}', 
+				{$r['fog_red4']}, {$r['fog_green4']}, {$r['fog_blue4']}, '{$r['fog_minclip4']}', '{$r['fog_maxclip4']}', 
+				'{$r['fog_density']}', '{$r['flag_needed']}', {$r['canbind']}, {$r['cancombat']}, {$r['canlevitate']}, {$r['castoutdoor']}, {$r['hotzone']}, {$r['insttype']}, {$r['shutdowndelay']}, {$r['peqzone']}, {$r['expansion']}, {$r['suspendbuffs']}, 
+				{$r['rain_chance1']}, {$r['rain_chance2']}, {$r['rain_chance3']}, {$r['rain_chance4']}, {$r['rain_duration1']}, {$r['rain_duration2']}, {$r['rain_duration3']}, {$r['rain_duration4']}, 
+				{$r['snow_chance1']}, {$r['snow_chance2']}, {$r['snow_chance3']}, {$r['snow_chance4']}, {$r['snow_duration1']}, {$r['snow_duration2']}, {$r['snow_duration3']}, {$r['snow_duration4']}, 
+				{$r['gravity']}, {$r['type']}, {$r['skylock']}, 180, 180, 180, 600, 600, 
+				0, 0, 0, 0, 0, 0, NULL, NULL)";
+				
+	RowText($query);
 }
 
 function copy_wfh_npcs($eqdb, $p2002db, $zone_id)
