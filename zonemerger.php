@@ -20,7 +20,7 @@ else
 
 include_once("footer.php");
 
-function display_zone_merger_form($mysqli = NULL)
+function display_zonemerger_form($mysqli = NULL)
 {
 	return;
 }
