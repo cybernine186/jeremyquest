@@ -41,7 +41,7 @@ function display_zonemerger_form($eqdb = NULL)
 					<label for="destination"><h6>Select POP Zone</h6></label>
 					<select class="form-control" id="inputZone" name="inputZone">
 <?php
-						$query = "SELECT short_name, zoneidnumber FROM zones WHERE zoneidnumber >= 200 AND zoneidnumber <= 223";
+						$query = "SELECT short_name, zoneidnumber FROM zone WHERE zoneidnumber >= 200 AND zoneidnumber <= 223";
 						$result = $eqdb->query($query);
 				
 						while ($row = $result->fetch_assoc())
