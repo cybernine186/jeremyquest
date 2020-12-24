@@ -41,6 +41,7 @@ function show_zone_tasks($eqdb, $zone_id)
 {
 	// Show zone number and name
 	$query = "SELECT short_name FROM zone WHERE zoneidnumber = {$zone_id}";
+	RowText($query);
 	$result = $eqdb->query($query);
 	if ($result->num_rows != 1)
 		data_error();
