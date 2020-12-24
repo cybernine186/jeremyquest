@@ -14,13 +14,53 @@ if (!$permission['zonemerger'])
 RowText("<h4>Zone Merger</h4>");
 
 if (!isset($_GET['a']))
-	display_zonemerger_form($eqdb);
+	display_zoneselect_form($eqdb);
+elseif ($_GET['a'] == "sz")
+	show_zone_tasks($eqdb);
+elseif ($_GET['a'] == "den")
+{
+	delete_existing_npcs($eqdb);
+	show_zone_tasks($eqdb);
+}
 else
-	display_zonemerger_form($eqdb);
+	display_zoneselect_form($eqdb);
 
 include_once("footer.php");
 
-function display_zonemerger_form($eqdb = NULL)
+function show_zone_tasks($eqdb)
+{
+	Row();
+		Col();
+		DivC();
+		Col(true, '', 6);
+?>
+			<table class="table">
+				<thead>
+					<tr>
+						<th scope="col">Task</th>
+						<th scope="col">Do It</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Delete Existing NPCs</td>
+						<td><a class="btn btn-primary" href="zonemerger.php?a=den" role="button">Go</a></td>
+					</tr>
+				</tbody>
+			</table>
+<?php
+		DivC();
+		Col();
+		DivC();
+	DivC();
+}
+
+function delete_existing_npcs($eqdb)
+{
+	RowText("NPCs deleted...<br />");
+}
+
+function display_zoneselect_form($eqdb = NULL)
 {
 	RowText("");
 	
