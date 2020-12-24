@@ -166,7 +166,24 @@ function swap_zone_data($eqdb, $p2002db, $zone_id)
 
 function copy_wfh_npcs($eqdb, $p2002db, $zone_id)
 {
+	$npc_id_min = $zone_id * 1000;
+	$npc_id_max = ($zone_id + 1) * 1000;
 	
+	$query = "SELECT id, name, lastname, level, race, class, bodytype, hp, mana, gender, texture, helmtexture, herosforgemodel, size, hp_regen_rate, mana_regen_rate, 
+				loottable_id, merchant_id, alt_currency_id, npc_spells_id, npc_spells_effects_id, npc_faction_id, adventure_template_id, trap_template, 
+				mindmg, maxdmg, attack_count, npcspecialattks, special_abilities, aggroradius, assistradius, 
+				face, luclin_hairsyle, luclin_haircolor, luclin_eyecolor, luclin_eyecolor2, luclin_beardcolor, luclin_beard, drakkin_heritage, drakkin_tattoo, drakkin_details, 
+				armortint_id, armortint_red, armortint_green, armortint_blue, d_melee_texture1, d_melee_texture2, ammo_idfile, prim_melee_type, sec_melee_type, ranged_type, runspeed, 
+				MR, CR, DR, FR, PR, Corrup, PhR, see_invis, see_invis_undead, qglobal, AC, npc_aggro, spawn_limit, attack_speed, attack_delay, findable, 
+				STR, STA, DEX, AGI, _INT, WIS, CHA, see_hide, see_improved_hide, trackable, isbot, exclude, ATK, Accuracy, Avoidance, slow_mitigation, 
+				version, maxlevel, scalerate, private_corpse, unique_spawn_by_name, underwater, isquest, emoteid, spellscale, healscale, no_target_hotkey, raid_target, 
+				chesttexture, armtexture, bracertexture, handtexture, legtexture, feettexture, light, walkspeed, peqid, unique_, fixed, combat_hp_regen, combat_mana_regen, aggro_pc, 
+				ignore_distance, ignore_despawn, show_name, untargetable, disable_instance FROM npc_types WHERE id >= {$npc_id_min} AND id < {$npc_id_max}";
+	
+	$result = $p2002db->query($query);
+	RowText("Found {$result->num_rows} NPCs in p2002 database for zone {$zone_id}.<br />");
+	$r = $result->fetch_assoc();
+	var_dump($r);
 }
 
 function delete_existing_npcs($eqdb, $zone_id)
