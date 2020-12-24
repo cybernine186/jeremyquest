@@ -78,7 +78,7 @@ function delete_existing_npcs($eqdb, $zone_id)
 	$npc_id_min = $zone_id * 1000;
 	$npc_id_max = ($zone_id + 1) * 1000;
 	$query = "DELETE FROM npc_types WHERE id >= {$npc_id_min} AND id < {$npc_id_max}";
-	$result = $eqbd->query($query);
+	$result = $eqdb->query($query);
 	$affected_rows = $eqdb->affected_rows;
 	RowText("{$affected_rows} NPCs were deleted from Zone {$zone_id}");
 }
