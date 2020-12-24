@@ -199,7 +199,7 @@ function copy_wfh_npcs($eqdb, $p2002db, $zone_id)
 									"ignore_despawn, show_name, untargetable, 					charm_ac, charm_min_dmg, charm_max_dmg, charm_attack_delay, charm_accuracy_rating, charm_avoidance_rating, charm_atk, 
 				skip_global_loot, rare_spawn, stuck_behavior, model, combat_hp_regen, hp_regen_rate, combat_mana_regen, mana_regen_rate, always_aggro, flymode) VALUES 
 				
-				({$r['id']}, '{$r['name']}', '{$r['lastname']}', {$r['level']}, {$r['race']}, {$r['bodytype']}, {$r['hp']}, {$r['mana']}, {$r['gender']}, {$r['texture']}, {$r['helmtexture']}, {$r['herosforgemodel']}, '{$r['size']}', 
+				({$r['id']}, '{$r['name']}', '{$r['lastname']}', {$r['level']}, {$r['race']}, {$r['class']}, {$r['bodytype']}, {$r['hp']}, {$r['mana']}, {$r['gender']}, {$r['texture']}, {$r['helmtexture']}, {$r['herosforgemodel']}, '{$r['size']}', 
 				{$r['loottable_id']}, {$r['merchant_id']}, {$r['alt_currency_id']}, {$r['npc_spells_id']}, {$r['npc_spells_effects_id']}, {$r['npc_faction_id']}, {$r['adventure_template_id']}, {$r['adventure_template_id']}, 
 				{$r['mindmg']}, {$r['maxdmg']}, {$r['attack_count']}, '{$r['npcspecialattks']}', '{$r['special_abilities']}', {$r['aggroradius']}, {$r['assistradius']}, 
 				{$r['face']}, {$r['luclin_hairstyle']}, {$r['luclin_haircolor']}, {$r['luclin_eyecolor']}, {$r['luclin_eyecolor2']}, {$r['luclin_beardcolor']}, {$r['luclin_beard']}, {$r['drakkin_heritage']}, {$r['drakkin_tattoo']}, {$r['drakkin_details']}, 
