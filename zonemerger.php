@@ -144,7 +144,7 @@ function swap_zone_data($eqdb, $p2002db, $zone_id)
 				snow_chance1, snow_chance2, snow_chance3, snow_chance4, snow_duration1, snow_duration2, snow_duration3, snow_duration4, 
 				gravity, type, skylock, fast_regen_hp, fast_regen_mana, fast_regen_endurance, npc_max_aggro_dist, max_movement_update_range,
 				ffa, lockout, logout_kick_timer, min_expansion, max_expansion, content_flags, content_flags_disabled) VALUES
-				('{$r['short_name']}', {$r['id']}, '{$r['file_name']}', '{$r['long_name']}', '{$r['map_file_name']}', '{$r['safe_x']}', '{$r['safe_y']}', '{$r['safe_z']}', 
+				('{$r['short_name']}', {$r['id']}, '{$r['file_name']}', '{$r['long_name']}', NULL, '{$r['safe_x']}', '{$r['safe_y']}', '{$r['safe_z']}', 
 				'{$r['graveyard_id']}', {$r['min_level']}, {$r['min_status']}, {$r['zoneidnumber']}, {$r['version']}, {$r['timezone']}, {$r['maxclients']}, {$r['ruleset']}, '{$r['note']}', '{$r['underworld']}', 
 				'{$r['minclip']}', '{$r['maxclip']}', '{$r['fog_minclip']}', '{$r['fog_maxclip']}', {$r['fog_blue']}, {$r['fog_red']}, {$r['fog_green']}, {$r['sky']}, {$r['ztype']}, '{$r['zone_exp_multiplier']}', '{$r['walkspeed']}', {$r['time_type']}, 
 				{$r['fog_red1']}, {$r['fog_green1']}, {$r['fog_blue1']}, '{$r['fog_minclip1']}', '{$r['fog_maxclip1']}', 
