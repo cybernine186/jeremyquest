@@ -180,6 +180,7 @@ function copy_wfh_npcs($eqdb, $p2002db, $zone_id)
 				chesttexture, armtexture, bracertexture, handtexture, legtexture, feettexture, light, walkspeed, peqid, unique_, fixed, combat_hp_regen, combat_mana_regen, aggro_pc, 
 				ignore_distance, ignore_despawn, show_name, untargetable, disable_instance FROM npc_types WHERE id >= {$npc_id_min} AND id < {$npc_id_max}";
 	
+	RowText($query);
 	$result = $p2002db->query($query);
 	RowText("Found {$result->num_rows} NPCs in p2002 database for zone {$zone_id}.<br />");
 	$r = $result->fetch_assoc();
