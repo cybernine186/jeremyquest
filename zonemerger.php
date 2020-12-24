@@ -118,12 +118,10 @@ function show_zone_tasks($eqdb, $zone_id)
 
 function swap_zone_data($eqdb, $p2002db, $zone_id)
 {
-	/*
 	$query = "DELETE FROM zone WHERE zoneidnumber = {$zone_id}";
 	$result = $eqdb->query($query);
 	$affected_rows = $eqdb->affected_rows;
 	RowText("{$affected_rows} zone header(s) were deleted for Zone {$zone_id}");
-	*/
 	
 	$query = "SELECT short_name, id, file_name, long_name, map_file_name, safe_x, safe_y, safe_z, graveyard_id, min_level, min_status, zoneidnumber, version, timezone, maxclients, ruleset, note, underworld, 
 				minclip, maxclip, fog_minclip, fog_maxclip, fog_blue, fog_red, fog_green, sky, ztype, zone_exp_multiplier, walkspeed, time_type, fog_red1, fog_green1, fog_blue1, fog_minclip1, fog_maxclip1, 
@@ -158,8 +156,14 @@ function swap_zone_data($eqdb, $p2002db, $zone_id)
 				{$r['snow_chance1']}, {$r['snow_chance2']}, {$r['snow_chance3']}, {$r['snow_chance4']}, {$r['snow_duration1']}, {$r['snow_duration2']}, {$r['snow_duration3']}, {$r['snow_duration4']}, 
 				{$r['gravity']}, {$r['type']}, {$r['skylock']}, 180, 180, 180, 600, 600, 
 				0, 0, 0, 0, 0, 0, NULL, NULL)";
-				
-	RowText($query);
+	
+	$result = $eqdb->query($query);
+	if ($result)
+		RowText("Zone Header Data for Zone {$zone_id} successfully inserted!");
+	else
+		RowText("Zone Header Data for Zone {$zone_id} NOT successfully inserted!");
+	
+	
 }
 
 function copy_wfh_npcs($eqdb, $p2002db, $zone_id)
