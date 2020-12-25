@@ -101,14 +101,14 @@ elseif ($_GET['a'] == "cgy")
 	show_zone_tasks($eqdb, $zone_id);
 }
 
-// Copy Graveyard Data
-elseif ($_GET['a'] == "cgy")
+// Copy Grid Data
+elseif ($_GET['a'] == "cg")
 {
 	if (!IsNumber($_GET['zid']))
 		data_error();
 	$zone_id = $_GET['zid'];
 	
-	copy_graveyard_data($eqdb, $p2002db, $zone_id);
+	copy_grid_data($eqdb, $p2002db, $zone_id);
 	show_zone_tasks($eqdb, $zone_id);
 }
 
@@ -531,6 +531,24 @@ function copy_spawn_data($eqdb, $p2002db, $zone_id)
 	var_dump($sgid);
 	print "<br />";
 	var_dump($s2id);
+}
+
+function copy_grid_data($eqdb, $p2002db, $zone_id)
+{
+	$query = "DELETE FROM grid WHERE zoneid = {$zone_id}";
+	$result_delete = $eqdb->query($query);
+	if (!$result_delete)
+		RowText("DELETE query for grid failed.");
+	else
+		RowText("{$eqdb->affected_rows} grids deleted");
+
+	$query = "DELETE FROM grid_entries WHERE zoneid = {$zone_id}";
+	$result_delete = $eqdb->query($query);
+	if (!$result_delete)
+		RowText("DELETE query for grid_entries failed.");
+	else
+		RowText("{$eqdb->affected_rows} grid_entries deleted");
+	
 }
 
 function display_zoneselect_form($eqdb = NULL)
