@@ -362,7 +362,7 @@ function copy_spawn_data($eqdb, $p2002db, $zone_id)
 	
 	while ($r = $result->fetch_assoc())
 	{
-		$query = "INSERT INTO spawn_conditions (zone, id, value, onchange, name VALUES 
+		$query = "INSERT INTO spawn_conditions (zone, id, value, onchange, name) VALUES 
 			('{$r['zone']}', {$r['id']}, {$r['value']}, {$r['onchange']}, '{$r['name']}')";
 		RowText($query);
 		$result_insert = $eqdb->query($query);
