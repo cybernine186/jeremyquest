@@ -101,6 +101,17 @@ elseif ($_GET['a'] == "cgy")
 	show_zone_tasks($eqdb, $zone_id);
 }
 
+// Copy Graveyard Data
+elseif ($_GET['a'] == "cgy")
+{
+	if (!IsNumber($_GET['zid']))
+		data_error();
+	$zone_id = $_GET['zid'];
+	
+	copy_graveyard_data($eqdb, $p2002db, $zone_id);
+	show_zone_tasks($eqdb, $zone_id);
+}
+
 else
 	display_zoneselect_form($eqdb);
 
@@ -152,6 +163,10 @@ function show_zone_tasks($eqdb, $zone_id)
 					<tr>
 						<td>Copy Graveyard Data</td>
 						<td><a class="btn btn-primary" href="zonemerger.php?a=cgy&zid=<?php print $zone_id; ?>" role="button">Go</a></td>
+					</tr>
+					<tr>
+						<td>Copy Grid Data</td>
+						<td><a class="btn btn-primary" href="zonemerger.php?a=cg&zid=<?php print $zone_id; ?>" role="button">Go</a></td>
 					</tr>
 				</tbody>
 			</table>
@@ -452,8 +467,10 @@ function copy_spawn_data($eqdb, $p2002db, $zone_id)
 	
 	while ($r = $result->fetch_assoc())
 	{
+		/* FIX THIS - spawn2s referencing repeat spawngroupIDs result in the spawn2 and spawnentry not being copied
 		if (isset($sgid[$r['spawngroupID']]))
 			continue;
+		*/
 		
 		// spawngroup
 		$query = "SELECT id, name, spawn_limit, dist, max_x, min_x, max_y, min_y, delay, mindelay, despawn, despawn_timer FROM spawngroup WHERE id = {$r['spawngroupID']}";
