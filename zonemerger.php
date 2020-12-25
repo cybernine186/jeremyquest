@@ -445,7 +445,7 @@ function copy_spawn_data($eqdb, $p2002db, $zone_id)
 		
 		// copy spawn2
 		$query = "INSERT INTO spawn2 (spawngroupID, zone, version, x, y, z, heading, respawntime, variance, pathgrid, _condition, cond_value, enabled, animation) VALUES 
-			({$sgid[$r['spawngroupID']]}, '{$r['zone']}', {$r['zone']}, {$r['version']}, '{$r['x']}', '{$r['y']}', '{$r['z']}', '{$r['heading']}', {$r['respawntime']}, {$r['variance']}, {$r['pathgrid']}, {$r['_condition']}, {$r['cond_value']}, {$r['enabled']}, {$r['animation']})";
+			({$sgid[$r['spawngroupID']]}, '{$r['zone']}', {$r['version']}, '{$r['x']}', '{$r['y']}', '{$r['z']}', '{$r['heading']}', {$r['respawntime']}, {$r['variance']}, {$r['pathgrid']}, {$r['_condition']}, {$r['cond_value']}, {$r['enabled']}, {$r['animation']})";
 		RowText($query);
 		$result_insert = $eqdb->query($query);
 		if ($result_insert)
