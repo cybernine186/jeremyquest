@@ -335,7 +335,6 @@ function copy_spawn_data($eqdb, $p2002db, $zone_id)
 	}
 	
 	$spawn_event_count = 0;
-	
 	while ($r = $result->fetch_assoc())
 	{
 		$query = "INSERT INTO spawn_events (zone, cond_id, name, period, next_minute, next_hour, next_day, next_month, next_year, enabled, action, argument, strict VALUES 
@@ -346,7 +345,6 @@ function copy_spawn_data($eqdb, $p2002db, $zone_id)
 		else
 			RowText("spawn_events insert failed.");
 	}
-	
 	RowText("{$spawn_event_count} spawn_events copied over.");
 	
 	// spawn_conditions
@@ -359,7 +357,6 @@ function copy_spawn_data($eqdb, $p2002db, $zone_id)
 	}
 	
 	$spawn_condition_count = 0;
-	
 	while ($r = $result->fetch_assoc())
 	{
 		$query = "INSERT INTO spawn_conditions (zone, id, value, onchange, name) VALUES 
@@ -371,6 +368,30 @@ function copy_spawn_data($eqdb, $p2002db, $zone_id)
 		else
 			RowText("spawn_conditions insert failed.");
 	}
+	RowText("{$spawn_condition_count} spawn_conditions copied over.");
+	
+	// spawn_condition_values
+	$query = "SELECT id, value, zone, instance_id FROM spawn_condition_values WHERE zone = '{$zone_name}'";
+	$result = $p2002db->query($query);
+	if ($result->num_rows < 1)
+	{
+		RowText("No spawn_condition_values data for zone {$zone_name} ({$zone_id}).");
+		return;
+	}
+
+	$spawn_condition_value_count = 0;
+	while ($r = $result->fetch_assoc())
+	{
+		$query = "INSERT INTO spawn_condition_values (id, value, zone, instance_id) VALUES 
+			({$r['id']}, {$r['value']}, '{$r['zone']}', {$r['instance_id']})";
+		RowText($query);
+		$result_insert = $eqdb->query($query);
+		if ($result_insert)
+			$spawn_condition_value_count++;
+		else
+			RowText("spawn_condition_values insert failed.");
+	}
+	RowText("{$spawn_condition_value_count} spawn_condition_values copied over.");
 }
 
 function display_zoneselect_form($eqdb = NULL)
