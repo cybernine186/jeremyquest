@@ -429,7 +429,7 @@ function copy_spawn_data($eqdb, $p2002db, $zone_id)
 		$query = "SELECT spawngroupID, npcID, chance, mintime, maxtime FROM spawnentry WHERE spawngroupID = {$r['spawngroupID']}";
 		RowText($query);
 		$result_spawnentry = $p2002db->query($query);
-		if ($rse->num_rows < 1)
+		if ($result_spawnentry->num_rows < 1)
 			RowText("No spawnentry data for spawngroup ID {$r['spawngroupID']} and spawn2 ID {$r['id']}");
 		while ($rse = $result_spawnentry->fetch_assoc())
 		{
