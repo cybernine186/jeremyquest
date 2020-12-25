@@ -403,6 +403,9 @@ function copy_spawn_data($eqdb, $p2002db, $zone_id)
 	
 	while ($r = $result->fetch_assoc())
 	{
+		if (isset($sgid[$r['spawngroupID']]))
+			continue;
+		
 		// spawngroup
 		$query = "SELECT id, name, spawn_limit, dist, max_x, min_x, max_y, min_y, delay, mindelay, despawn, despawn_timer FROM spawngroup WHERE id = {$r['spawngroupID']}";
 		RowText($query);
