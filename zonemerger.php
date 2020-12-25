@@ -67,6 +67,19 @@ elseif ($_GET['a'] == "den")
 	delete_existing_npcs($eqdb, $zone_id);
 	show_zone_tasks($eqdb, $zone_id);
 }
+
+// Delete Existing Spawn Data
+elseif ($_GET['a'] == "desd")
+{
+	if (!IsNumber($_GET['zid']))
+		data_error();
+	$zone_id = $_GET['zid'];
+	
+	delete_existing_spawn_data($eqdb, $zone_id);
+	show_zone_tasks($eqdb, $zone_id);
+}
+
+
 else
 	display_zoneselect_form($eqdb);
 
@@ -106,6 +119,10 @@ function show_zone_tasks($eqdb, $zone_id)
 					<tr>
 						<td>Copy Over WFH NPCs</td>
 						<td><a class="btn btn-primary" href="zonemerger.php?a=con&zid=<?php print $zone_id; ?>" role="button">Go</a></td>
+					</tr>
+					<tr>
+						<td>Delete Existing Spawn Data</td>
+						<td><a class="btn btn-primary" href="zonemerger.php?a=desd&zid=<?php print $zone_id; ?>" role="button">Go</a></td>
 					</tr>
 				</tbody>
 			</table>
@@ -230,6 +247,60 @@ function delete_existing_npcs($eqdb, $zone_id)
 	$result = $eqdb->query($query);
 	$affected_rows = $eqdb->affected_rows;
 	RowText("{$affected_rows} NPCs were deleted from Zone {$zone_id}");
+}
+
+function delete_existing_spawn_data($eqdb, $zone_id)
+{
+	$query = "SELECT short_name FROM zone WHERE zoneidnumber = {$zone_id}";
+	$result = $eqdb->query($query);
+	if ($result->num_rows != 1)
+		data_error();
+	$row = $result->fetch_assoc();
+	$zone_name = $row['short_name'];
+	
+	// Delete spawn_events
+	$query = "DELETE FROM spawn_events WHERE zone = '{$zone_name}'";
+	$result = $eqdb->query($query);
+	if ($result)
+	{
+		$affected_rows = $eqdb->affected_rows;
+		RowText("{$affected_rows} spawn_events were deleted.");
+	}
+	else
+		RowText("Delete from spawn_events unsuccessful.");
+	
+	// Delete spawn_condition_values
+	$query = "DELETE FROM spawn_condition_values WHERE zone = '{$zone_name}'";
+	$result = $eqdb->query($query);
+	if ($result)
+	{
+		$affected_rows = $eqdb->affected_rows;
+		RowText("{$affected_rows} spawn_condition_values were deleted.");
+	}
+	else
+		RowText("Delete from spawn_condition_values unsuccessful.");
+	
+	// Delete spawn_conditions
+	$query = "DELETE FROM spawn_conditions WHERE zone = '{$zone_name}'";
+	$result = $eqdb->query($query);
+	if ($result)
+	{
+		$affected_rows = $eqdb->affected_rows;
+		RowText("{$affected_rows} spawn_conditions were deleted.");
+	}
+	else
+		RowText("Delete from spawn_conditions unsuccessful.");
+	
+	// Delete spawn2, spawngroup, and spawnentry
+	$query = "DELETE spawn2, spawngroup, spawnentry FROM spawn2 INNER JOIN spawngroup ON spawn2.spawngroupID = spawngroup.id INNER JOIN spawnentry ON spawnentry.spawngroupID = spawngroup.id WHERE zone = '{$zone_name}'";
+	$result = $eqdb->query($query);
+	if ($result)
+	{
+		$affected_rows = $eqdb->affected_rows;
+		RowText("{$affected_rows} bispawndelete rows were deleted.");
+	}
+	else
+		RowText("Delete from bispawndelete unsuccessful.");
 }
 
 function display_zoneselect_form($eqdb = NULL)
