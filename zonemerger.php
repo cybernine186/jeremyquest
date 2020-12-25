@@ -90,6 +90,17 @@ elseif ($_GET['a'] == "csd")
 	show_zone_tasks($eqdb, $zone_id);
 }
 
+// Copy Graveyard Data
+elseif ($_GET['a'] == "cgy")
+{
+	if (!IsNumber($_GET['zid']))
+		data_error();
+	$zone_id = $_GET['zid'];
+	
+	copy_graveyard_data($eqdb, $p2002db, $zone_id);
+	show_zone_tasks($eqdb, $zone_id);
+}
+
 else
 	display_zoneselect_form($eqdb);
 
@@ -137,6 +148,10 @@ function show_zone_tasks($eqdb, $zone_id)
 					<tr>
 						<td>Copy Spawn Data</td>
 						<td><a class="btn btn-primary" href="zonemerger.php?a=csd&zid=<?php print $zone_id; ?>" role="button">Go</a></td>
+					</tr>
+					<tr>
+						<td>Copy Graveyard Data</td>
+						<td><a class="btn btn-primary" href="zonemerger.php?a=cgy&zid=<?php print $zone_id; ?>" role="button">Go</a></td>
 					</tr>
 				</tbody>
 			</table>
@@ -193,6 +208,40 @@ function swap_zone_data($eqdb, $p2002db, $zone_id)
 		RowText("Zone Header Data for Zone {$zone_id} successfully inserted!");
 	else
 		RowText("Zone Header Data for Zone {$zone_id} NOT successfully inserted!");
+}
+
+function copy_graveyard_data($eqdb, $p2002db, $zone_id)
+{
+	$query = "DELETE FROM graveyard WHERE zone_id = {$zone_id}";
+	$result = $eqdb->query($query);
+	if (!result)
+		RowText("Existing Graveyard Delete query failed.");
+	else
+		RowText("{$eqdb->affected_rows} rows of graveyard deleted for zone {$zone_id}");
+	
+	$query = "SELECT x, y, z, heading FROM graveyard WHERE zone_id = {$zone_id}";
+	$result = $p2002db->query($query);
+	if ($result->num_rows != 1)
+		data_error();
+	
+	$r = $result->fetch_assoc();
+	
+	$query = "INSERT INTO graveyard (zone_id, x, y, z, heading) VALUES 
+				({$zone_id}, '{$r['x']}', '{$r['y']}', '{$r['z']}', '{$r['heading']}')";
+	$result_insert = $eqdb->query($query);
+	if (!$result_insert)
+		RowText("Graveyard data insert failed.");
+	else
+		RowText("Graveyard data insert successful.");
+	
+	$insert_id = $eqdb->insert_id;
+	
+	$query = "UPDATE zone SET graveyard_id = {$insert_id} WHERE zoneidnumber = {$zone_id}";
+	$result_update = $eqdb->query($query);
+	if (!$result_update)
+		RowText("Zone update for gravyard_id failed.");
+	else
+		RowText("Zone update for graveyard_id successful.");
 }
 
 function copy_wfh_npcs($eqdb, $p2002db, $zone_id)
