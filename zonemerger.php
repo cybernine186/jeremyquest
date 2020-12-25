@@ -326,12 +326,12 @@ function copy_spawn_data($eqdb, $p2002db, $zone_id)
 	$row = $result->fetch_assoc();
 	$zone_name = $row['short_name'];
 	
+	// spawn_events
 	$query = "SELECT id, zone, cond_id, name, period, next_minute, next_hour, next_day, next_month, next_year, enabled, action, argument, strict FROM spawn_events WHERE zone = '{$zone_name}'";
 	$result = $p2002db->query($query);
 	if ($result->num_rows < 1)
 	{
 		RowText("No spawn_events data for zone {$zone_name} ({$zone_id}).");
-		return;
 	}
 	
 	$spawn_event_count = 0;
@@ -340,12 +340,36 @@ function copy_spawn_data($eqdb, $p2002db, $zone_id)
 	{
 		$query = "INSERT INTO spawn_events (zone, cond_id, name, period, next_minute, next_hour, next_day, next_month, next_year, enabled, action, argument, strict VALUES 
 			('{$r['zone']}', {$r['cond_id']}, '{$r['name']}', {$r['period']}, {$r['next_minute']}, {$r['next_hour']}, {$r['next_day']}, {$r['next_month']}, {$r['next_year']}, {$r['enabled']}, {$r['action']}, {$r['argument']}, {$r['strict']})";
-		RowText($query);
 		$result_insert = $eqdb->query($query);
 		if ($result_insert)
 			$spawn_event_count++;
 		else
-			RowText("spawn_event insert failed.");
+			RowText("spawn_events insert failed.");
+	}
+	
+	RowText("{$spawn_event_count} spawn_events copied over.");
+	
+	// spawn_conditions
+	$query = "SELECT zone, id, value, onchange, name FROM spawn_conditions WHERE zone = '{$zone_name}'";
+	$result = $p2002db->query($query);
+	if ($result->num_rows < 1)
+	{
+		RowText("No spawn_conditions data for zone {$zone_name} ({$zone_id}).");
+		return;
+	}
+	
+	$spawn_condition_count = 0;
+	
+	while ($r = $result->fetch_assoc())
+	{
+		$query = "INSERT INTO spawn_conditions (zone, id, value, onchange, name VALUES 
+			('{$r['zone']}', {$r['id']}, {$r['value']}, {$r['onchange']}, '{$r['name']}')";
+		RowText($query);
+		$result_insert = $eqdb->query($query);
+		if ($result_insert)
+			$spawn_condition_count++;
+		else
+			RowText("spawn_conditions insert failed.");
 	}
 }
 
