@@ -440,7 +440,7 @@ function copy_spawn_data($eqdb, $p2002db, $zone_id)
 			if ($result_insert)
 				$spawnentry_count++;
 			else
-				RowText("spawnentry insert failed of spawngroupID {{$sgid[$r['spawngroupID']]} and npcID {$rse['npcID']}";
+				RowText("spawnentry insert failed of spawngroupID {{$sgid[$r['spawngroupID']]} and npcID {$rse['npcID']}");
 		}
 		
 		// copy spawn2
