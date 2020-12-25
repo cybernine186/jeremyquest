@@ -341,7 +341,7 @@ function copy_spawn_data($eqdb, $p2002db, $zone_id)
 		$query = "INSERT INTO spawn_events (zone, cond_id, name, period, next_minute, next_hour, next_day, next_month, next_year, enabled, action, argument, strict VALUES 
 			('{$r['zone']}', {$r['cond_id']}, '{$r['name']}', {$r['period']}, {$r['next_minute']}, {$r['next_hour']}, {$r['next_day']}, {$r['next_month']}, {$r['next_year']}, {$r['enabled']}, {$r['action']}, {$r['argument']}, {$r['strict']})";
 		RowText($query);
-		$result_insert = $eqdb->query($query)
+		$result_insert = $eqdb->query($query);
 		if ($result_insert)
 			$spawn_event_count++;
 		else
