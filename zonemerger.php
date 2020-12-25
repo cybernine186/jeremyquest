@@ -214,7 +214,7 @@ function copy_graveyard_data($eqdb, $p2002db, $zone_id)
 {
 	$query = "DELETE FROM graveyard WHERE zone_id = {$zone_id}";
 	$result = $eqdb->query($query);
-	if (!result)
+	if (!$result)
 		RowText("Existing Graveyard Delete query failed.");
 	else
 		RowText("{$eqdb->affected_rows} rows of graveyard deleted for zone {$zone_id}");
