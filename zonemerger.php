@@ -330,9 +330,7 @@ function copy_spawn_data($eqdb, $p2002db, $zone_id)
 	$query = "SELECT id, zone, cond_id, name, period, next_minute, next_hour, next_day, next_month, next_year, enabled, action, argument, strict FROM spawn_events WHERE zone = '{$zone_name}'";
 	$result = $p2002db->query($query);
 	if ($result->num_rows < 1)
-	{
 		RowText("No spawn_events data for zone {$zone_name} ({$zone_id}).");
-	}
 	
 	$spawn_event_count = 0;
 	while ($r = $result->fetch_assoc())
@@ -351,10 +349,7 @@ function copy_spawn_data($eqdb, $p2002db, $zone_id)
 	$query = "SELECT zone, id, value, onchange, name FROM spawn_conditions WHERE zone = '{$zone_name}'";
 	$result = $p2002db->query($query);
 	if ($result->num_rows < 1)
-	{
 		RowText("No spawn_conditions data for zone {$zone_name} ({$zone_id}).");
-		return;
-	}
 	
 	$spawn_condition_count = 0;
 	while ($r = $result->fetch_assoc())
@@ -374,10 +369,7 @@ function copy_spawn_data($eqdb, $p2002db, $zone_id)
 	$query = "SELECT id, value, zone, instance_id FROM spawn_condition_values WHERE zone = '{$zone_name}'";
 	$result = $p2002db->query($query);
 	if ($result->num_rows < 1)
-	{
 		RowText("No spawn_condition_values data for zone {$zone_name} ({$zone_id}).");
-		return;
-	}
 
 	$spawn_condition_value_count = 0;
 	while ($r = $result->fetch_assoc())
@@ -392,6 +384,84 @@ function copy_spawn_data($eqdb, $p2002db, $zone_id)
 			RowText("spawn_condition_values insert failed.");
 	}
 	RowText("{$spawn_condition_value_count} spawn_condition_values copied over.");
+	
+	// spawn2 links to spawngroup, to which spawnentry links
+	$query = "SELECT id, spawngroupID, zone, version, x, y, z, heading, rspawntime, variance, pathgrid, _condition, cond_value, enabled, animation, boot_respawntime, clear_timer_onboot FROM spawn2 WHERE zone = '{$zone_name}'";
+	RowText($query);
+	$result = $p2002db->query($query);
+	if ($result->num_rows < 1)
+	{
+		RowText("No spawn2 data for zone {$zone_name} ({$zone_id}).");
+		return;
+	}
+	
+	$spawn2_count = 0;
+	$spawngroup_count = 0;
+	$spawnentry_count = 0;
+	$sgid = array();
+	$s2id = array();
+	
+	while ($r = $result->fetch_assoc())
+	{
+		// spawngroup
+		$query = "SELECT id, name, spawn_limit, dist, max_x, min_x, max_y, min_y, delay, mindelay, despawn, despawn_timer FROM spawngroup WHERE id = {$r['spawngroupID']}";
+		RowText($query);
+		$result_spawngroup = $p2002db->query($query);
+		if ($result_spawngroup->num_rows != 1)
+			RowText("Hanging spawn2->spawngroup reference of ID {$r['spawngroupID']}");
+		else
+		{
+			$rsg = $result_spawngroup->fetch_assoc();
+			$query = "INSERT INTO spawngroup (name, spawn_limit, dist, max_x, min_x, max_y, min_y, delay, mindelay, despawn, despawn_timer) VALUES 
+				('{$rsg['name']}', {$rsg['spawn_limit']}, {$rsg['dist']}, {$rsg['max_x']}, {$rsg['min_x']}, {$rsg['max_y']}, {$rsg['min_y']}, {$rsg['delay']}, {$rsg['mindelay']}, {$rsg['despawn']}, {$rsg['despawn_timer']})";
+			RowText($query);
+			$result_insert = $eqdb->query($query);
+			if ($result_insert)
+			{
+				$spawngroup_count++;
+				$sgid[$rsg['id']] = $eqdb->insert_id;
+			}
+			else
+				RowText("spawngroup insert failed for spawngroup of ID {$rsg['id']}");
+		}
+		
+		// spawnentry - multiple
+		$query = "SELECT spawngroupID, npcID, chance, mintime, maxtime FROM spawnentry WHERE spawngroupID = {$r['spawngroupID']}";
+		RowText($query);
+		$result_spawnentry = $p2002db->query($query);
+		if ($rse->num_rows < 1)
+			RowText("No spawnentry data for spawngroup ID {$r['spawngroupID']} and spawn2 ID {$r['id']}");
+		while ($rse = $result_spawnentry->fetch_assoc())
+		{
+			$query = "INSERT INTO spawnentry (spawngroupID, npcID, chance) VALUES 
+				({$sgid[$r['spawngroupID']]}, {$rse['npcID']}, {$rse['chance']})";
+			RowText($query);
+			$result_insert = $eqdb->query($query);
+			if ($result_insert)
+				$spawnentry_count++;
+			else
+				RowText("spawnentry insert failed of spawngroupID {{$sgid[$r['spawngroupID']]} and npcID {$rse['npcID']}";
+		}
+		
+		// copy spawn2
+		$query = "INSERT INTO spawn2 (spawngroupID, zone, version, x, y, z, heading, respawntime, variance, pathgrid, _condition, cond_value, enabled, animation) VALUES 
+			({$sgid[$r['spawngroupID']]}, '{$r['zone']}', {$r['zone']}, {$r['version']}, '{$r['x']}', '{$r['y']}', '{$r['z']}', '{$r['heading']}', {$r['respawntime']}, {$r['variance']}, {$r['pathgrid']}, {$r['_condition']}, {$r['cond_value']}, {$r['enabled']}, {$r['animation']})";
+		RowText($query);
+		$result_insert = $eqdb->query($query);
+		if ($result_insert)
+		{
+			$spawn2_count++;
+			$s2id[$r['id']] = $eqdb->insert_id;
+		}
+		else
+			RowText("spawn2 insert failed for spawn2 ID {$r['id']}");
+	}
+	RowText("{$spawn2_count} spawn2 rows inserted");
+	RowText("{$spawngroup_count} spawngroup rows inserted");
+	RowText("{$spawnentry_count} spawnentry rows inserted<br />");
+	var_dump($sgid);
+	print "<br />";
+	var_dump($s2id);
 }
 
 function display_zoneselect_form($eqdb = NULL)
