@@ -386,7 +386,7 @@ function copy_spawn_data($eqdb, $p2002db, $zone_id)
 	RowText("{$spawn_condition_value_count} spawn_condition_values copied over.");
 	
 	// spawn2 links to spawngroup, to which spawnentry links
-	$query = "SELECT id, spawngroupID, zone, version, x, y, z, heading, rspawntime, variance, pathgrid, _condition, cond_value, enabled, animation, boot_respawntime, clear_timer_onboot FROM spawn2 WHERE zone = '{$zone_name}'";
+	$query = "SELECT id, spawngroupID, zone, version, x, y, z, heading, respawntime, variance, pathgrid, _condition, cond_value, enabled, animation, boot_respawntime, clear_timer_onboot FROM spawn2 WHERE zone = '{$zone_name}'";
 	RowText($query);
 	$result = $p2002db->query($query);
 	if ($result->num_rows < 1)
