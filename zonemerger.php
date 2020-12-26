@@ -706,7 +706,7 @@ function copy_loot_data($eqdb, $p2002db, $zone_id)
 			
 		}
 		
-		$query = "UPDATE npc_types SET loottable_id = {$ltid[$r['id']]} WHERE id = {$r['id']}";
+		$query = "UPDATE npc_types SET loottable_id = {$ltid[$r['loottable_id']]} WHERE id = {$r['id']}";
 		$result_update = $eqdb->query($query);
 		if (!$result_update)
 			RowText("UPDATE npc_types query failed");
