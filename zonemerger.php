@@ -481,8 +481,11 @@ function copy_spawn_data($eqdb, $p2002db, $zone_id)
 		else
 		{
 			$rsg = $result_spawngroup->fetch_assoc();
+			$do_dist = true;
+			if ($rsg['max_x'] == $rsg['min_x'] || $rsg['min_y'] == $rsg['max_y'])
+				$do_dist = false;
 			$query = "INSERT INTO spawngroup (name, spawn_limit, dist, max_x, min_x, max_y, min_y, delay, mindelay, despawn, despawn_timer) VALUES 
-				('{$rsg['name']}', {$rsg['spawn_limit']}, {$rsg['dist']}, {$rsg['max_x']}, {$rsg['min_x']}, {$rsg['max_y']}, {$rsg['min_y']}, {$rsg['delay']}, {$rsg['mindelay']}, {$rsg['despawn']}, {$rsg['despawn_timer']})";
+				('{$rsg['name']}', {$rsg['spawn_limit']}, " . ($do_dist ? $rsg['dist'] : 0) . ", {$rsg['max_x']}, {$rsg['min_x']}, {$rsg['max_y']}, {$rsg['min_y']}, {$rsg['delay']}, {$rsg['mindelay']}, {$rsg['despawn']}, {$rsg['despawn_timer']})";
 			RowText($query);
 			$result_insert = $eqdb->query($query);
 			if ($result_insert)
