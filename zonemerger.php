@@ -633,6 +633,9 @@ function copy_loot_data($eqdb, $p2002db, $zone_id)
 	
 	while ($r = $result->fetch_assoc())
 	{
+		if ($r['loottable_id'] == 0)
+			continue;
+		
 		// Copy loottable rows
 		$query = "SELECT id, name, mincash, maxcash, avgcoin, done FROM loottable WHERE id = {$r['loottable_id']}";
 		$result_loottable = $p2002db->query($query);
@@ -643,8 +646,12 @@ function copy_loot_data($eqdb, $p2002db, $zone_id)
 		}
 		if ($result_loottable->num_rows != 1)
 		{
-			RowText("Expected 1 loottable row got {$result_loottable->num_rows} rows");
+			RowText("Referenced loottable does not exist - skipping and setting to 0 - NPC ID {$r['id']}");
 			array_push($hanging_loottables, $r['id']);
+			$query = "UPDATE npc_types SET loottable_id = 0 WHERE id = {$r['id']}";
+			$result_update = $eqdb->query($query);
+			if (!$result_update)
+				RowText("UPDATE npc_types for loottable_id = 0 query FAILED");
 			continue;
 		}
 		
@@ -672,14 +679,14 @@ function copy_loot_data($eqdb, $p2002db, $zone_id)
 		{
 			// copy the lootdrops - new IDs
 			$query = "SELECT id, name FROM lootdrop WHERE id = {$rlte['lootdrop_id']}";
-			RowText($query);
 			$result_lootdrop = $p2002db->query($query);
 			if (!$result_lootdrop)
 				RowText("SELECT FROM lootdrop query failed");
 			if ($result_lootdrop->num_rows != 1)
 			{
 				array_push($hanging_lootdrops, $r['loottable_id']);
-				RowText("Expected 1 lootdrop row got {$result_lootdrop->num_rows} rows");
+				RowText("Referened lootdrop does not exist - skipping - lootdrop_id of {$rlte['lootdrop_id']}");
+				continue;
 			}
 					
 			$rld = $result_lootdrop->fetch_assoc();
