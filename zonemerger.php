@@ -623,6 +623,9 @@ function copy_loot_data($eqdb, $p2002db, $zone_id)
 	$ltid = array();
 	$ldid = array();
 	
+	$hanging_loottables = array();
+	$hanging_lootdrops = array();
+	
 	$loottables = 0;
 	$loottable_entries = 0;
 	$lootdrops = 0;
@@ -632,7 +635,6 @@ function copy_loot_data($eqdb, $p2002db, $zone_id)
 	{
 		// Copy loottable rows
 		$query = "SELECT id, name, mincash, maxcash, avgcoin, done FROM loottable WHERE id = {$r['loottable_id']}";
-		RowText($query);
 		$result_loottable = $p2002db->query($query);
 		if (!$result_loottable)
 		{
@@ -642,6 +644,7 @@ function copy_loot_data($eqdb, $p2002db, $zone_id)
 		if ($result_loottable->num_rows != 1)
 		{
 			RowText("Expected 1 loottable row got {$result_loottable->num_rows} rows");
+			array_push($hanging_loottables, $r['id']);
 			continue;
 		}
 		
@@ -674,7 +677,10 @@ function copy_loot_data($eqdb, $p2002db, $zone_id)
 			if (!$result_lootdrop)
 				RowText("SELECT FROM lootdrop query failed");
 			if ($result_lootdrop->num_rows != 1)
+			{
+				array_push($hanging_lootdrops, $r['loottable_id']);
 				RowText("Expected 1 lootdrop row got {$result_lootdrop->num_rows} rows");
+			}
 					
 			$rld = $result_lootdrop->fetch_assoc();
 			$query = "INSERT INTO lootdrop (name) VALUES ('{$rld['name']}')";
@@ -724,7 +730,18 @@ function copy_loot_data($eqdb, $p2002db, $zone_id)
 	RowText("{$lootdrops} lootdrops inserted");
 	RowText("{$lootdrop_entries} lootdrop_entries inserted<br />");
 	
+	var_dump($hanging_loottables);
+	
+	print "<br /><br />";
+	
+	var_dump($hanging_lootdrops);
+	
+	print "<br /><br />";
+	
 	var_dump($ltid);
+	
+	print "<br /><br />";
+	
 	var_dump($ldid);
 }
 
