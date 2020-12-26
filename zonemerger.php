@@ -632,6 +632,7 @@ function copy_loot_data($eqdb, $p2002db, $zone_id)
 	{
 		// Copy loottable rows
 		$query = "SELECT id, name, mincash, maxcash, avgcoin, done FROM loottable WHERE id = {$r['loottable_id']}";
+		RowText($query);
 		$result_loottable = $p2002db->query($query);
 		if (!$result_loottable)
 		{
