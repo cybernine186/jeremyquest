@@ -639,7 +639,11 @@ function copy_loot_data($eqdb, $p2002db, $zone_id)
 			return;
 		}
 		if ($result_loottable->num_rows != 1)
-			data_error();
+		{
+			RowText("Expected 1 loottable row got {$result_loottable->num_rows} rows");
+			continue;
+		}
+		
 		$rlt = $result_loottable->fetch_assoc();
 		$query = "INSERT INTO loottable (name, mincash, maxcash, avgcoin, done) VALUES 
 			('{$rlt['name']}', {$rlt['mincash']}, {$rlt['maxcash']}, {$rlt['avgcoin']}, {$rlt['done']})";
@@ -668,8 +672,8 @@ function copy_loot_data($eqdb, $p2002db, $zone_id)
 			$result_lootdrop = $p2002db->query($query);
 			if (!$result_lootdrop)
 				RowText("SELECT FROM lootdrop query failed");
-			if ($result_loottable->num_rows != 1)
-				RowText("Expected 1 loottable row got {$result_loottable->num_rows} rows");
+			if ($result_lootdrop->num_rows != 1)
+				RowText("Expected 1 lootdrop row got {$result_lootdrop->num_rows} rows");
 					
 			$rld = $result_lootdrop->fetch_assoc();
 			$query = "INSERT INTO lootdrop (name) VALUES ('{$rld['name']}')";
