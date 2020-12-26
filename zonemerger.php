@@ -642,7 +642,7 @@ function copy_loot_data($eqdb, $p2002db, $zone_id)
 			data_error();
 		$rlt = $result_loottable->fetch_assoc();
 		$query = "INSERT INTO loottable (name, mincash, maxcash, avgcoin, done) VALUES 
-			'{$rlt['name']}', {$rlt['mincash']}, {$rlt['maxcash']}, {$rlt['avgcoin']}, {$rlt['done']})";
+			('{$rlt['name']}', {$rlt['mincash']}, {$rlt['maxcash']}, {$rlt['avgcoin']}, {$rlt['done']})";
 		$result_insert = $eqdb->query($query);
 		if (!$result_insert)
 			RowText("INSERT loottable query failed - ID {$rlt['id']}");
