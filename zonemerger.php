@@ -535,6 +535,7 @@ function copy_spawn_data($eqdb, $p2002db, $zone_id)
 
 function copy_grid_data($eqdb, $p2002db, $zone_id)
 {
+	// Delete from grid
 	$query = "DELETE FROM grid WHERE zoneid = {$zone_id}";
 	$result_delete = $eqdb->query($query);
 	if (!$result_delete)
@@ -542,6 +543,7 @@ function copy_grid_data($eqdb, $p2002db, $zone_id)
 	else
 		RowText("{$eqdb->affected_rows} grids deleted");
 
+	// Delete from grid_entries
 	$query = "DELETE FROM grid_entries WHERE zoneid = {$zone_id}";
 	$result_delete = $eqdb->query($query);
 	if (!$result_delete)
@@ -549,6 +551,41 @@ function copy_grid_data($eqdb, $p2002db, $zone_id)
 	else
 		RowText("{$eqdb->affected_rows} grid_entries deleted");
 	
+	// copy grids over
+	$query = "SELECT id, type, type2 FROM grid WHERE zoneid = {$zone_id}";
+	$result = $p2002db->query($query);
+	if ($result->num_rows < 1)
+		RowText("No grids for zone {$zone_id}");
+	$grid_count = 0;
+	while ($r = $result->fetch_assoc())
+	{
+		$query = "INSERT INTO grid (id, zoneid, type, type2) VALUES 
+			({$r['id']}, {$zone_id}, {$r['type']}, {$r['type2']})";
+		$result_insert = $eqdb->query($query);
+		if (!$result_insert)
+			RowText("INSERT for grid failed of id {$r['id']}");
+		else
+			$grid_count++;
+	}
+	RowText("{$grid_count} grids were inserted for zone {$zone_id}");
+	
+	// copy grid_entries over
+	$query = "SELECT gridid, number, x, y, z, heading, pause FROM grid_entries WHERE zoneid = {$zone_id}";
+	$result = $p2002db->query($query);
+	if ($result->num_rows < 1)
+		RowText("No grid_entries for zone {$zone_id}");
+	$grid_entry_count = 0;
+	while ($r = $result->fetch_assoc())
+	{
+		$query = "INSERT INTO grid_entries (gridid, zoneid, number, x, y, z, heading, pause) VALUES 
+			({$r['gridid']}, {$zone_id}, {$r['number']}, '{$r['x']}', '{$r['y']}', '{$r['z']}', '{$r['heading']}', {$r['pause']})";
+		$result_insert = $eqdb->query($query);
+		if (!$result_insert)
+			RowText("INSERT for grid_entries failed of id {$r['gridid']} and zone {$zone_id}");
+		else
+			$grid_entry_count++;
+	}
+	RowText("{$grid_entry_count} grid_entries were inserted for zone {$zone_id}");
 }
 
 function display_zoneselect_form($eqdb = NULL)
