@@ -669,7 +669,8 @@ function copy_loot_data($eqdb, $p2002db, $zone_id)
 			if (!$result_lootdrop)
 				RowText("SELECT FROM lootdrop query failed");
 			if ($result_loottable->num_rows != 1)
-				data_error();
+				RowText("Expected 1 loottable row got {$result_loottable->num_rows} rows");
+					
 			$rld = $result_lootdrop->fetch_assoc();
 			$query = "INSERT INTO lootdrop (name) VALUES ('{$rld['name']}')";
 			$result_insert = $eqdb->query($query);
