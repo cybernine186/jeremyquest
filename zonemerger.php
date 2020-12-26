@@ -550,7 +550,7 @@ function copy_grid_data($eqdb, $p2002db, $zone_id)
 		RowText("DELETE query for grid_entries failed.");
 	else
 		RowText("{$eqdb->affected_rows} grid_entries deleted");
-	
+/*	
 	// copy grids over
 	$query = "SELECT id, type, type2 FROM grid WHERE zoneid = {$zone_id}";
 	$result = $p2002db->query($query);
@@ -586,6 +586,7 @@ function copy_grid_data($eqdb, $p2002db, $zone_id)
 			$grid_entry_count++;
 	}
 	RowText("{$grid_entry_count} grid_entries were inserted for zone {$zone_id}");
+*/
 }
 
 function display_zoneselect_form($eqdb = NULL)
