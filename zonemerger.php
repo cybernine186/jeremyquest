@@ -664,6 +664,7 @@ function copy_loot_data($eqdb, $p2002db, $zone_id)
 		{
 			// copy the lootdrops - new IDs
 			$query = "SELECT id, name FROM lootdrop WHERE id = {$rlte['lootdrop_id']}";
+			RowText($query);
 			$result_lootdrop = $p2002db->query($query);
 			if (!$result_lootdrop)
 				RowText("SELECT FROM lootdrop query failed");
