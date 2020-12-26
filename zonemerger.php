@@ -38,9 +38,9 @@ elseif ($_GET['a'] == "sz")
 // Transfer full zone content
 elseif ($_GET['a'] == "tfzc")
 {
-	if (!IsNumber($_POST['inputZone']))
+	if (!IsNumber($_GET['zid']))
 		data_error();
-	$zone_id = $_POST['inputZone'];
+	$zone_id = $_GET['zid'];
 	
 	show_zone_tasks($eqdb, $zone_id);
 	
