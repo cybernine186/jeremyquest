@@ -112,6 +112,17 @@ elseif ($_GET['a'] == "cg")
 	show_zone_tasks($eqdb, $zone_id);
 }
 
+// Copy Loot Data
+elseif ($_GET['a'] == "cld")
+{
+	if (!IsNumber($_GET['zid']))
+		data_error();
+	$zone_id = $_GET['zid'];
+	
+	copy_loot_data($eqdb, $p2002db, $zone_id);
+	show_zone_tasks($eqdb, $zone_id);
+}
+
 else
 	display_zoneselect_form($eqdb);
 
@@ -167,6 +178,10 @@ function show_zone_tasks($eqdb, $zone_id)
 					<tr>
 						<td>Copy Grid Data</td>
 						<td><a class="btn btn-primary" href="zonemerger.php?a=cg&zid=<?php print $zone_id; ?>" role="button">Go</a></td>
+					</tr>
+					<tr>
+						<td>Copy Loot Data</td>
+						<td><a class="btn btn-primary" href="zonemerger.php?a=cld&zid=<?php print $zone_id; ?>" role="button">Go</a></td>
 					</tr>
 				</tbody>
 			</table>
@@ -590,6 +605,120 @@ function copy_grid_data($eqdb, $p2002db, $zone_id)
 	}
 	RowText("{$grid_entry_count} grid_entries were inserted for zone {$zone_id}");
 
+}
+
+function copy_loot_data($eqdb, $p2002db, $zone_id)
+{
+	$npc_id_min = $zone_id * 1000;
+	$npc_id_max = ($zone_id + 1) * 1000;
+	$query = "SELECT id, loottable_id FROM npc_types WHERE id >= {$npc_id_min} AND id < {$npc_id_max}";
+	$result = $p2002db->query($query);
+	if (!$result)
+	{
+		RowText("SELECT FROM npc_types query failed.");
+		return;
+	}
+	
+	// for tracking ID changes - loottable and lootdrop
+	$ltid = array();
+	$ldid = array();
+	
+	$loottables = 0;
+	$loottable_entries = 0;
+	$lootdrops = 0;
+	$lootdrop_entries = 0;
+	
+	while ($r = $result->fetch_assoc())
+	{
+		// Copy loottable rows
+		$query = "SELECT id, name, mincash, maxcash, avgcoin, done FROM loottable WHERE id = {$r['loottable_id']}";
+		$result_loottable = $p2002db->query($query);
+		if (!$result_loottable)
+		{
+			RowText("SELECT FROM loottable query failed.");
+			return;
+		}
+		if ($result_loottable->num_rows != 1)
+			data_error();
+		$rlt = $result_loottable->fetch_assoc();
+		$query = "INSERT INTO loottable (name, mincash, maxcash, avgcoin, done) VALUES 
+			'{$rlt['name']}', {$rlt['mincash']}, {$rlt['maxcash']}, {$rlt['avgcoin']}, {$rlt['done']})";
+		$result_insert = $eqdb->query($query);
+		if (!$result_insert)
+			RowText("INSERT loottable query failed - ID {$rlt['id']}");
+		else
+			$loottables++;
+		$lt_insert_id = $eqdb->insert_id;
+		$ltid[$rlt['id']] = $lt_insert_id;
+		
+		// Parse loottable_entries rows
+		$query = "SELECT loottable_id, lootdrop_id, multiplier, probability, droplimit, mindrop, multiplier_min FROM loottable_entries WHERE loottable_id = {$r['loottable_id']}";
+		$result_loottable_entries = $p2002db->query($query);
+		if (!$result_loottable_entries)
+		{
+			RowText("SELECT FROM loottable_entries query failed.");
+			return;
+		}
+		
+		while ($rlte = $result_loottable_entries->fetch_assoc())
+		{
+			// copy the lootdrops - new IDs
+			$query = "SELECT id, name FROM lootdrop WHERE id = {$rlte['lootdrop_id']}";
+			$result_lootdrop = $p2002db->query($query);
+			if (!$result_lootdrop)
+				RowText("SELECT FROM lootdrop query failed");
+			if ($result_loottable->num_rows != 1)
+				data_error();
+			$rld = $result_lootdrop->fetch_assoc();
+			$query = "INSERT INTO lootdrop (name) VALUES ('{$rld['name']}')";
+			$result_insert = $eqdb->query($query);
+			if (!$result_insert)
+				RowText("INSERT INTO lootdrop query failed");
+			else
+				$lootdrops++;
+			$ld_insert_id = $eqdb->insert_id;
+			$ldid[$rlte['lootdrop_id']] = $ld_insert_id;
+			
+			// Copy loottable_entries over after new IDs for lootdrops established
+			$query = "INSERT INTO loottable_entries (loottable_id, lootdrop_id, multiplier, droplimit, mindrop, probability, multiplier_min) VALUES 
+				({$lt_insert_id}, {$ld_insert_id}, {$rlte['multiplier']}, {$rlte['droplimit']}, {$rlte['mindrop']}, {$rlte['probability']}, {$rlte['multiplier_min']})";
+			$result_insert = $eqdb->query($query);
+			if (!$result_insert)
+				RowText("INSERT INTO loottable_entries query failed");
+			else
+				$loottable_entries++;
+			
+			// copy lootdrop_entries
+			$query = "SELECT lootdrop_id, item_id, item_charges, equip_item, chance, disabled_chance, minlevel, maxlevel, multiplier FROM lootdrop_entries WHERE lootdrop_id = {$rlte['lootdrop_id']}";
+			$result_lootdrop_entries = $p2002db->query($query);
+			if (!$result_lootdrop_entries)
+				RowText("SELECT FROM lootdrop_entries query failed");
+			while ($rlde = $result_lootdrop_entries->fetch_assoc())
+			{
+				$query = "INSERT INTO lootdrop_entries (lootdrop_id, item_id, item_charges, equip_item, chance, disabled_chance, minlevel, maxlevel, multiplier) VALUES 
+					({$ld_insert_id}, {$rlde['item_id']}, {$rlde['item_charges']}, {$rlde['equip_item']}, {$rlde['chance']}, {$rlde['disabled_chance']}, {$rlde['minlevel']}, {$rlde['maxlevel']}, {$rlde['multiplier']})";
+				$result_insert = $eqdb->query($query);
+				if (!$result_insert)
+					RowText("INSERT INTO lootdrop_entries query failed");
+				else
+					$lootdrop_entries++;
+			}
+			
+		}
+		
+		$query = "UPDATE npc_types SET loottable_id = {$ltid[$r['id']]} WHERE id = {$r['id']}";
+		$result_update = $eqdb->query($query);
+		if (!$result_update)
+			RowText("UPDATE npc_types query failed");
+	}
+	
+	RowText("{$loottables} loottables  inserted");
+	RowText("{$loottable_entries} loottable_entries inserted");
+	RowText("{$lootdrops} lootdrops inserted");
+	RowText("{$lootdrop_entries} lootdrop_entries inserted<br />");
+	
+	var_dump($ltid);
+	var_dump($ldid);
 }
 
 function display_zoneselect_form($eqdb = NULL)
