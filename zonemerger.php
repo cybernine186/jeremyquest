@@ -35,26 +35,34 @@ elseif ($_GET['a'] == "sz")
 	show_zone_tasks($eqdb, $zone_id);
 }
 
+// Transfer full zone content
+elseif ($_GET['a'] == "tfzc")
+{
+	if (!IsNumber($_POST['inputZone']))
+		data_error();
+	$zone_id = $_POST['inputZone'];
+	
+	show_zone_tasks($eqdb, $zone_id);
+	
+	swap_zone_data($eqdb, $p2002db, $zone_id);
+	delete_existing_npcs($eqdb, $zone_id);
+	copy_wfh_npcs($eqdb, $p2002db, $zone_id);
+	delete_existing_spawn_data($eqdb, $zone_id);
+	copy_spawn_data($eqdb, $p2002db, $zone_id);
+	copy_graveyard_data($eqdb, $p2002db, $zone_id);
+	copy_grid_data($eqdb, $p2002db, $zone_id);
+	copy_loot_data($eqdb, $p2002db, $zone_id);
+}
+
 // Swap Zone Data
 elseif ($_GET['a'] == "szd")
 {
 	if (!IsNumber($_GET['zid']))
 		data_error();
 	$zone_id = $_GET['zid'];
-	
-	swap_zone_data($eqdb, $p2002db, $zone_id);
-	show_zone_tasks($eqdb, $zone_id);
-}
 
-// Copy Over NPCs
-elseif ($_GET['a'] == "con")
-{
-	if (!IsNumber($_GET['zid']))
-		data_error();
-	$zone_id = $_GET['zid'];
-	
-	copy_wfh_npcs($eqdb, $p2002db, $zone_id);
-	show_zone_tasks($eqdb, $zone_id);
+	show_zone_tasks($eqdb, $zone_id);	
+	swap_zone_data($eqdb, $p2002db, $zone_id);
 }
 
 // Delete Existing NPCs
@@ -64,8 +72,19 @@ elseif ($_GET['a'] == "den")
 		data_error();
 	$zone_id = $_GET['zid'];
 	
-	delete_existing_npcs($eqdb, $zone_id);
 	show_zone_tasks($eqdb, $zone_id);
+	delete_existing_npcs($eqdb, $zone_id);
+}
+
+// Copy Over NPCs
+elseif ($_GET['a'] == "con")
+{
+	if (!IsNumber($_GET['zid']))
+		data_error();
+	$zone_id = $_GET['zid'];
+	
+	show_zone_tasks($eqdb, $zone_id);
+	copy_wfh_npcs($eqdb, $p2002db, $zone_id);
 }
 
 // Delete Existing Spawn Data
@@ -75,8 +94,8 @@ elseif ($_GET['a'] == "desd")
 		data_error();
 	$zone_id = $_GET['zid'];
 	
-	delete_existing_spawn_data($eqdb, $zone_id);
 	show_zone_tasks($eqdb, $zone_id);
+	delete_existing_spawn_data($eqdb, $zone_id);
 }
 
 // Copy Spawn Data
@@ -86,8 +105,8 @@ elseif ($_GET['a'] == "csd")
 		data_error();
 	$zone_id = $_GET['zid'];
 	
-	copy_spawn_data($eqdb, $p2002db, $zone_id);
 	show_zone_tasks($eqdb, $zone_id);
+	copy_spawn_data($eqdb, $p2002db, $zone_id);
 }
 
 // Copy Graveyard Data
@@ -97,8 +116,8 @@ elseif ($_GET['a'] == "cgy")
 		data_error();
 	$zone_id = $_GET['zid'];
 	
-	copy_graveyard_data($eqdb, $p2002db, $zone_id);
 	show_zone_tasks($eqdb, $zone_id);
+	copy_graveyard_data($eqdb, $p2002db, $zone_id);
 }
 
 // Copy Grid Data
@@ -108,8 +127,8 @@ elseif ($_GET['a'] == "cg")
 		data_error();
 	$zone_id = $_GET['zid'];
 	
-	copy_grid_data($eqdb, $p2002db, $zone_id);
 	show_zone_tasks($eqdb, $zone_id);
+	copy_grid_data($eqdb, $p2002db, $zone_id);
 }
 
 // Copy Loot Data
@@ -119,8 +138,8 @@ elseif ($_GET['a'] == "cld")
 		data_error();
 	$zone_id = $_GET['zid'];
 	
-	copy_loot_data($eqdb, $p2002db, $zone_id);
 	show_zone_tasks($eqdb, $zone_id);
+	copy_loot_data($eqdb, $p2002db, $zone_id);
 }
 
 else
@@ -151,6 +170,10 @@ function show_zone_tasks($eqdb, $zone_id)
 					</tr>
 				</thead>
 				<tbody>
+					<tr>
+						<td>Transfer Full Zone Content</td>
+						<td><a class="btn btn-primary" href="zonemerger.php?a=tfzc&zid=<?php print $zone_id; ?>" role="button">GO</a></td>
+					</tr>
 					<tr>
 						<td>Swap Over Zone Data</td>
 						<td><a class="btn btn-primary" href="zonemerger.php?a=szd&zid=<?php print $zone_id; ?>" role="button">Go</a></td>
