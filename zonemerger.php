@@ -767,7 +767,7 @@ function copy_loot_data($eqdb, $p2002db, $zone_id)
 				if (!isset($itt[$rlde['item_id']]))
 				{
 					$query = "SELECT id_peq, id_wfh FROM items_map WHERE id_peq = {$rlde['item_id']}";
-					$result_item_map = $p2002db->query($query)
+					$result_item_map = $p2002db->query($query);
 					if ($result_item_map->num_rows != 1)
 						RowText("Item map results != 1 for item {$rlde['item_id']}");
 					else
