@@ -648,6 +648,7 @@ function copy_loot_data($eqdb, $p2002db, $zone_id)
 	$npc_id_min = $zone_id * 1000;
 	$npc_id_max = ($zone_id + 1) * 1000;
 	$query = "SELECT id, loottable_id FROM npc_types WHERE id >= {$npc_id_min} AND id < {$npc_id_max}";
+	RowText($query);
 	$result = $p2002db->query($query);
 	if (!$result)
 	{
