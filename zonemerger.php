@@ -801,7 +801,7 @@ function copy_loot_data($eqdb, $p2002db, $zone_id)
 						$query = "INSERT INTO items VALUES (";
 						foreach ($ri as $key => $value)
 						{
-							if ($key == 'name' || $key == 'charmfile' || $key == 'charmfileid')
+							if ($key == 'Name' || $key == 'charmfile' || $key == 'charmfileid')
 								$query = $query . "'{$value}', ";
 							else
 								$query = $query . $value . ", ";
