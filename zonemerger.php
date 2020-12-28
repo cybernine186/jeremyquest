@@ -801,7 +801,12 @@ function copy_loot_data($eqdb, $p2002db, $zone_id)
 						$query = "INSERT INTO items VALUES (";
 						foreach ($ri as $key => $value)
 						{
-							if ($key == 'Name' || $key == 'charmfile' || $key == 'charmfileid')
+							if ($value === NULL)
+								$query = $query . "NULL, ";
+							elseif ($key == "Name" || $key == "charmfile" || $key == "charmfileid" || $key == "combateffects" || $key == "filename" || $key == "idfile" || $key == "lore" || $key == "sellrate" ||
+								$key == "updated" || $key == "comment" || $key == "UNK134" || $key == "serialized" || $key == "verified" || $key == "serialization" || $key == "source" || $key == "lorefile" || 
+								$key == "UNK132" || $key == "clickunk6" || $key == "procunk6" || $key == "wornunk6" || $key == "focusunk6" || $key == "scrollunk6" || $key == "clickname" || $key == "procname" || 
+								$key == "wornname" || $key == "focusname" || $key == "scrollname" || $key == "created" || $key == "bardname")
 								$query = $query . "'{$value}', ";
 							else
 								$query = $query . $value . ", ";
