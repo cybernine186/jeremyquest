@@ -3,6 +3,15 @@
 include_once("functions.php");
 include_once("header.php");
 
+// Check for permissions
+if (!$permission['zonemerger'])
+{
+	RowText("<h5>You are not authorized!</h5>");
+	include_once("footer.php");
+	die;
+}
+
+// old dump but has some stuff wfh doesn't - zone
 $p2002db = new mysqli($dbhost, "neq", "mariaslargesekrets", "p2002");
 
 if ($p2002db->connect_errno)
@@ -12,13 +21,14 @@ if ($p2002db->connect_errno)
 	die;
 }
 
-// Check for permissions
-if (!$permission['zonemerger'])
+$wfhdb = new mysqli($dbhost, "neq", "mariaslargesekrets", "wfh");
+if ($wfhdb->connect_errno)
 {
-	RowText("<h5>You are not authorized!</h5>");
+	print "Failed to connect to WFH database.";
 	include_once("footer.php");
 	die;
 }
+
 
 RowText("<h4>Zone Merger</h4>");
 
@@ -46,12 +56,12 @@ elseif ($_GET['a'] == "tfzc")
 	
 	swap_zone_data($eqdb, $p2002db, $zone_id);
 	delete_existing_npcs($eqdb, $zone_id);
-	copy_wfh_npcs($eqdb, $p2002db, $zone_id);
+	copy_wfh_npcs($eqdb, $wfhdb, $zone_id);
 	delete_existing_spawn_data($eqdb, $zone_id);
-	copy_spawn_data($eqdb, $p2002db, $zone_id);
+	copy_spawn_data($eqdb, $wfhdb, $zone_id);
 	copy_graveyard_data($eqdb, $p2002db, $zone_id);
-	copy_grid_data($eqdb, $p2002db, $zone_id);
-	copy_loot_data($eqdb, $p2002db, $zone_id);
+	copy_grid_data($eqdb, $wfhdb, $zone_id);
+	copy_loot_data($eqdb, $wfhdb, $zone_id);
 }
 
 // Swap Zone Data
@@ -84,7 +94,7 @@ elseif ($_GET['a'] == "con")
 	$zone_id = $_GET['zid'];
 	
 	show_zone_tasks($eqdb, $zone_id);
-	copy_wfh_npcs($eqdb, $p2002db, $zone_id);
+	copy_wfh_npcs($eqdb, $wfhdb, $zone_id);
 }
 
 // Delete Existing Spawn Data
@@ -106,7 +116,7 @@ elseif ($_GET['a'] == "csd")
 	$zone_id = $_GET['zid'];
 	
 	show_zone_tasks($eqdb, $zone_id);
-	copy_spawn_data($eqdb, $p2002db, $zone_id);
+	copy_spawn_data($eqdb, $wfhdb, $zone_id);
 }
 
 // Copy Graveyard Data
@@ -128,7 +138,7 @@ elseif ($_GET['a'] == "cg")
 	$zone_id = $_GET['zid'];
 	
 	show_zone_tasks($eqdb, $zone_id);
-	copy_grid_data($eqdb, $p2002db, $zone_id);
+	copy_grid_data($eqdb, $wfhdb, $zone_id);
 }
 
 // Copy Loot Data
@@ -139,7 +149,7 @@ elseif ($_GET['a'] == "cld")
 	$zone_id = $_GET['zid'];
 	
 	show_zone_tasks($eqdb, $zone_id);
-	copy_loot_data($eqdb, $p2002db, $zone_id);
+	copy_loot_data($eqdb, $wfhdb, $zone_id);
 }
 
 else
@@ -652,6 +662,10 @@ function copy_loot_data($eqdb, $p2002db, $zone_id)
 	$hanging_loottables = array();
 	$hanging_lootdrops = array();
 	
+	// item transfer tracker
+	$itt = array();
+	
+	// total numbers copied
 	$loottables = 0;
 	$loottable_entries = 0;
 	$lootdrops = 0;
@@ -748,6 +762,55 @@ function copy_loot_data($eqdb, $p2002db, $zone_id)
 					RowText("INSERT INTO lootdrop_entries query failed");
 				else
 					$lootdrop_entries++;
+				
+				// item not transferred - transfer it
+				if (!isset($itt[$rlde['item_id']]))
+				{
+					$query = "SELECT id_peq, id_wfh FROM items_map WHERE id_peq = {$rlde['item_id']}";
+					$result_item_map = $p2002db->query($query)
+					if ($result_item_map->num_rows != 1)
+						RowText("Item map results != 1 for item {$rlde['item_id']}");
+					else
+					{
+						$rim = $result_item_map->fetch_assoc();
+						$item_id_swap = false;
+						if ($rim['id_peq'] != $rim['id_wfh'])
+						{
+							RowText("Item map for item {$rlde['item_id']} applicable");
+							$item_id_swap = true;
+						}
+						
+						/*
+						// delete old item
+						$query = "DELETE FROM items WHERE id = {$rlde['item_id']}";
+						$result_delete = $eqdb->query($query);
+						if (!result_delete)
+							RowText("DELETE FROM items query failed");
+						else
+							RowText("Item {$rlde['item_id']} deleted");
+						*/
+						
+						// copy the item
+						$query = "SELECT * FROM items WHERE id = {$rlde['item_id']}";
+						$result_items = $p2002db->query($query);
+						if (!$result_items)
+							RowText("SELECT FROM items query failed");
+						if ($result_items->num_rows != 1)
+							RowText("SELECT FROM items query returned {$result_items->num_rows} rows");
+						$ri = $result_items->fetch_assoc();
+						$query = "INSERT INTO items VALUES (";
+						foreach ($ri as $key => $value)
+						{
+							if ($key == 3 || $key == 43 || $key == 44)
+								$query = $query . "'{$value}', ";
+							else
+								$query = $query . $value . ", ";
+						}
+						$query = rtrim($query, ", ");
+						$query = $query . ")";
+						RowText($query);
+					}
+				}
 			}
 			
 		}
