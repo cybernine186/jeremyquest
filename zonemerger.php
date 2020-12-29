@@ -783,7 +783,7 @@ function copy_loot_data($eqdb, $p2002db, $zone_id)
 						// delete old item
 						$query = "DELETE FROM items WHERE id = {$rlde['item_id']}";
 						$result_delete = $eqdb->query($query);
-						if (!result_delete)
+						if (!$result_delete)
 							RowText("DELETE FROM items query failed");
 						else
 							RowText("Item {$rlde['item_id']} deleted");
