@@ -780,7 +780,6 @@ function copy_loot_data($eqdb, $p2002db, $zone_id)
 							$item_id_swap = true;
 						}
 						
-						/*
 						// delete old item
 						$query = "DELETE FROM items WHERE id = {$rlde['item_id']}";
 						$result_delete = $eqdb->query($query);
@@ -788,7 +787,6 @@ function copy_loot_data($eqdb, $p2002db, $zone_id)
 							RowText("DELETE FROM items query failed");
 						else
 							RowText("Item {$rlde['item_id']} deleted");
-						*/
 						
 						// copy the item
 						$query = "SELECT * FROM items WHERE id = {$rlde['item_id']}";
@@ -801,7 +799,9 @@ function copy_loot_data($eqdb, $p2002db, $zone_id)
 						$query = "INSERT INTO items VALUES (";
 						foreach ($ri as $key => $value)
 						{
-							if ($value === NULL)
+							if ($key == "gmflag" || $key == "soulbound")
+								continue;
+							elseif ($value === NULL)
 								$query = $query . "NULL, ";
 							elseif ($key == "Name" || $key == "charmfile" || $key == "charmfileid" || $key == "combateffects" || $key == "filename" || $key == "idfile" || $key == "lore" || $key == "sellrate" ||
 								$key == "updated" || $key == "comment" || $key == "UNK134" || $key == "serialized" || $key == "verified" || $key == "serialization" || $key == "source" || $key == "lorefile" || 
@@ -814,6 +814,11 @@ function copy_loot_data($eqdb, $p2002db, $zone_id)
 						$query = rtrim($query, ", ");
 						$query = $query . ")";
 						RowText($query);
+						$result_insert = $eqdb->query($query);
+						if (!$result_insert)
+							RowText("INSERT INTO items query failed");
+						else
+							$itt[$rlde['item_id']] = 1;
 					}
 				}
 			}
