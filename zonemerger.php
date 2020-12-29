@@ -725,7 +725,7 @@ function copy_loot_data($eqdb, $p2002db, $zone_id)
 			if ($result_lootdrop->num_rows != 1)
 			{
 				array_push($hanging_lootdrops, $r['loottable_id']);
-				RowText("Referened lootdrop does not exist - skipping - lootdrop_id of {$rlte['lootdrop_id']}");
+				RowText("Referenced lootdrop does not exist - skipping - lootdrop_id of {$rlte['lootdrop_id']}");
 				continue;
 			}
 					
@@ -807,7 +807,7 @@ function copy_loot_data($eqdb, $p2002db, $zone_id)
 								$key == "updated" || $key == "comment" || $key == "UNK134" || $key == "serialized" || $key == "verified" || $key == "serialization" || $key == "source" || $key == "lorefile" || 
 								$key == "UNK132" || $key == "clickunk6" || $key == "procunk6" || $key == "wornunk6" || $key == "focusunk6" || $key == "scrollunk6" || $key == "clickname" || $key == "procname" || 
 								$key == "wornname" || $key == "focusname" || $key == "scrollname" || $key == "created" || $key == "bardname")
-								$query = $query . "'{$value}', ";
+								$query = $query . "'" . $eqdb->real_escape_string($value) . "', ";
 							else
 								$query = $query . $value . ", ";
 						}
