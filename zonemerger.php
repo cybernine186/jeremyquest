@@ -878,7 +878,7 @@ function copy_npc_spell_data($eqdb, $wfhdb, $zone_id)
 	$nsi = array();
 	while ($r = $result->fetch_assoc())
 	{
-		if (isset($nsi[$r['npc_spells_id']]))
+		if (isset($nsi[$r['npc_spells_id']]) || $r['npc_spells_id'] == 0 )
 			continue;
 		$query = "SELECT name, parent_list, attack_proc, proc_chance, range_proc, rproc_chance, defensive_proc, dproc_chance, fail_recast, engaged_no_sp_recast_min, engaged_no_sp_recast_max,
 			engaged_b_self_chance, engaged_b_other_chance, engaged_d_chance, pursue_no_sp_recast_min, pursue_no_sp_recast_max, pursue_d_chance, idle_no_sp_recast_min, idle_no_sp_recast_max, idle_b_chance 
