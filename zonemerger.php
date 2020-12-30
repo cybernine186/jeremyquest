@@ -152,6 +152,16 @@ elseif ($_GET['a'] == "cld")
 	copy_loot_data($eqdb, $wfhdb, $zone_id);
 }
 
+elseif ($_GET['a'] == "cns")
+{
+	if (!IsNumber($_GET['zid']))
+		data_error();
+	$zone_id = $_GET['zid'];
+	
+	show_zone_tasks($eqdb, $zone_id);
+	copy_npc_spell_data($eqdb, $wfhdb, $zone_id);
+}
+
 else
 	display_zoneselect_form($eqdb);
 
@@ -215,6 +225,10 @@ function show_zone_tasks($eqdb, $zone_id)
 					<tr>
 						<td>Copy Loot Data</td>
 						<td><a class="btn btn-primary" href="zonemerger.php?a=cld&zid=<?php print $zone_id; ?>" role="button">Go</a></td>
+					</tr>
+					<tr>
+						<td>NPC Spells</td>
+						<td><a class="btn btn-primary" href="zonemerger.php?a=cns&zid=<?php print $zone_id; ?>" role="button">Go</a></td>
 					</tr>
 				</tbody>
 			</table>
@@ -849,6 +863,45 @@ function copy_loot_data($eqdb, $p2002db, $zone_id)
 	print "<br /><br />";
 	
 	var_dump($ldid);
+}
+
+function copy_npc_spell_data($eqdb, $wfhdb, $zone_id)
+{
+	$npc_id_min = $zone_id * 1000;
+	$npc_id_max = ($zone_id + 1) * 1000;
+	$query = "SELECT id, npc_spells_id FROM npc_types WHERE id >= {$npc_id_min} AND id < {$npc_id_max}";
+	$result = $wfh->query($query);
+	if (!$result)
+		RowText("SELECT FROM npc_types query failed");
+	if ($result->num_rows < 1)
+		RowText("SELECT FROM npc_types query for npc spell data had 0 rows");
+	$nsi = array();
+	while ($r = $result->fetch_assoc())
+	{
+		if (isset($nsi[$r['npc_spells_id']]))
+			continue;
+		$query = "SELECT name, parent_list, attack_proc, proc_chance, range_proc, rproc_chance, defensive_proc, dproc_chance, fail_recast, engaged_no_sp_recast_min, engaged_no_sp_recast_max,
+			engaged_b_self_chance, engaged_b_other_chance, engaged_d_chance, pursue_no_sp_recast_min, pursue_no_sp_recast_max, pursue_d_chance, idle_no_sp_recast_min, idle_no_sp_recast_max, idle_b_chance 
+			FROM npc_spells WHERE id = {$r['npc_spells_id']}";
+		$result_spells = $wfhdb->query($query);
+		if (!$result_spells)
+		{
+			RowText("SELECT FROM npc_spells query failed");
+			$nsi[$r['npc_spells_id']] = 0;
+			continue;
+		}
+		if (!$result_spells->num_rows < 1)
+		{
+			RowText("npc_spells row not found - setting to 0 etc");
+			$nsi[$r['npc_spells_id']] = 0;
+			continue;
+		}
+		$rns = $result_spells->fetch_assoc();
+		$query = "INSERT INTO npc_spells VALUES ('{$rns['name']}', {$rns['parent_list']}, {$rns['attack_proc']}, {$rns['proc_chance']}, {$rns['range_proc']}, {$rns['rproc_chance']}, {$rns['defensive_proc']}, {$rns['dproc_chance']}, 
+			{$rns['fail_recast']}, {$rns['engaged_no_sp_recast_min']}, {$rns['engaged_no_sp_recast_max']}, {$rns['engaged_b_self_chance']}, {$rns['engaged_b_other_chance']}, {$rns['engaged_d_chance']}, 
+			{$rns['pursue_no_sp_recast_min']}, {$rns['pursue_no_sp_recast_max']}, {$rns['pursue_d_chance']}, {$rns['idle_no_sp_recast_min']}, {$rns['idle_no_sp_recast_max']}, {$rns['idle_b_chance']})";
+		RowText($query);
+	}
 }
 
 function display_zoneselect_form($eqdb = NULL)
