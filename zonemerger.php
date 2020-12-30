@@ -901,8 +901,16 @@ function copy_npc_spell_data($eqdb, $wfhdb, $zone_id)
 		$query = "INSERT INTO npc_spells VALUES ('{$rns['name']}', {$rns['parent_list']}, {$rns['attack_proc']}, {$rns['proc_chance']}, {$rns['range_proc']}, {$rns['rproc_chance']}, {$rns['defensive_proc']}, {$rns['dproc_chance']}, 
 			{$rns['fail_recast']}, {$rns['engaged_no_sp_recast_min']}, {$rns['engaged_no_sp_recast_max']}, {$rns['engaged_b_self_chance']}, {$rns['engaged_b_other_chance']}, {$rns['engaged_d_chance']}, 
 			{$rns['pursue_no_sp_recast_min']}, {$rns['pursue_no_sp_recast_max']}, {$rns['pursue_d_chance']}, {$rns['idle_no_sp_recast_min']}, {$rns['idle_no_sp_recast_max']}, {$rns['idle_b_chance']})";
-		RowText($query);
+		$result_insert = $eqdb->query($query);
+		if (!$result_insert)
+		{
+			RowText("INSERT INTO npc_spells query failed");
+			continue;
+		}
+		$insert_id = $eqdb->insert_id;
+		$nsi[$r['npc_spells_id']] = $insert_id;
 	}
+	var_dump($nsi);
 }
 
 function display_zoneselect_form($eqdb = NULL)
