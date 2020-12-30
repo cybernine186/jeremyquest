@@ -891,7 +891,7 @@ function copy_npc_spell_data($eqdb, $wfhdb, $zone_id)
 			$nsi[$r['npc_spells_id']] = 0;
 			continue;
 		}
-		if (!$result_spells->num_rows < 1)
+		if ($result_spells->num_rows < 1)
 		{
 			RowText("npc_spells row {$r['npc_spells_id']} not found - setting to 0 etc");
 			$nsi[$r['npc_spells_id']] = 0;
