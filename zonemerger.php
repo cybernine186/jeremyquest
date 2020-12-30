@@ -870,7 +870,7 @@ function copy_npc_spell_data($eqdb, $wfhdb, $zone_id)
 	$npc_id_min = $zone_id * 1000;
 	$npc_id_max = ($zone_id + 1) * 1000;
 	$query = "SELECT id, npc_spells_id FROM npc_types WHERE id >= {$npc_id_min} AND id < {$npc_id_max}";
-	$result = $wfh->query($query);
+	$result = $wfhdb->query($query);
 	if (!$result)
 		RowText("SELECT FROM npc_types query failed");
 	if ($result->num_rows < 1)
