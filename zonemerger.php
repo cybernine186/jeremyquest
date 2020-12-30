@@ -898,7 +898,9 @@ function copy_npc_spell_data($eqdb, $wfhdb, $zone_id)
 			continue;
 		}
 		$rns = $result_spells->fetch_assoc();
-		$query = "INSERT INTO npc_spells VALUES ('{$rns['name']}', {$rns['parent_list']}, {$rns['attack_proc']}, {$rns['proc_chance']}, {$rns['range_proc']}, {$rns['rproc_chance']}, {$rns['defensive_proc']}, {$rns['dproc_chance']}, 
+		$query = "INSERT INTO npc_spells (name, parent_list, attack_proc, proc_chance, range_proc, rproc_chance, defensive_proc, dproc_chance, fail_recast, engaged_no_sp_recast_min, engaged_no_sp_recast_max,
+			engaged_b_self_chance, engaged_b_other_chance, engaged_d_chance, pursue_no_sp_recast_min, pursue_no_sp_recast_max, pursue_d_chance, idle_no_sp_recast_min, idle_no_sp_recast_max, idle_b_chance 
+			VALUES ('{$rns['name']}', {$rns['parent_list']}, {$rns['attack_proc']}, {$rns['proc_chance']}, {$rns['range_proc']}, {$rns['rproc_chance']}, {$rns['defensive_proc']}, {$rns['dproc_chance']}, 
 			{$rns['fail_recast']}, {$rns['engaged_no_sp_recast_min']}, {$rns['engaged_no_sp_recast_max']}, {$rns['engaged_b_self_chance']}, {$rns['engaged_b_other_chance']}, {$rns['engaged_d_chance']}, 
 			{$rns['pursue_no_sp_recast_min']}, {$rns['pursue_no_sp_recast_max']}, {$rns['pursue_d_chance']}, {$rns['idle_no_sp_recast_min']}, {$rns['idle_no_sp_recast_max']}, {$rns['idle_b_chance']})";
 		RowText($query);
