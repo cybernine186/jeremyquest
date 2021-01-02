@@ -46,3 +46,8 @@ CREATE TABLE connections (
 	selected TINYINT NOT NULL DEFAULT 0,
     PRIMARY KEY (id)
 );
+
+CREATE TABLE spawn2_map (
+	old_id INT UNSIGNED NOT NULL,
+	new_id INT UNSIGNED NOT NULL
+);
