@@ -603,7 +603,7 @@ function copy_spawn_data($eqdb, $p2002db, $zone_id)
 	$query = "INSERT INTO spawn2_map (old_id, new_id) VALUES (";
 	foreach ($s2id as $key => $value)
 	{
-		$query = $query . "({$key}, {$value}), ");
+		$query = $query . "({$key}, {$value}), ";
 	}
 	$query = rtrim($query, ", ");
 	$query = $query . ")";
