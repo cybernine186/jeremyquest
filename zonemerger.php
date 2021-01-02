@@ -62,6 +62,7 @@ elseif ($_GET['a'] == "tfzc")
 	copy_graveyard_data($eqdb, $p2002db, $zone_id);
 	copy_grid_data($eqdb, $wfhdb, $zone_id);
 	copy_loot_data($eqdb, $wfhdb, $zone_id);
+	copy_npc_spell_data($eqdb, $wfhdb, $zone_id);
 }
 
 // Swap Zone Data
