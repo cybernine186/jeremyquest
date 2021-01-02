@@ -933,7 +933,7 @@ function copy_npc_spell_data($eqdb, $wfhdb, $zone_id)
 		while ($rnse = $result_npc_spells_entries->fetch_assoc())
 		{
 			$query = "INSERT INTO npc_spells_entries (npc_spells_id, spellid, type, minlevel, maxlevel, manacost, recast_delay, priority, resist_adjust, min_hp, max_hp) VALUES 
-				{$rnse['npc_spells_id']}, {$rnse['spellid']}, {$rnse['type']}, {$rnse['minlevel']}, {$rnse['maxlevel']}, {$rnse['manacost']}, {$rnse['recast_delay']}, {$rnse['priority']}, " .
+				({$rnse['npc_spells_id']}, {$rnse['spellid']}, {$rnse['type']}, {$rnse['minlevel']}, {$rnse['maxlevel']}, {$rnse['manacost']}, {$rnse['recast_delay']}, {$rnse['priority']}, " .
 				($rnse['resist_adjust'] === NULL ? "NULL, " : "{$rnse['resist_adjust']}, ") . "{$rnse['min_hp']}, {$rnse['max_hp']})";
 				
 			RowText($query);
