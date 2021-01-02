@@ -600,6 +600,17 @@ function copy_spawn_data($eqdb, $p2002db, $zone_id)
 	var_dump($sgid);
 	print "<br />";
 	var_dump($s2id);
+	$query = "INSERT INTO spawn2_map (old_id, new_id) VALUES (";
+	foreach ($s2id as $key => $value)
+	{
+		$query = $query . "({$key}, {$value}), ");
+	}
+	$query = rtrim($query, ", ");
+	$query = $query . ")";
+	RowText($query);
+	$result_insert = $eqdb->query($query);
+	if (!$result_insert)
+		RowText("INSERT INTO spawn2_map query failed");
 }
 
 function copy_grid_data($eqdb, $p2002db, $zone_id)
