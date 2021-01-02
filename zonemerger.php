@@ -867,6 +867,7 @@ function copy_loot_data($eqdb, $p2002db, $zone_id)
 
 function copy_npc_spell_data($eqdb, $wfhdb, $zone_id)
 {
+	// look through npc_types for the zone
 	$npc_id_min = $zone_id * 1000;
 	$npc_id_max = ($zone_id + 1) * 1000;
 	$query = "SELECT id, npc_spells_id FROM npc_types WHERE id >= {$npc_id_min} AND id < {$npc_id_max}";
@@ -876,10 +877,15 @@ function copy_npc_spell_data($eqdb, $wfhdb, $zone_id)
 	if ($result->num_rows < 1)
 		RowText("SELECT FROM npc_types query for npc spell data had 0 rows");
 	$nsi = array();
+	$ns_count = 0;
+	$nse_count = 0;
 	while ($r = $result->fetch_assoc())
 	{
+		// skip if already copied or set to 0
 		if (isset($nsi[$r['npc_spells_id']]) || $r['npc_spells_id'] == 0 )
 			continue;
+		
+		// get the npc_spells base info
 		$query = "SELECT name, parent_list, attack_proc, proc_chance, range_proc, rproc_chance, defensive_proc, dproc_chance, fail_recast, engaged_no_sp_recast_min, engaged_no_sp_recast_max,
 			engaged_b_self_chance, engaged_b_other_chance, engaged_d_chance, pursue_no_sp_recast_min, pursue_no_sp_recast_max, pursue_d_chance, idle_no_sp_recast_min, idle_no_sp_recast_max, idle_b_chance 
 			FROM npc_spells WHERE id = {$r['npc_spells_id']}";
@@ -898,6 +904,7 @@ function copy_npc_spell_data($eqdb, $wfhdb, $zone_id)
 			continue;
 		}
 		$rns = $result_spells->fetch_assoc();
+		// copy the npc_spells info to target db
 		$query = "INSERT INTO npc_spells (name, parent_list, attack_proc, proc_chance, range_proc, rproc_chance, defensive_proc, dproc_chance, fail_recast, engaged_no_sp_recast_min, engaged_no_sp_recast_max,
 			engaged_b_self_chance, engaged_b_other_chance, engaged_d_chance, pursue_no_sp_recast_min, pursue_no_sp_recast_max, pursue_d_chance, idle_no_sp_recast_min, idle_no_sp_recast_max, idle_b_chance) 
 			VALUES ('{$rns['name']}', {$rns['parent_list']}, {$rns['attack_proc']}, {$rns['proc_chance']}, {$rns['range_proc']}, {$rns['rproc_chance']}, {$rns['defensive_proc']}, {$rns['dproc_chance']}, 
@@ -910,9 +917,41 @@ function copy_npc_spell_data($eqdb, $wfhdb, $zone_id)
 			RowText("INSERT INTO npc_spells query failed");
 			continue;
 		}
+		else
+			$ns_count++;
 		$insert_id = $eqdb->insert_id;
+		// keep track of which npc_spells have already been copied
 		$nsi[$r['npc_spells_id']] = $insert_id;
+		
+		// copy the npc_spells_entries
+		$query = "SELECT npc_spells_id, spellid, type, minlevel, maxlevel, manacost, recast_delay, priority, resist_adjust, min_hp, max_hp FROM npc_spells_entries WHERE npc_spells_id = {$r['npc_spells_id']}";
+		$result_npc_spells_entries = $wfhdb->query($query);
+		if (!$result_npc_spells_entries)
+			RowText("SELECT FROM npc_spells_entries query failed");
+		if ($result_npc_spells_entries->num_rows < 1)
+			RowText("No entries for npc spells id  {$r['npc_spells_id']}");
+		while ($rnse = $result_npc_spells_entries->fetch_assoc())
+		{
+			$query = "INSERT INTO npc_spells_entries (npc_spells_id, spellid, type, minlevel, maxlevel, manacost, recast_delay, priority, resist_adjust, min_hp, max_hp) VALUES 
+				{$rnse['npc_spells_id']}, {$rnse['spellid']}, {$rnse['type']}, {$rnse['minlevel']}, {$rnse['maxlevel']}, {$rnse['manacost']}, {$rnse['recast_delay']}, {$rnse['priority']}, " .
+				($rnse['resist_adjust'] === NULL ? "NULL, " : "{$rnse['resist_adjust']}, ") . "{$rnse['min_hp']}, {$rnse['max_hp']})";
+				
+			RowText($query);
+			$result_insert = $eqdb->query($query);
+			if (!$result_insert)
+				RowText("INSERT INTO npc_spells_entries failed");
+			else
+				$nse_count++;
+		}
+		
+		// change the npc_types data to reflect new ID for npc_spells
+		$query = "UPDATE npc_types SET npc_spells_id = {$insert_id} WHERE id = {$r['id']}";
+		$result_update = $eqdb->query($query);
+		if (!$result_update)
+			RowText("UPDATE npc_types query failed");
 	}
+	RowText("{$ns_count} npc_spells were copied over.<br />");
+	RowText("{$nse_count} npc_spells_entries were copied over.<br />");3
 	var_dump($nsi);
 }
 
