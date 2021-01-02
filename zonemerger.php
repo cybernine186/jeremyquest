@@ -951,7 +951,7 @@ function copy_npc_spell_data($eqdb, $wfhdb, $zone_id)
 			RowText("UPDATE npc_types query failed");
 	}
 	RowText("{$ns_count} npc_spells were copied over.<br />");
-	RowText("{$nse_count} npc_spells_entries were copied over.<br />");3
+	RowText("{$nse_count} npc_spells_entries were copied over.<br />");
 	var_dump($nsi);
 }
 
