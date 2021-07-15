@@ -13,6 +13,7 @@ CREATE TABLE users (
 	permission_connections TINYINT NOT NULL DEFAULT 0,
 	permission_copychar TINYINT NOT NULL DEFAULT 0,
 	permission_purgechar TINYINT NOT NULL DEFAULT 0,
+	permission_zonemerger TINYINT NOT NULL DEFAULT 0,
 	PRIMARY KEY (id)
 );
 
@@ -44,4 +45,9 @@ CREATE TABLE connections (
 	password VARCHAR(30) NOT NULL,
 	selected TINYINT NOT NULL DEFAULT 0,
     PRIMARY KEY (id)
+);
+
+CREATE TABLE spawn2_map (
+	old_id INT UNSIGNED NOT NULL,
+	new_id INT UNSIGNED NOT NULL
 );
