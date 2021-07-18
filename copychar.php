@@ -2,7 +2,7 @@
 /***************************************************************************************************
 File:			copychar.php
 Description:	Copies a character from one database/server to another. Currently only setup to 
-					work from ROZ 1 to ROZ 2, now legends.
+					work from ROZ 1 to ROZ 2 due to the specific database schemas of each.
 ***************************************************************************************************/
 
 include_once("functions.php");
