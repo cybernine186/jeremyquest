@@ -1,4 +1,9 @@
 <?php
+/***************************************************************************************************
+File:			copychar.php
+Description:	Copies a character from one database/server to another. Currently only setup to 
+					work from ROZ 1 to ROZ 2, now legends.
+***************************************************************************************************/
 
 include_once("functions.php");
 include_once("header.php");
@@ -13,23 +18,27 @@ if (!$permission['copychar'])
 
 RowText("<h4>Copy Character</h4>");
 
-// Select Origin Connection - Step 1
+
 if (!isset($_GET['a']))
 {
+	// No action set - select origin connection - Step 1
 	display_select_origin_connection($admindb, $uid);
 }
 elseif ($_GET['a'] == "nn")
 {
+	// New Name for character copy
 	if (!IsNumber($_POST['id']) || !IsNumber($_POST['origin']) || !IsNumber($_POST['destination']))
 		data_error();
 	
 	if (!IsText($_POST['characterName']))
 		data_error();
 	
+	// connect to destination db	
 	$destinationdb = DatabaseConnection($admindb, $_POST['destination'], $uid);
 	if (!$destinationdb)
 		data_error();
 	
+	// See if new name is available
 	$query = "SELECT id FROM character_data WHERE name = '{$_POST['characterName']}'";
 	$result = $destinationdb->query($query);
 	if (!$result)
@@ -44,6 +53,7 @@ elseif ($_GET['a'] == "nn")
 			Col();
 			DivC();
 			Col(true, '', 4);
+			// display form to select another name
 ?>
 				<form action="copychar.php?a=nn" method="post">
 					<div class="form-group">
@@ -63,15 +73,21 @@ elseif ($_GET['a'] == "nn")
 		include_once("footer.php");
 		die;
 	}
+	// multiple characters of same name, something is wrong
 	elseif ($result->num_rows > 1)
 		data_error();
+	// nothing found, name available
 	else
 		RowText("Name {$_POST['characterName']} available on destination server.");
-		
+	
+	// connect to origin db
 	$origindb = DatabaseConnection($admindb, $_POST['origin'], $uid);
 	if (!$origindb)
 		data_error();
-		
+	
+	// find the account number of the proper account on the destination server
+	
+	// first get the account number and name from the origin server
 	$query = "SELECT character_data.account_id AS account_id, account.name AS account_name FROM character_data LEFT JOIN account ON character_data.account_id = account.id WHERE character_data.id = {$_POST['id']}";
 	$result = $origindb->query($query);
 	if (!$result)
@@ -81,6 +97,7 @@ elseif ($_GET['a'] == "nn")
 	$newaccountid = 0;
 	$account_name = $row['account_name'];
 	
+	// search by name for account on destination server
 	$query = "SELECT id FROM account WHERE name = '{$account_name}'";
 	$result = $destinationdb->query($query);
 	if (!$result)
@@ -102,6 +119,7 @@ elseif ($_GET['a'] == "nn")
 			data_error();
 		if ($accountresult->num_rows < 12)
 		{
+			// less than 12 characters (ROF2 client max)
 			RowText("Space available on account on destination server.");
 			RowText("");
 			Row();
@@ -127,6 +145,7 @@ elseif ($_GET['a'] == "nn")
 		}
 		
 	}
+	// multiple accounts of that name - something is wrong
 	elseif ($result->num_rows > 1)
 		data_error();
 		
@@ -134,7 +153,7 @@ elseif ($_GET['a'] == "nn")
 		Col();
 		DivC();
 		Col(true, '', 4);
-			// Check Account context
+			// Check Account context so can copy to different account
 ?>
 			<form action="copychar.php?a=ca" method="post">
 				<div class="form-group">
@@ -158,6 +177,7 @@ elseif ($_GET['a'] == "nn")
 // Process Copy
 elseif ($_GET['a'] == "p")
 {
+	// dump everything in case there's an issue
 	var_dump($_POST);
 	
 	if (!IsNumber($_POST['sn']) || !IsNumber($_POST['sa']) || !IsNumber($_POST['id']) || !IsNumber($_POST['origin']) || !IsNumber($_POST['destination']))
