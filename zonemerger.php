@@ -1,5 +1,8 @@
 <?php
-
+/***************************************************************************************************
+File:			zonemerger.php
+Description:	Interface to import zone data from the Wayfarer Haven database into our db
+***************************************************************************************************/
 include_once("functions.php");
 include_once("header.php");
 

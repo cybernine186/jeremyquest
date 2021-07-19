@@ -1,4 +1,8 @@
 <?php
+/***************************************************************************************************
+File:			trades.php
+Description:	Interface to search player trades
+***************************************************************************************************/
 
 include_once("functions.php");
 include_once("header.php");
@@ -15,10 +19,12 @@ RowText("<h4>Trades</h4>");
 
 if (!isset($_GET['a']))
 {
+	// no action parameter - show trade search interface
 	display_trade_search();
 }
 elseif ($_GET['a'] == "sp")
 {
+	// search players for trades
 	if (!IsText($_POST['playerName']))
 		data_error();
 	
@@ -28,6 +34,7 @@ elseif ($_GET['a'] == "sp")
 }
 elseif ($_GET['a'] == "p")
 {
+	// trades for one player
 	if (!IsNumber($_GET['id']))
 		data_error();
 	
@@ -37,6 +44,7 @@ elseif ($_GET['a'] == "p")
 }
 elseif ($_GET['a'] == "t")
 {
+	// show details for one trade
 	if (!IsNumber($_GET['id']))
 		data_error();
 	
@@ -174,6 +182,7 @@ elseif ($_GET['a'] == "t")
 }
 else
 {
+	// Default: show trade search interface
 	display_trade_search();
 }
 

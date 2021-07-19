@@ -1,4 +1,8 @@
 <?php
+/***************************************************************************************************
+File:			purgechar.php
+Description:	Interface to purge all character data from database for a character id
+***************************************************************************************************/
 
 include_once("functions.php");
 include_once("header.php");
@@ -13,10 +17,12 @@ if (!$permission['purgechar'])
 
 RowText("<h4>Purge Character Data</h4>");
 
+// no action parameter - show purge form
 if (!isset($_GET['a']))
 	display_purge_form();
 elseif ($_GET['a'] == "p")
 {
+	// purge the character data
 	if (!IsNumber($_POST['charID']))
 		data_error();
 	

@@ -1,7 +1,7 @@
 <?php
 /***************************************************************************************************
-File:			logs.php
-Description:	Logging of system usage
+File:			connections.php
+Description:	Manages connections to game databases
 ***************************************************************************************************/
 
 include_once("functions.php");
@@ -20,14 +20,17 @@ RowText("<h4>Connections</h4>");
 
 if (!isset($_GET['a']))
 {
+	// No action parameter, show connection list
 	display_connection_list($admindb, $uid, $cid);
 }
 elseif ($_GET['a'] == "c")
 {
+	// Create connection
 	display_connection_creation();
 }
 elseif ($_GET['a'] == "cp")
 {
+	// Create connection processing
 	$cname = $admindb->real_escape_string($_POST['connectionName']);
 	$chost = $admindb->real_escape_string($_POST['connectionHost']);
 	$cdb = $admindb->real_escape_string($_POST['connectionDatabase']);
@@ -46,13 +49,16 @@ elseif ($_GET['a'] == "cp")
 }
 elseif ($_GET['a'] == "u")
 {
+	// Use Database Connection
 	if (!IsNumber($_GET['id']))
 		data_error();
 	
 	$cid = $_GET['id'];
 	
+	// Clear selected connection flag(s)
 	$query = "UPDATE connections SET selected = 0 WHERE user = {$uid}";
 	$admindb->query($query);
+	// Flag new connection as selected
 	$query = "UPDATE connections SET selected = 1 WHERE id = {$cid}";
 	$admindb->query($query);
 	
@@ -62,6 +68,7 @@ elseif ($_GET['a'] == "u")
 }
 elseif ($_GET['a'] == "d")
 {
+	// Delete connection
 	if (!IsNumber($_GET['id']))
 		data_error();
 	
@@ -71,6 +78,7 @@ elseif ($_GET['a'] == "d")
 }
 elseif ($_GET['a'] == "dp")
 {
+	// Delete connection processing
 	if (!IsNumber($_GET['id']))
 		data_error();
 	
@@ -85,6 +93,7 @@ elseif ($_GET['a'] == "dp")
 }
 else
 {
+	// Default: show connection list
 	display_connection_list($admindb, $uid, $cid);
 }
 

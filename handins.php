@@ -1,4 +1,8 @@
 <?php
+/***************************************************************************************************
+File:			handins.php
+Description:	Interface to search instances of player handins to NPCs
+***************************************************************************************************/
 
 include_once("functions.php");
 include_once("header.php");

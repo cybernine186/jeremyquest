@@ -200,6 +200,8 @@ else
 	}
 }
 
+// handle game server database connection
+
 $eqcgood = false;
 $cname = "No Connection";
 $cid = 0;

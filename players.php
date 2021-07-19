@@ -1,4 +1,8 @@
 <?php
+/***************************************************************************************************
+File:			players.php
+Description:	Interface to select a player and see the various functionality that can be applied
+***************************************************************************************************/
 
 include_once("functions.php");
 include_once("header.php");
@@ -16,6 +20,7 @@ if (!isset($_GET['a']))
 }
 elseif ($_GET['a'] == 'o')
 {
+	// display player overview
 	if (!IsNumber($_GET['id']))
 		data_error();
 	

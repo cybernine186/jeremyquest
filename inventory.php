@@ -1,4 +1,8 @@
 <?php
+/***************************************************************************************************
+File:			inventory.php
+Description:	Interface to look at player inventory snapshots and roll them back
+***************************************************************************************************/
 
 include_once("functions.php");
 include_once("header.php");
@@ -15,6 +19,7 @@ RowText("<h4>Inventory Snapshots</h4>");
 
 if (!isset($_GET['a']))
 {
+	// No action parameter set, show search interface
 	Row();
 		Col();
 		DivC();
@@ -35,6 +40,7 @@ if (!isset($_GET['a']))
 }
 elseif ($_GET['a'] == "ri")
 {
+	// roll it back - actually roll back the character's inventory
 	$charid = preg_replace("/[^0-9]/", "", $_GET['id']);
 	$snaptime = preg_replace("/[^0-9]/", "", $_GET['ti']);
 
@@ -80,6 +86,7 @@ elseif ($_GET['a'] == "ri")
 }
 elseif ($_GET['a'] == "sp")
 {
+	// search players results - list of players who match query
 	$name = $eqdb->real_escape_string($_POST['playername']);
 		
 	RowText("<h3>Players Matching: {$name}</h3>");
@@ -116,6 +123,7 @@ elseif ($_GET['a'] == "sp")
 }
 elseif ($_GET['a'] == "sr")
 {
+	// show results/rollbacks - all inventory snapshots for a single character
 	$charid = preg_replace("/[^0-9]/", "", $_GET['id']);
 	$query = "SELECT name FROM character_data WHERE id = {$charid}";
 	$result = $eqdb->query($query);
@@ -161,6 +169,7 @@ elseif ($_GET['a'] == "sr")
 	}
 else
 {
+	// Default: show search player context
 	Row();
 		Col();
 		DivC();

@@ -1,4 +1,9 @@
 <?php
+/***************************************************************************************************
+File:			functions.php
+Description:	Various helper functions
+***************************************************************************************************/
+
 
 /*******************************************************************************
 Function:	Container
@@ -152,17 +157,36 @@ function display_pagination($start, $pages, $link)
 	print "</ul>";
 }
 
+/*******************************************************************************
+Function:	Hyperlink
+Purpose:	Generate HTML for a hyperlink
+In:			$target - the hyperlink target
+			$label - text for the hyperlink
+*******************************************************************************/
 function Hyperlink($target, $label)
 {
 	print "<a href=\"{$target}\">{$label}</a>";
 }
 
+/*******************************************************************************
+Function:	Logging
+Purpose:	Generate a logging entry in database
+In:			$userid - id of the user who generates entry
+			$type - enumeration for type of log entry
+			$message - the message to be logged for the entry
+*******************************************************************************/
 function Logging($admindb, $userid, $type, $message)
 {
 	$query = "INSERT INTO logs (time, uid, type, message) VALUES (NOW(), {$userid}, {$type}, '{$message}')";
 	$result = $admindb->query($query);
 }
 
+/*******************************************************************************
+Function:	DatabaseConnection
+Purpose:	Establish a MySQL database connection
+In:			$dbid - the id of the database in the connections tables
+			$uid - the id of the user attempting to establish the connection
+*******************************************************************************/
 function DatabaseConnection($admindb, $dbid, $uid)
 {
 	$query = "SELECT user, host, dbase, username, password FROM connections WHERE id = {$dbid}";

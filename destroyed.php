@@ -1,4 +1,10 @@
 <?php
+/***************************************************************************************************
+File:			destroyed.php
+Description:	Interface to search and view the destruction of items by players
+					Sometimes certain player actions destroy items aside from the destroy feature
+					i.e. using a consumable
+***************************************************************************************************/
 
 include_once("functions.php");
 include_once("header.php");
@@ -15,10 +21,12 @@ RowText("<h4>Destroyed Items</h4>");
 
 if (!isset($_GET['a']))
 {
+	// No action parameter - display search context
 	display_destroyed_search();
 }
 elseif ($_GET['a'] == "sp")
 {
+	// Search Players
 	if (!IsText($_POST['playerName']))
 		data_error();
 	
@@ -28,6 +36,7 @@ elseif ($_GET['a'] == "sp")
 }
 elseif ($_GET['a'] == "p")
 {
+	// Player (character) context
 	if (!IsNumber($_GET['id']))
 		data_error();
 	
@@ -37,6 +46,7 @@ elseif ($_GET['a'] == "p")
 }
 elseif ($_GET['a'] == "d")
 {
+	// destroyed context - the instance of destroyal
 	if (!IsNumber($_GET['id']))
 		data_error();
 	

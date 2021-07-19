@@ -1,4 +1,8 @@
 <?php
+/***************************************************************************************************
+File:			looted.php
+Description:	Interface to show items looted by players with some details - currently incomplete
+***************************************************************************************************/
 
 include_once("functions.php");
 include_once("header.php");
@@ -12,7 +16,7 @@ if (!$permission['looted'])
 }
 
 RowText("<h4>Looted Items</h4>");
-RowText("<h5>Under Construction</h5>");
+RowText("<h5>This tool is not currently available.</h5>");
 
 include_once("footer.php");
 

@@ -1,7 +1,7 @@
 <?php
 /***************************************************************************************************
 File:			logs.php
-Description:	Logging of system usage
+Description:	Logging of system usage - just shows all entries
 ***************************************************************************************************/
 
 include_once("functions.php");
