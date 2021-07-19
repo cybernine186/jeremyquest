@@ -1,4 +1,9 @@
 <?php
+/***************************************************************************************************
+File:			dropped.php
+Description:	Interface to search instances of players dropping items to the ground and picking
+					items up from the ground
+***************************************************************************************************/
 
 include_once("functions.php");
 include_once("header.php");
@@ -15,10 +20,12 @@ RowText("<h4>Item Drops and Pickups</h4>");
 
 if (!isset($_GET['a']))
 {
+	// No action parameter - display dropped search context
 	display_dropped_search();
 }
 elseif ($_GET['a'] == "sp")
 {
+	// Search Players
 	if (!IsText($_POST['playerName']))
 		data_error();
 	
@@ -28,6 +35,7 @@ elseif ($_GET['a'] == "sp")
 }
 elseif ($_GET['a'] == "p")
 {
+	// Player context - items picked up / dropped by character
 	if (!IsNumber($_GET['id']))
 		data_error();
 	
@@ -37,6 +45,7 @@ elseif ($_GET['a'] == "p")
 }
 elseif ($_GET['a'] == "d")
 {
+	// Drop context - an individual drop or pickup
 	if (!IsNumber($_GET['id']))
 		data_error();
 	
@@ -104,6 +113,7 @@ elseif ($_GET['a'] == "d")
 }
 else
 {
+	// default: dropped search
 	display_dropped_search();
 }
 
