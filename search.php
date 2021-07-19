@@ -1,10 +1,13 @@
 <?php
+/***************************************************************************************************
+File:			search.php
+Description:	Script to show results from searching for players on the navbar
+***************************************************************************************************/
 
 include_once("functions.php");
 include_once("header.php");
 
-include_once("footer.php");
-
+// check permissions
 if ($uid <= 0)
 {
 	RowText("<h5>You are not authorized!</h5>");
@@ -14,13 +17,17 @@ if ($uid <= 0)
 
 if (!isset($_GET['a']))
 {
+	// no action parameter - error
 	data_error();
 }
 elseif ($_GET['a'] == 's')
 {
+	// search players results
 	$playername = $eqdb->real_escape_string($_POST['search']);
 	display_search_results($eqdb, $playername);
 }
+
+include_once("footer.php");
 
 function display_search_results($eqdb, $playername)
 {
