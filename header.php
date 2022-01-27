@@ -114,7 +114,7 @@ if(basename($_SERVER["SCRIPT_FILENAME"], '.php') == "login" && isset($_GET['a'])
 	{
 		// Generate a hash for cookie
 		$cost = 10;
-		$salt = strtr(base64_encode(mcrypt_create_iv(16, MCRYPT_DEV_URANDOM)), '+', '.');
+		$salt = strtr(base64_encode('sDLFKjsdfn56t453fee'), '+', '.');
 		$salt = sprintf("$2a$%02d$", $cost) . $salt;
 		$hash = crypt(($uname . $uid . time()), $salt);
 		setcookie($cookie_name, $hash, time() + (86400 * 9999));

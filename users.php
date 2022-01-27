@@ -182,7 +182,7 @@ elseif ($_GET['a'] == "cp")
 	
 	// Create password hash
 	$cost = 10;
-	$salt = strtr(base64_encode(mcrypt_create_iv(16, MCRYPT_DEV_URANDOM)), '+', '.');
+	$salt = strtr(base64_encode('sDLFKjsdfn56t453fee'), '+', '.');
 	$salt = sprintf("$2a$%02d$", $cost) . $salt;
 	$hash = crypt($_POST['password1'], $salt);
 	
